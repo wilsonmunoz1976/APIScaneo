@@ -11,8 +11,9 @@ namespace APIScaneo.Controllers
     public class CofresUrnasController : ControllerBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         private readonly CofresUrnas? Conectividad = null;
+        private readonly Emergencia? MailAgente = null;
+        private readonly string CrLf = "\r\n";
 
         public CofresUrnasController()
         {
@@ -28,6 +29,7 @@ namespace APIScaneo.Controllers
                 if (myDb1ConnectionString != null)
                 {
                     Conectividad = new CofresUrnas(myDb1ConnectionString);
+                    MailAgente = new Emergencia(myDb1ConnectionString);
                 }
             }
             catch (Exception ex)
@@ -284,15 +286,35 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("ReingresoCofresUrnas")]
-        public RespuestaEjecucion ReingresoCofresUrnas([FromBody] ReingresoCofreUrna reingresoCofreUrna)
+        public RespuestaEjecucion? ReingresoCofresUrnas([FromBody] ReingresoCofreUrna reingresoCofreUrna)
         {
-            RespuestaEjecucion oResp = new();
+            RespuestaEjecucion? oResp = new();
 
             try
             {
                 if (Conectividad != null)
                 {
-                    oResp = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna);
+                    DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, ref oResp);
+                    if (oResp.Codigo == 0)
+                    {
+                        if (dt.Rows.Count > 0)
+                        {
+                            ReingresoCofreDato? oDato = null;
+                            DataRow dr = dt.Rows[0];
+                            oDato = new()
+                            {
+                                CodArticuloOrigen = dr["CodArticuloOrigen"].ToString(),
+                                DesArticuloOrigen = dr["DesArticuloOrigen"].ToString(),
+                                CodArticuloDestino = dr["CodArticuloDestino"].ToString(),
+                                DesArticuloDestino = dr["DesArticuloDestino"].ToString(),
+                                CodSoliEgre = Convert.ToInt32(dr["CodSoliEgre"]),
+                                CodPlanilla = dr["CodPlanilla"].ToString(),
+                                NombreFallecido = dr["NombreFallecido"].ToString(),
+                                Usuario = dr["Usuario"].ToString()
+                            };
+                            oResp = NotificarReingreso(oDato);
+                        }
+                    }
                 }
                 else
                 {
@@ -306,12 +328,91 @@ namespace APIScaneo.Controllers
             }
             catch (Exception ex)
             {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
+                oResp = new()
+                {
+                    Codigo = -2,
+                    Mensaje = ex.Message
+                };
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return oResp;
         }
 
+        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreDato? oReq)
+        {
+            RespuestaEjecucion? oResp = null;
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            ConfigEmail? configEmail = configuration.GetSection("ConfigEmail").Get<ConfigEmail>();
+            string htmlBody = string.Empty;
+            if (configEmail != null)
+            {
+                string fileName = Environment.CurrentDirectory + "\\plantilla_mail_reingreso.html";
+                using (StreamReader reader = new(fileName))
+                {
+                    string? line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        htmlBody += line + CrLf;
+                    }
+                }
+                if (oReq != null)
+                {
+                    htmlBody = htmlBody.Replace("[CodCofreOrig]", oReq.CodArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.DesArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[CodCofreDest]", oReq.CodArticuloDestino);
+                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.DesArticuloDestino);
+                    htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
+                    htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oReq.CodSoliEgre.ToString());
+                    htmlBody = htmlBody.Replace("[CodigoPlanilla]", oReq.CodPlanilla);
+                    htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
+                }
+
+                EmailMessage? oMail = new()
+                {
+                    ServidorMail = configEmail.MailServer,
+                    PortMail = configEmail.MailPuerto,
+                    UseSSL = true,
+                    FromMail = configEmail.FromEmail,
+                    FromName = configEmail.FromName,
+                    Subject = configEmail.MailSubject,
+                    UsuarioMail = configEmail.MailUsuario,
+                    PasswordMail = configEmail.MailPassword,
+                    To = new List<string?>(configEmail.MailTo.Split(";")),
+                    CC = new List<string?>(configEmail.MailCC.Split(";")),
+                    CCO = new List<string?>(configEmail.MailCCO.Split(";")),
+                    Body = htmlBody
+                };
+
+                if (MailAgente != null)
+                {
+                    oResp = MailAgente.EnviarCorreoNotificacion(oMail);
+                }
+                else
+                {
+                    oResp = new()
+                    {
+                        Codigo = -2,
+                        Mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
+                    };
+                    logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
+                }
+
+                if (oResp == null)
+                {
+                    oResp = new RespuestaEjecucion()
+                    {
+                        Codigo = -2,
+                        Mensaje = "No hay conectividad con la base de datos, solicite soporte"
+                    };
+                    logger.Error("No hay conectividad con la base de datos, solicite soporte");
+                }
+            }
+            return oResp;
+        }
     }
 }

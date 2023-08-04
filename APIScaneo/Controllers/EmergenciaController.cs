@@ -148,7 +148,7 @@ namespace APIScaneo.Controllers
 
                 if (Conectividad != null)
                 {
-                    oResp = Conectividad.EnviarCorreoNotificacion(oReq, oMail);
+                    oResp = Conectividad.EnviarCorreoNotificacion(oMail);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Debug\net7.0\PubTmp\Out\plantilla_mail_notificacion.html
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Debug\net7.0\PubTmp\Out\plantilla_mail_reingreso.html
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Debug\net7.0\PubTmp\Out\APIScaneo.exe
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Debug\net7.0\PubTmp\Out\appsettings.Development.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Debug\net7.0\PubTmp\Out\appsettings.json

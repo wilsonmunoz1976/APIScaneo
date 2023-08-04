@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="plantilla_mail_reingreso.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="plantilla_mail_notificacion.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

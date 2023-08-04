@@ -2,6 +2,7 @@
 using System.Data;
 using clsScaneo.Entidades;
 using NLog;
+using Microsoft.Extensions.Configuration;
 
 namespace clsScaneo.Clases
 {
@@ -166,7 +167,6 @@ namespace clsScaneo.Clases
 
             return dt;
         }
-
         public RespuestaEjecucion? CambiaEstadoCofresUrnas(string? Bodega, int? Codigo, int? Estado, string? Comentario, string? Fotografia, string? Usuario)
         {
             RespuestaEjecucion oResp;
@@ -215,9 +215,9 @@ namespace clsScaneo.Clases
 
             return oResp;
         }
-        public RespuestaEjecucion ReingresoCofresUrnas(ReingresoCofreUrna reingresoCofreUrna)
+        public DataTable ReingresoCofresUrnas(ReingresoCofreUrna reingresoCofreUrna, ref RespuestaEjecucion oResp)
         {
-            RespuestaEjecucion oResp;
+            DataTable dt = new();
             try
             {
                 SqlCommand cmd = oConnection.CreateCommand();
@@ -230,7 +230,7 @@ namespace clsScaneo.Clases
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 
-                _ = cmd.ExecuteNonQuery();
+                dt.Load(cmd.ExecuteReader());
 
                 oResp = new()
                 {
@@ -246,8 +246,9 @@ namespace clsScaneo.Clases
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
-            return oResp;
+            return dt;
         }
+
         #endregion "Cofres Urnas"
 
     }

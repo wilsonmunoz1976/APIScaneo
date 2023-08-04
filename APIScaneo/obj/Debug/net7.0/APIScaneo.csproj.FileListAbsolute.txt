@@ -82,6 +82,7 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\appsettings.Deve
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\appsettings.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\APIScaneo.exe
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\plantilla_mail_notificacion.html
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\plantilla_mail_reingreso.html
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\APIScaneo.deps.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\APIScaneo.runtimeconfig.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Debug\net7.0\APIScaneo.dll

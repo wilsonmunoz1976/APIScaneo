@@ -28,7 +28,7 @@ namespace clsScaneo.Clases
         #endregion "Construccion"
 
         #region "Emergencia"
-        public RespuestaEjecucion? EnviarCorreoNotificacion(EmergenciaReq? oEmergencia, EmailMessage? oReq)
+        public RespuestaEjecucion? EnviarCorreoNotificacion(EmailMessage? oReq)
         {
             RespuestaEjecucion oResp = new();
             try
@@ -89,7 +89,6 @@ namespace clsScaneo.Clases
                     oMsg.BCC = sMailCCO;
 
                     oMsg.Send();
-
 
                     oResp.Codigo = 0;
                     oResp.Mensaje = "Mensaje Enviado Correctamente";
