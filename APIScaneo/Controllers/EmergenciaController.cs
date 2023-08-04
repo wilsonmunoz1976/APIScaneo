@@ -41,29 +41,120 @@ namespace APIScaneo.Controllers
         [HttpPost("RegistrarEmergencia")]
         public RespuestaEjecucion? RegistrarEmergencia([FromBody] RegistroEmergenciaRequest? oReq)
         {
-            RespuestaEjecucion? oResp;
             RegistroEmergenciaResponse respRegistro = new();
-            try
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+
+                try
                 {
-                    oResp = Conectividad.RegistrarEmergencia(oReq, ref respRegistro);
-                    if (oResp != null)
+                    if (Conectividad != null)
                     {
-                        if (oResp.Codigo == 0)
+                        oResp = Conectividad.RegistrarEmergencia(oReq, ref respRegistro);
+                        if (oResp != null)
                         {
-                            oResp = NotificacionEmail(oReq, ref respRegistro);
+                            if (oResp.Codigo == 0)
+                            {
+                                oResp = NotificacionEmail(oReq, ref respRegistro);
+                            }
+                            else
+                            {
+                                string? sMensaje = oResp.Mensaje;
+                                oResp = new()
+                                {
+                                    Codigo = -1,
+                                    Mensaje = sMensaje ?? ""
+                                };
+
+                            }
                         }
                         else
                         {
-                            string? sMensaje = oResp.Mensaje;
                             oResp = new()
                             {
-                                Codigo = -1,
-                                Mensaje = sMensaje ?? ""
+                                Codigo = -2,
+                                Mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
                             };
-
+                            logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
                         }
+                    }
+                    else
+                    {
+                        oResp = new()
+                        {
+                            Codigo = -2,
+                            Mensaje = "No esta instanciada la clase de Emergencia"
+                        };
+                        logger.Error("No esta instanciada la clase de Emergencia");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    oResp = new()
+                    {
+                        Codigo = -2,
+                        Mensaje = ex.Message
+                    };
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                }
+            }
+            return oResp;
+        }
+
+        private RespuestaEjecucion? NotificacionEmail(RegistroEmergenciaRequest? oReq, ref RegistroEmergenciaResponse respRegistro)
+        {
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
+            {
+
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+                EmailConfig? configEmail = configuration.GetSection("ConfigEmail").Get<EmailConfig>();
+                string htmlBody = string.Empty;
+                if (configEmail != null)
+                {
+                    string fileName = Environment.CurrentDirectory + "\\plantilla_mail_notificacion.html";
+                    using (StreamReader reader = new(fileName))
+                    {
+                        string? line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            htmlBody += line + CrLf;
+                        }
+                    }
+                    if (oReq != null)
+                    {
+                        htmlBody = htmlBody.Replace("[CodArticulo]", oReq.Articulo);
+                        htmlBody = htmlBody.Replace("[DesArticulo]", respRegistro.DesArticulo);
+                        htmlBody = htmlBody.Replace("[Bodega]", respRegistro.Bodega);
+                        htmlBody = htmlBody.Replace("[NombreCompleto]", oReq.Nombres);
+                        htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
+                        htmlBody = htmlBody.Replace("[CodigoSoliEgre]", respRegistro.CodigoSolicEgre.ToString());
+                        htmlBody = htmlBody.Replace("[CodigoPlanilla]", respRegistro.CodigoPlanilla);
+                    }
+
+                    EmailMessage? oMail = new()
+                    {
+                        ServidorMail = configEmail.MailServer,
+                        PortMail = configEmail.MailPuerto,
+                        UseSSL = true,
+                        FromMail = configEmail.FromEmail,
+                        FromName = configEmail.FromName,
+                        Subject = configEmail.MailSubject,
+                        UsuarioMail = configEmail.MailUsuario,
+                        PasswordMail = configEmail.MailPassword,
+                        To = new List<string?>(configEmail.MailTo.Split(";")),
+                        CC = new List<string?>(configEmail.MailCC.Split(";")),
+                        CCO = new List<string?>(configEmail.MailCCO.Split(";")),
+                        Body = htmlBody
+                    };
+
+                    if (Conectividad != null)
+                    {
+                        oResp = Conectividad.EnviarCorreoNotificacion(oMail);
                     }
                     else
                     {
@@ -74,104 +165,39 @@ namespace APIScaneo.Controllers
                         };
                         logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
                     }
-                }
-                else
-                {
-                    oResp = new()
+
+                    if (oResp == null)
                     {
-                        Codigo = -2,
-                        Mensaje = "No esta instanciada la clase de Emergencia"
-                    };
-                    logger.Error("No esta instanciada la clase de Emergencia");
-                }
-            }
-            catch (Exception ex)
-            {
-                oResp = new()
-                {
-                    Codigo = -2,
-                    Mensaje = ex.Message
-                };
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
-            }
-            return oResp;
-        }
-
-        private RespuestaEjecucion? NotificacionEmail(RegistroEmergenciaRequest? oReq, ref RegistroEmergenciaResponse respRegistro)
-        {
-            RespuestaEjecucion? oResp = null;
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            EmailConfig? configEmail = configuration.GetSection("ConfigEmail").Get<EmailConfig>();
-            string htmlBody = string.Empty;
-            if (configEmail != null)
-            {
-                string fileName = Environment.CurrentDirectory + "\\plantilla_mail_notificacion.html";
-                using (StreamReader reader = new(fileName))
-                {
-                    string? line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        htmlBody += line + CrLf;
+                        oResp = new RespuestaEjecucion()
+                        {
+                            Codigo = -2,
+                            Mensaje = "No hay conectividad con la base de datos, solicite soporte"
+                        };
+                        logger.Error("No hay conectividad con la base de datos, solicite soporte");
                     }
                 }
-                if (oReq != null)
-                {
-                    htmlBody = htmlBody.Replace("[CodArticulo]", oReq.Articulo);
-                    htmlBody = htmlBody.Replace("[DesArticulo]", respRegistro.DesArticulo);
-                    htmlBody = htmlBody.Replace("[Bodega]", respRegistro.Bodega);
-                    htmlBody = htmlBody.Replace("[NombreCompleto]", oReq.Nombres);
-                    htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
-                    htmlBody = htmlBody.Replace("[CodigoSoliEgre]", respRegistro.CodigoSolicEgre.ToString());
-                    htmlBody = htmlBody.Replace("[CodigoPlanilla]", respRegistro.CodigoPlanilla);
-                }
-
-                EmailMessage? oMail = new()
-                {
-                    ServidorMail = configEmail.MailServer,
-                    PortMail = configEmail.MailPuerto,
-                    UseSSL = true,
-                    FromMail = configEmail.FromEmail,
-                    FromName = configEmail.FromName,
-                    Subject = configEmail.MailSubject,
-                    UsuarioMail = configEmail.MailUsuario,
-                    PasswordMail = configEmail.MailPassword,
-                    To = new List<string?>(configEmail.MailTo.Split(";")),
-                    CC = new List<string?>(configEmail.MailCC.Split(";")),
-                    CCO = new List<string?>(configEmail.MailCCO.Split(";")),
-                    Body = htmlBody
-                };
-
-                if (Conectividad != null)
-                {
-                    oResp = Conectividad.EnviarCorreoNotificacion(oMail);
-                }
-                else
-                {
-                    oResp = new()
-                    {
-                        Codigo = -2,
-                        Mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
-                    };
-                    logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
-                }
-
-                if (oResp == null)
-                {
-                    oResp = new RespuestaEjecucion()
-                    {
-                        Codigo = -2,
-                        Mensaje = "No hay conectividad con la base de datos, solicite soporte"
-                    };
-                    logger.Error("No hay conectividad con la base de datos, solicite soporte");
-                }
             }
             return oResp;
         }
-
+        private RespuestaEjecucion? IsTokenValido()
+        {
+            var context = HttpContext;
+            if (context.Response.Headers["Token-Expired"] == "true")
+            {
+                return new()
+                {
+                    Codigo = -9,
+                    Mensaje = "Token es invalido o esta expirado"
+                };
+            }
+            else
+            {
+                return new()
+                {
+                    Codigo = 0,
+                    Mensaje = "Token valido"
+                };
+            }
+        }
     }
 }

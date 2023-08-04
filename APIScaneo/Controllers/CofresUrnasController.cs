@@ -42,34 +42,38 @@ namespace APIScaneo.Controllers
         public BodegaResponse GetBodegas()
         {
             List<BodegaResponseDetalle> oBodegas = new();
-            RespuestaEjecucion oResp = new();
-            try
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    DataTable oData = Conectividad.GetBodegas(ref oResp);
-                    if (oData != null)
+                    if (Conectividad != null)
                     {
-                        oBodegas = (from DataRow dr in oData.Rows
-                                    select new BodegaResponseDetalle()
-                                    {
-                                        Codigobodega = dr["ci_bodega"].ToString(),
-                                        Nombrebodega = dr["tx_nombrebodega"].ToString(),
-                                    }
-                                         ).ToList();
+                        DataTable oData = Conectividad.GetBodegas(ref oResp);
+                        if (oData != null)
+                        {
+                            oBodegas = (from DataRow dr in oData.Rows
+                                        select new BodegaResponseDetalle()
+                                        {
+                                            Codigobodega = dr["ci_bodega"].ToString(),
+                                            Nombrebodega = dr["tx_nombrebodega"].ToString(),
+                                        }
+                                             ).ToList();
+                        }
+                    }
+                    else
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    oResp.Mensaje = ex.Message;
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            } catch (Exception ex)
-            {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
 
             return new BodegaResponse() { Respuesta = oResp, Detalle = oBodegas };
@@ -79,39 +83,42 @@ namespace APIScaneo.Controllers
         public CofreUrnaListaResponse GetCofresUrnas()
         {
             List<CofreUrnaListaResponseDetalle> oCofresUrnas = new();
-            RespuestaEjecucion oResp = new();
-            try
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    DataTable oData = Conectividad.GetCofresUrnas("009", 0, null, ref oResp);
-                    if (oData != null)
+                    if (Conectividad != null)
                     {
-                        oCofresUrnas = (from DataRow dr in oData.Rows
-                                        select new CofreUrnaListaResponseDetalle()
-                                        {
-                                            Codigo = dr["Codigo"].ToString(),
-                                            Bodega = dr["Bodega"].ToString(),
-                                            Producto = dr["Producto"].ToString(),
-                                            Inhumado = dr["Inhumado"].ToString(),
-                                            NombreProveedor = dr["NombreProveedor"].ToString(),
-                                            Estado = Convert.ToInt16(dr["Estado"])
-                                        }
-                                         ).ToList();
+                        DataTable oData = Conectividad.GetCofresUrnas("009", 0, null, ref oResp);
+                        if (oData != null)
+                        {
+                            oCofresUrnas = (from DataRow dr in oData.Rows
+                                            select new CofreUrnaListaResponseDetalle()
+                                            {
+                                                Codigo = dr["Codigo"].ToString(),
+                                                Bodega = dr["Bodega"].ToString(),
+                                                Producto = dr["Producto"].ToString(),
+                                                Inhumado = dr["Inhumado"].ToString(),
+                                                NombreProveedor = dr["NombreProveedor"].ToString(),
+                                                Estado = Convert.ToInt16(dr["Estado"])
+                                            }
+                                             ).ToList();
+                        }
+                    }
+                    else
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    oResp.Mensaje = ex.Message;
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oCofresUrnas };
         }
@@ -120,39 +127,42 @@ namespace APIScaneo.Controllers
         public CofreUrnaListaResponse GetCofresUrnas(string bodega, int? estado = 0, string? usuario = null)
         {
             List<CofreUrnaListaResponseDetalle>? oActivosFijos = new();
-            RespuestaEjecucion oResp = new();
-            try
+            RespuestaEjecucion oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    DataTable oData = Conectividad.GetCofresUrnas(bodega, estado, usuario, ref oResp);
-                    if (oData != null)
+                    if (Conectividad != null)
                     {
-                        oActivosFijos = (from DataRow dr in oData.Rows
-                                         select new CofreUrnaListaResponseDetalle()
-                                         {
-                                             Codigo = dr["Codigo"].ToString(),
-                                             Bodega = dr["Bodega"].ToString(),
-                                             Producto = dr["Producto"].ToString(),
-                                             Inhumado = dr["Inhumado"].ToString(),
-                                             NombreProveedor = dr["NombreProveedor"].ToString(),
-                                             Estado = Convert.ToInt16(dr["Estado"])
-                                         }
-                                         ).ToList();
+                        DataTable oData = Conectividad.GetCofresUrnas(bodega, estado, usuario, ref oResp);
+                        if (oData != null)
+                        {
+                            oActivosFijos = (from DataRow dr in oData.Rows
+                                             select new CofreUrnaListaResponseDetalle()
+                                             {
+                                                 Codigo = dr["Codigo"].ToString(),
+                                                 Bodega = dr["Bodega"].ToString(),
+                                                 Producto = dr["Producto"].ToString(),
+                                                 Inhumado = dr["Inhumado"].ToString(),
+                                                 NombreProveedor = dr["NombreProveedor"].ToString(),
+                                                 Estado = Convert.ToInt16(dr["Estado"])
+                                             }
+                                             ).ToList();
+                        }
+                    }
+                    else
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    oResp.Mensaje = ex.Message;
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oActivosFijos };
         }
@@ -161,41 +171,44 @@ namespace APIScaneo.Controllers
         public CofreUrnaDatoResponse GetCofreUrna(string? articulo)
         {
             CofreUrnaDatoResponseDetalle detalle = new();
-            RespuestaEjecucion oResp = new();
-            try
+            RespuestaEjecucion oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    DataTable oData = Conectividad.GetCofreUrna(articulo, ref oResp);
-                    if (oData != null)
+                    if (Conectividad != null)
                     {
-                        if (oData.Rows.Count > 0)
+                        DataTable oData = Conectividad.GetCofreUrna(articulo, ref oResp);
+                        if (oData != null)
                         {
-                            DataRow dr = oData.Rows[0];
-                            detalle = new()
+                            if (oData.Rows.Count > 0)
                             {
-                                CodArticulo = dr["CodArticulo"].ToString(),
-                                DesArticulo = dr["DesArticulo"].ToString(),
-                                CodBodega = dr["CodBodega"].ToString(),
-                                DesBodega = dr["DesBodega"].ToString(),
-                                Precio = Convert.ToDecimal(dr["Precio"]),
-                                Existencia = Convert.ToDecimal(dr["Existencia"])
-                            };
+                                DataRow dr = oData.Rows[0];
+                                detalle = new()
+                                {
+                                    CodArticulo = dr["CodArticulo"].ToString(),
+                                    DesArticulo = dr["DesArticulo"].ToString(),
+                                    CodBodega = dr["CodBodega"].ToString(),
+                                    DesBodega = dr["DesBodega"].ToString(),
+                                    Precio = Convert.ToDecimal(dr["Precio"]),
+                                    Existencia = Convert.ToDecimal(dr["Existencia"])
+                                };
+                            }
                         }
                     }
+                    else
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    oResp.Mensaje = ex.Message;
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return new CofreUrnaDatoResponse() { Respuesta = oResp, Detalle = detalle };
         }
@@ -204,44 +217,47 @@ namespace APIScaneo.Controllers
         public CofreUrnaListaResponse GetSolEgreCofreUrna(int? solicitudEgreso, string? usuario = null)
         {
             List<CofreUrnaListaResponseDetalle> oCofresUrnas = new();
-            RespuestaEjecucion oResp = new();
-            try
+            RespuestaEjecucion oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    DataTable oData = Conectividad.GetSolEgreCofreUrna(solicitudEgreso, usuario, ref oResp);
-                    if (oData != null)
+                    if (Conectividad != null)
                     {
-                        oCofresUrnas = (from DataRow dr in oData.Rows
-                                        select new CofreUrnaListaResponseDetalle()
-                                        {
-                                            Codigo = dr["Codigo"].ToString(),
-                                            Bodega = dr["Bodega"].ToString(),
-                                            Producto = dr["Producto"].ToString(),
-                                            Inhumado = dr["Inhumado"].ToString(),
-                                            NombreProveedor = dr["NombreProveedor"].ToString(),
-                                            Estado = Convert.ToInt16(dr["Estado"]),
-                                            Comentario = dr["Comentario"].ToString(),
-                                            ObservacionRetiro = dr["ObservacionRetiro"].ToString(),
-                                            ObservacionEntrega = dr["ObservacionEntrega"].ToString(),
-                                            ObservacionSala = dr["ObservacionSala"].ToString(),
-                                            FotografiaSala = dr["FotografiaSala"].ToString()
-                                        }
-                                         ).ToList();
+                        DataTable oData = Conectividad.GetSolEgreCofreUrna(solicitudEgreso, usuario, ref oResp);
+                        if (oData != null)
+                        {
+                            oCofresUrnas = (from DataRow dr in oData.Rows
+                                            select new CofreUrnaListaResponseDetalle()
+                                            {
+                                                Codigo = dr["Codigo"].ToString(),
+                                                Bodega = dr["Bodega"].ToString(),
+                                                Producto = dr["Producto"].ToString(),
+                                                Inhumado = dr["Inhumado"].ToString(),
+                                                NombreProveedor = dr["NombreProveedor"].ToString(),
+                                                Estado = Convert.ToInt16(dr["Estado"]),
+                                                Comentario = dr["Comentario"].ToString(),
+                                                ObservacionRetiro = dr["ObservacionRetiro"].ToString(),
+                                                ObservacionEntrega = dr["ObservacionEntrega"].ToString(),
+                                                ObservacionSala = dr["ObservacionSala"].ToString(),
+                                                FotografiaSala = dr["FotografiaSala"].ToString()
+                                            }
+                                             ).ToList();
+                        }
+                    }
+                    else
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de CofresUrnas";
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    oResp.Mensaje = ex.Message;
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp.Codigo = -2;
-                oResp.Mensaje = ex.Message;
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oCofresUrnas };
         }
@@ -249,38 +265,41 @@ namespace APIScaneo.Controllers
         [HttpPost("CambiaEstadoCofresUrnas")]
         public RespuestaEjecucion? CambiaEstadoCofresUrnas([FromBody] CambiaEstadoCofreUrnaRequest cofresUrnasReq)
         {
-            RespuestaEjecucion? oResp;
-            try
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+                try
                 {
-                    oResp = Conectividad.CambiaEstadoCofresUrnas(
-                            Bodega: cofresUrnasReq.Bodega,
-                            Codigo: cofresUrnasReq.Codigo,
-                            Estado: cofresUrnasReq.Estado,
-                            Comentario: cofresUrnasReq.Comentario,
-                            Fotografia: cofresUrnasReq.Fotografia,
-                            Usuario: cofresUrnasReq.Usuario
-                            );
+                    if (Conectividad != null)
+                    {
+                        oResp = Conectividad.CambiaEstadoCofresUrnas(
+                                Bodega: cofresUrnasReq.Bodega,
+                                Codigo: cofresUrnasReq.Codigo,
+                                Estado: cofresUrnasReq.Estado,
+                                Comentario: cofresUrnasReq.Comentario,
+                                Fotografia: cofresUrnasReq.Fotografia,
+                                Usuario: cofresUrnasReq.Usuario
+                                );
+                    }
+                    else
+                    {
+                        oResp = new()
+                        {
+                            Codigo = -2,
+                            Mensaje = "No esta instanciada la clase de CofresUrnas"
+                        };
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp = new()
                     {
                         Codigo = -2,
-                        Mensaje = "No esta instanciada la clase de CofresUrnas"
+                        Mensaje = ex.Message
                     };
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp = new()
-                {
-                    Codigo = -2,
-                    Mensaje = ex.Message
-                };
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return oResp;
         }
@@ -288,52 +307,55 @@ namespace APIScaneo.Controllers
         [HttpPost("ReingresoCofresUrnas")]
         public RespuestaEjecucion? ReingresoCofresUrnas([FromBody] ReingresoCofreUrnaRequest reingresoCofreUrna)
         {
-            RespuestaEjecucion? oResp = new();
-
-            try
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp.Codigo == 0)
             {
-                if (Conectividad != null)
+
+                try
                 {
-                    DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, ref oResp);
-                    if (oResp.Codigo == 0)
+                    if (Conectividad != null)
                     {
-                        if (dt.Rows.Count > 0)
+                        DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, ref oResp);
+                        if (oResp.Codigo == 0)
                         {
-                            ReingresoCofreUrnaRespose? oDato = null;
-                            DataRow dr = dt.Rows[0];
-                            oDato = new()
+                            if (dt.Rows.Count > 0)
                             {
-                                CodArticuloOrigen = dr["CodArticuloOrigen"].ToString(),
-                                DesArticuloOrigen = dr["DesArticuloOrigen"].ToString(),
-                                CodArticuloDestino = dr["CodArticuloDestino"].ToString(),
-                                DesArticuloDestino = dr["DesArticuloDestino"].ToString(),
-                                CodSoliEgre = Convert.ToInt32(dr["CodSoliEgre"]),
-                                CodPlanilla = dr["CodPlanilla"].ToString(),
-                                NombreFallecido = dr["NombreFallecido"].ToString(),
-                                Usuario = dr["Usuario"].ToString()
-                            };
-                            oResp = NotificarReingreso(oDato);
+                                ReingresoCofreUrnaRespose? oDato = null;
+                                DataRow dr = dt.Rows[0];
+                                oDato = new()
+                                {
+                                    CodArticuloOrigen = dr["CodArticuloOrigen"].ToString(),
+                                    DesArticuloOrigen = dr["DesArticuloOrigen"].ToString(),
+                                    CodArticuloDestino = dr["CodArticuloDestino"].ToString(),
+                                    DesArticuloDestino = dr["DesArticuloDestino"].ToString(),
+                                    CodSoliEgre = Convert.ToInt32(dr["CodSoliEgre"]),
+                                    CodPlanilla = dr["CodPlanilla"].ToString(),
+                                    NombreFallecido = dr["NombreFallecido"].ToString(),
+                                    Usuario = dr["Usuario"].ToString()
+                                };
+                                oResp = NotificarReingreso(oDato);
+                            }
                         }
                     }
+                    else
+                    {
+                        oResp = new()
+                        {
+                            Codigo = -2,
+                            Mensaje = "No esta instanciada la clase de CofresUrnas"
+                        };
+                        logger.Error("No esta instanciada la clase de CofresUrnas");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     oResp = new()
                     {
                         Codigo = -2,
-                        Mensaje = "No esta instanciada la clase de CofresUrnas"
+                        Mensaje = ex.Message
                     };
-                    logger.Error("No esta instanciada la clase de CofresUrnas");
+                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
-            }
-            catch (Exception ex)
-            {
-                oResp = new()
-                {
-                    Codigo = -2,
-                    Mensaje = ex.Message
-                };
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
             return oResp;
         }
@@ -414,5 +436,26 @@ namespace APIScaneo.Controllers
             }
             return oResp;
         }
+        private RespuestaEjecucion? IsTokenValido()
+        {
+            var context = HttpContext;
+            if (context.Response.Headers["Token-Expired"] == "true")
+            {
+                return new()
+                {
+                    Codigo = -9,
+                    Mensaje = "Token es invalido o esta expirado"
+                };
+            }
+            else
+            {
+                return new()
+                {
+                    Codigo = 0,
+                    Mensaje = "Token valido"
+                };
+            }
+        }
+
     }
 }
