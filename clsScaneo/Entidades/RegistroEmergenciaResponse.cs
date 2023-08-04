@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace clsScaneo.Entidades
 {
-    public class RespRegistro
+    public class RegistroEmergenciaResponse
     {
         public string? CodigoPlanilla { get; set; } = string.Empty;
         public int? CodigoSolicEgre { get; set; } = 0;

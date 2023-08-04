@@ -37,9 +37,9 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("GetBodegas")]
-        public Bodega GetBodegas()
+        public BodegaResponse GetBodegas()
         {
-            List<BodegaDet> oBodegas = new();
+            List<BodegaResponseDetalle> oBodegas = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -51,7 +51,7 @@ namespace APIScaneo.Controllers
                         if (oData != null)
                         {
                             oBodegas = (from DataRow dr in oData.Rows
-                                        select new BodegaDet()
+                                        select new BodegaResponseDetalle()
                                         {
                                             Codigobodega = dr["ci_bodega"].ToString(),
                                             Nombrebodega = dr["tx_nombrebodega"].ToString(),
@@ -80,13 +80,13 @@ namespace APIScaneo.Controllers
                 logger.Error(ex.GetType().FullName + " - " + ex.Message + "\r\n" + ex.StackTrace);
             }
 
-            return new Bodega() { Respuesta = oResp, Detalle = oBodegas };
+            return new BodegaResponse() { Respuesta = oResp, Detalle = oBodegas };
         }
 
         [HttpPost("GetInventario/{bodega}")]
-        public InventarioCab GetInventario(string bodega)
+        public InventarioResponse GetInventario(string bodega)
         {
-            List<InventarioDet> oInventario = new();
+            List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = new();
             try
             {
@@ -96,7 +96,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oInventario = (from DataRow dr in oData.Rows
-                                       select new InventarioDet()
+                                       select new InventarioDetalle()
                                        {
                                            Codigo = dr["Codigo"].ToString(),
                                            Articulo = dr["Articulo"].ToString(),
@@ -122,13 +122,13 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new InventarioCab() { Respuesta = oResp, Detalle = oInventario };
+            return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
         }
 
         [HttpPost("GetInventario/{bodega}/{Codigo}")]
-        public InventarioCab GetInventario(string codigo, string bodega="1")
+        public InventarioResponse GetInventario(string codigo, string bodega="1")
         {
-            List<InventarioDet> oInventario = new();
+            List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -138,7 +138,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oInventario = (from DataRow dr in oData.Rows
-                                       select new InventarioDet()
+                                       select new InventarioDetalle()
                                        {
                                            Codigo = dr["Codigo"].ToString(),
                                            Articulo = dr["Articulo"].ToString(),
@@ -166,11 +166,11 @@ namespace APIScaneo.Controllers
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
 
             }
-            return new InventarioCab() { Respuesta = oResp, Detalle = oInventario };
+            return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
         }
 
         [HttpPost("ActualizarInventario")]
-        public RespuestaEjecucion ActualizarInventario([FromBody] InventarioReq oReq)
+        public RespuestaEjecucion ActualizarInventario([FromBody] InventarioRequest oReq)
         {
             RespuestaEjecucion oResp = new();
             try

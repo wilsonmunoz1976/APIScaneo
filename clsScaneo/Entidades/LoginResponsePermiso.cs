@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class LoginPermiso
+    public class LoginResponsePermiso
     {
         public string? CodigoModulo  { get; set; }
         public string? DescripcionModulo { get; set; }

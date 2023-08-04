@@ -215,7 +215,7 @@ namespace clsScaneo.Clases
 
             return oResp;
         }
-        public DataTable ReingresoCofresUrnas(ReingresoCofreUrna reingresoCofreUrna, ref RespuestaEjecucion oResp)
+        public DataTable ReingresoCofresUrnas(ReingresoCofreUrnaRequest reingresoCofreUrna, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new();
             try

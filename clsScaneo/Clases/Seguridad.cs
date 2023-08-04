@@ -3,7 +3,7 @@ using System.Data;
 using clsScaneo.Entidades;
 using NLog;
 using APIScaneo.Authorization;
-using APIScaneo.Models;
+using clsScaneo.Models;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Options;
 

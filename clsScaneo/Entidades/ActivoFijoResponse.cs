@@ -2,9 +2,9 @@ using clsScaneo.Entidades;
 
 namespace clsScaneo.Entidades
 {
-    public class ActivoFijo
+    public class ActivoFijoResponse
     {
         public RespuestaEjecucion? Respuesta { get; set; }
-        public List<ActivoFijoDet>? Detalle { get; set; }
+        public List<ActivoFijoResponseDetalle>? Detalle { get; set; }
     }
 }

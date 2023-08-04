@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class InventarioDet
+    public class InventarioDetalle
     {
         public string? Codigo { get; set; } = "I0000099999";
         public string? Articulo { get; set; } = "C100";

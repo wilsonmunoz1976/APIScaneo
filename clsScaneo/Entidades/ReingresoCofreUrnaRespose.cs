@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class ReingresoCofreDato
+    public class ReingresoCofreUrnaRespose
     {
         public string? CodArticuloOrigen { get; set; } = string.Empty;
         public string? DesArticuloOrigen { get; set; } = string.Empty;

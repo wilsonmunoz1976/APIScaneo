@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class EmergenciaReq
+    public class RegistroEmergenciaRequest
     {
         public string Nombres { get; set; } = "";
         public string Articulo { get; set; } = "";

@@ -1,8 +1,8 @@
 namespace clsScaneo.Entidades
 {
-    public class InventarioCab
+    public class InventarioResponse
     {
         public RespuestaEjecucion? Respuesta { get; set; }
-        public List<InventarioDet>? Detalle { get; set; }
+        public List<InventarioDetalle>? Detalle { get; set; }
     }
 }

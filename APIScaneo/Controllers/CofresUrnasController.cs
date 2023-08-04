@@ -39,9 +39,9 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("GetBodegas")]
-        public Bodega GetBodegas()
+        public BodegaResponse GetBodegas()
         {
-            List<BodegaDet> oBodegas = new();
+            List<BodegaResponseDetalle> oBodegas = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -51,7 +51,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oBodegas = (from DataRow dr in oData.Rows
-                                    select new BodegaDet()
+                                    select new BodegaResponseDetalle()
                                     {
                                         Codigobodega = dr["ci_bodega"].ToString(),
                                         Nombrebodega = dr["tx_nombrebodega"].ToString(),
@@ -72,13 +72,13 @@ namespace APIScaneo.Controllers
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
 
-            return new Bodega() { Respuesta = oResp, Detalle = oBodegas };
+            return new BodegaResponse() { Respuesta = oResp, Detalle = oBodegas };
         }
 
         [HttpPost("GetCofresUrnas")]
-        public CofreUrnaResp GetCofresUrnas()
+        public CofreUrnaListaResponse GetCofresUrnas()
         {
-            List<CofreUrnaDet> oCofresUrnas = new();
+            List<CofreUrnaListaResponseDetalle> oCofresUrnas = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -88,7 +88,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oCofresUrnas = (from DataRow dr in oData.Rows
-                                        select new CofreUrnaDet()
+                                        select new CofreUrnaListaResponseDetalle()
                                         {
                                             Codigo = dr["Codigo"].ToString(),
                                             Bodega = dr["Bodega"].ToString(),
@@ -113,13 +113,13 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new CofreUrnaResp() { Respuesta = oResp, Detalle = oCofresUrnas };
+            return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oCofresUrnas };
         }
 
         [HttpPost("GetCofresUrnas/{bodega}")]
-        public CofreUrnaResp GetCofresUrnas(string bodega, int? estado = 0, string? usuario = null)
+        public CofreUrnaListaResponse GetCofresUrnas(string bodega, int? estado = 0, string? usuario = null)
         {
-            List<CofreUrnaDet>? oActivosFijos = new();
+            List<CofreUrnaListaResponseDetalle>? oActivosFijos = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -129,7 +129,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oActivosFijos = (from DataRow dr in oData.Rows
-                                         select new CofreUrnaDet()
+                                         select new CofreUrnaListaResponseDetalle()
                                          {
                                              Codigo = dr["Codigo"].ToString(),
                                              Bodega = dr["Bodega"].ToString(),
@@ -154,13 +154,13 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new CofreUrnaResp() { Respuesta = oResp, Detalle = oActivosFijos };
+            return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oActivosFijos };
         }
 
         [HttpPost("GetCofreUrna/{articulo}")]
-        public CofreUrnaDatoResp GetCofreUrna(string? articulo)
+        public CofreUrnaDatoResponse GetCofreUrna(string? articulo)
         {
-            CofreUrnaDato detalle = new();
+            CofreUrnaDatoResponseDetalle detalle = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -197,13 +197,13 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new CofreUrnaDatoResp() { Respuesta = oResp, Detalle = detalle };
+            return new CofreUrnaDatoResponse() { Respuesta = oResp, Detalle = detalle };
         }
 
         [HttpPost("GetSolEgreCofreUrna/{solicitudEgreso}")]
-        public CofreUrnaResp GetSolEgreCofreUrna(int? solicitudEgreso, string? usuario = null)
+        public CofreUrnaListaResponse GetSolEgreCofreUrna(int? solicitudEgreso, string? usuario = null)
         {
-            List<CofreUrnaDet> oCofresUrnas = new();
+            List<CofreUrnaListaResponseDetalle> oCofresUrnas = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -213,7 +213,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oCofresUrnas = (from DataRow dr in oData.Rows
-                                        select new CofreUrnaDet()
+                                        select new CofreUrnaListaResponseDetalle()
                                         {
                                             Codigo = dr["Codigo"].ToString(),
                                             Bodega = dr["Bodega"].ToString(),
@@ -243,11 +243,11 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new CofreUrnaResp() { Respuesta = oResp, Detalle = oCofresUrnas };
+            return new CofreUrnaListaResponse() { Respuesta = oResp, Detalle = oCofresUrnas };
         }
 
         [HttpPost("CambiaEstadoCofresUrnas")]
-        public RespuestaEjecucion? CambiaEstadoCofresUrnas([FromBody] CofreUrnaReq cofresUrnasReq)
+        public RespuestaEjecucion? CambiaEstadoCofresUrnas([FromBody] CambiaEstadoCofreUrnaRequest cofresUrnasReq)
         {
             RespuestaEjecucion? oResp;
             try
@@ -286,7 +286,7 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("ReingresoCofresUrnas")]
-        public RespuestaEjecucion? ReingresoCofresUrnas([FromBody] ReingresoCofreUrna reingresoCofreUrna)
+        public RespuestaEjecucion? ReingresoCofresUrnas([FromBody] ReingresoCofreUrnaRequest reingresoCofreUrna)
         {
             RespuestaEjecucion? oResp = new();
 
@@ -299,7 +299,7 @@ namespace APIScaneo.Controllers
                     {
                         if (dt.Rows.Count > 0)
                         {
-                            ReingresoCofreDato? oDato = null;
+                            ReingresoCofreUrnaRespose? oDato = null;
                             DataRow dr = dt.Rows[0];
                             oDato = new()
                             {
@@ -338,7 +338,7 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
-        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreDato? oReq)
+        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRespose? oReq)
         {
             RespuestaEjecucion? oResp = null;
 
@@ -347,7 +347,7 @@ namespace APIScaneo.Controllers
             .AddJsonFile("appsettings.json")
             .Build();
 
-            ConfigEmail? configEmail = configuration.GetSection("ConfigEmail").Get<ConfigEmail>();
+            EmailConfig? configEmail = configuration.GetSection("ConfigEmail").Get<EmailConfig>();
             string htmlBody = string.Empty;
             if (configEmail != null)
             {

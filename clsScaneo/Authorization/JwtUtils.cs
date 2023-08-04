@@ -10,7 +10,7 @@ using clsScaneo.Helpers;
 
 public interface IJwtUtils
 {
-    public string GenerateJwtToken(LoginDato user);
+    public string GenerateJwtToken(LoginResponseInfoUsuario user);
     public int? ValidateJwtToken(string? token);
 }
 
@@ -26,7 +26,7 @@ public class JwtUtils : IJwtUtils
             throw new Exception("JWT secret not configured");
     }
 
-    public string GenerateJwtToken(LoginDato user)
+    public string GenerateJwtToken(LoginResponseInfoUsuario user)
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -34,7 +34,7 @@ public class JwtUtils : IJwtUtils
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddMinutes(_Settings.HorasExpiracion * 60),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -56,6 +56,7 @@ public class JwtUtils : IJwtUtils
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
+                ValidateLifetime = true,
                 // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);

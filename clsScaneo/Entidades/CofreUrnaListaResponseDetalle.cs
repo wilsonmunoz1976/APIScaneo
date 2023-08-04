@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class CofreUrnaDet
+    public class CofreUrnaListaResponseDetalle
     {
         public string? Codigo { get; set; }
         public string? Bodega { get; set; }

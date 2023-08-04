@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class LoginParam
+    public class LoginResponseParametro
     {
         public string? NombreParametro  { get; set; }
         public string? ValorParametro { get; set; }

@@ -38,9 +38,9 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("GetActivosFijos")]
-        public ActivoFijo GetActivosFijos()
+        public ActivoFijoResponse GetActivosFijos()
         {
-            List<ActivoFijoDet> oActivosFijos = new();
+            List<ActivoFijoResponseDetalle> oActivosFijos = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -50,7 +50,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oActivosFijos = (from DataRow dr in oData.Rows
-                                         select new ActivoFijoDet()
+                                         select new ActivoFijoResponseDetalle()
                                          {
                                              Codigo = dr["Codigo"].ToString(),
                                              Activo = dr["Activo"].ToString(),
@@ -73,13 +73,13 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new ActivoFijo() { Respuesta = oResp, Detalle=oActivosFijos };
+            return new ActivoFijoResponse() { Respuesta = oResp, Detalle=oActivosFijos };
         }
 
         [HttpPost("GetActivosFijos/{codigo}")]
-        public ActivoFijo GetActivosFijos(string codigo)
+        public ActivoFijoResponse GetActivosFijos(string codigo)
         {
-            List<ActivoFijoDet> oActivosFijos = new();
+            List<ActivoFijoResponseDetalle> oActivosFijos = new();
             RespuestaEjecucion oResp = new();
             try
             {
@@ -89,7 +89,7 @@ namespace APIScaneo.Controllers
                     if (oData != null)
                     {
                         oActivosFijos = (from DataRow dr in oData.Rows
-                                         select new ActivoFijoDet()
+                                         select new ActivoFijoResponseDetalle()
                                          {
                                              Codigo = dr["Codigo"].ToString(),
                                              Activo = dr["Activo"].ToString(),
@@ -112,7 +112,7 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new ActivoFijo() { Respuesta = oResp, Detalle = oActivosFijos };
+            return new ActivoFijoResponse() { Respuesta = oResp, Detalle = oActivosFijos };
         }
 
     }

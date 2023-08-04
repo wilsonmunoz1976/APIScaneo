@@ -130,7 +130,7 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public RespuestaEjecucion ActualizarInventario(InventarioReq oReq)
+        public RespuestaEjecucion ActualizarInventario(InventarioRequest oReq)
         {
             RespuestaEjecucion? oResp;
             try
@@ -184,7 +184,7 @@ namespace clsScaneo.Clases
                 DetalleXML += "   <Detalle>\r\n";
                 if (oReq.Detalle != null)
                 {
-                    foreach (InventarioDet? oDet in oReq.Detalle)
+                    foreach (InventarioDetalle? oDet in oReq.Detalle)
                     {
                         DetalleXML += "       <Conteo>\r\n";
                         DetalleXML += "           <articulo>" + oDet.Articulo + "</articulo>\r\n";

@@ -1,5 +1,5 @@
 ﻿using clsScaneo.Entidades;
-namespace APIScaneo.Models
+namespace clsScaneo.Models
 {
 
     public class AuthenticateResponse
@@ -11,7 +11,7 @@ namespace APIScaneo.Models
         public string Token { get; set; }
 
 
-        public AuthenticateResponse(LoginDato user, string token)
+        public AuthenticateResponse(LoginResponseInfoUsuario user, string token)
         {
             Id = user.Id;
             FirstName = user.Nombres;

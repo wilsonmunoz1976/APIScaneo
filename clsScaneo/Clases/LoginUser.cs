@@ -3,7 +3,7 @@ using System.Data;
 using clsScaneo.Entidades;
 using NLog;
 using APIScaneo.Authorization;
-using APIScaneo.Models;
+using clsScaneo.Models;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Options;
 
@@ -30,7 +30,7 @@ namespace clsScaneo.Clases
 
                 if (_jwtUtils != null)
                 {
-                    Token = _jwtUtils.GenerateJwtToken(new LoginDato()
+                    Token = _jwtUtils.GenerateJwtToken(new LoginResponseInfoUsuario()
                     { Id = Convert.ToInt32(Id), Nombres = Nombres, Username = Usuario, Password = Password });
                 }
             return Token;

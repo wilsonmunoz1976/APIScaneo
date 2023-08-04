@@ -1,11 +1,13 @@
-﻿namespace APIScaneo.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class AuthenticateRequest
+namespace clsScaneo.Models
 {
-    [Required]
-    public string? Username { get; set; }
+    public class AuthenticateRequest
+    {
+        [Required]
+        public string? Username { get; set; }
 
-    [Required]
-    public string? Password { get; set; }
+        [Required]
+        public string? Password { get; set; }
+    }
 }

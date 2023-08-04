@@ -42,54 +42,13 @@ namespace APIScaneo.Controllers
             }
         }
 
-        [HttpPost("GetEmpresas")]
-        public Empresa GetEmpresas()
-        {
-            List<EmpresaDet> oEmpresas = new();
-            RespuestaEjecucion? oResp = new();
-            try
-            {
-                if (Conectividad != null)
-                {
-                    DataTable? oData = Conectividad.GetEmpresas(ref oResp);
-                    if (oData != null)
-                    {
-                        oEmpresas = (from DataRow dr in oData.Rows
-                                     select new EmpresaDet()
-                                     {
-                                         Codigo = dr["ci_empresa"].ToString(),
-                                         Nombre = dr["tx_empresa"].ToString()
-                                     }
-                                    ).ToList();
-                    }
-                }
-                else
-                {
-                    oResp.Codigo = -2;
-                    oResp.Mensaje = "No esta instanciada la clase de Seguridad";
-                    logger.Error("No esta instanciada la clase de Seguridad");
-                }
-            }
-            catch (Exception ex)
-            {
-                oResp = new()
-                {
-                    Codigo = -2,
-                    Mensaje = ex.Message
-                };
-                logger.Error(ex.Message + "\r\n" + ex.StackTrace);
-            }
-            return new Empresa() { Respuesta = oResp, Detalle = oEmpresas };
-
-        }
-
         [AllowAnonymous]
         [HttpPost("LoginApp")]
-        public LoginResp LoginApp([FromBody] LoginReq oReq)
+        public LoginResponse LoginApp([FromBody] LoginRequest oReq)
         {
-            List<LoginPermiso> oPermiso = new();
-            List<LoginParam> oParametro = new();
-            LoginDato oDato = new();
+            List<LoginResponsePermiso> oPermiso = new();
+            List<LoginResponseParametro> oParametro = new();
+            LoginResponseInfoUsuario oDato = new();
             string sToken = string.Empty;
             RespuestaEjecucion oResp = new();
             try
@@ -106,7 +65,7 @@ namespace APIScaneo.Controllers
                         if (tbPermisos != null)
                         {
                             oPermiso = (from DataRow dr in tbPermisos.Rows
-                                        select new LoginPermiso()
+                                        select new LoginResponsePermiso()
                                         {
                                             CodigoModulo = dr["cod_modulo"].ToString(),
                                             DescripcionModulo = dr["des_modulo"].ToString(),
@@ -121,7 +80,7 @@ namespace APIScaneo.Controllers
                         if (tbParametros != null)
                         {
                             oParametro = (from DataRow dr in tbParametros.Rows
-                                          select new LoginParam()
+                                          select new LoginResponseParametro()
                                           {
                                               NombreParametro = dr["nom_parametro"].ToString(),
                                               ValorParametro = dr["val_parametro"].ToString(),
@@ -163,7 +122,7 @@ namespace APIScaneo.Controllers
                 oResp.Mensaje = ex.Message;
                 logger.Error(ex.Message + "\r\n" + ex.StackTrace);
             }
-            return new LoginResp() { Respuesta = oResp, Parametro = oParametro, Permiso = oPermiso, LoginDato = oDato, Token = sToken };
+            return new LoginResponse() { Respuesta = oResp, Parametro = oParametro, Permiso = oPermiso, LoginDato = oDato, Token = sToken };
         }
     }
 }

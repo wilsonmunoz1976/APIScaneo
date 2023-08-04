@@ -39,10 +39,10 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("RegistrarEmergencia")]
-        public RespuestaEjecucion? RegistrarEmergencia([FromBody] EmergenciaReq? oReq)
+        public RespuestaEjecucion? RegistrarEmergencia([FromBody] RegistroEmergenciaRequest? oReq)
         {
             RespuestaEjecucion? oResp;
-            RespRegistro respRegistro = new();
+            RegistroEmergenciaResponse respRegistro = new();
             try
             {
                 if (Conectividad != null)
@@ -97,7 +97,7 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
-        private RespuestaEjecucion? NotificacionEmail(EmergenciaReq? oReq, ref RespRegistro respRegistro)
+        private RespuestaEjecucion? NotificacionEmail(RegistroEmergenciaRequest? oReq, ref RegistroEmergenciaResponse respRegistro)
         {
             RespuestaEjecucion? oResp = null;
 
@@ -106,7 +106,7 @@ namespace APIScaneo.Controllers
             .AddJsonFile("appsettings.json")
             .Build();
 
-            ConfigEmail? configEmail = configuration.GetSection("ConfigEmail").Get<ConfigEmail>();
+            EmailConfig? configEmail = configuration.GetSection("ConfigEmail").Get<EmailConfig>();
             string htmlBody = string.Empty;
             if (configEmail != null)
             {

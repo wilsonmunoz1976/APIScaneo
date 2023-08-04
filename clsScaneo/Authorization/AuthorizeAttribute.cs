@@ -16,7 +16,7 @@ namespace APIScaneo.Authorization
                 return;
 
             // authorization
-            var user = (LoginDato?)context.HttpContext.Items["User"];
+            var user = (LoginResponseInfoUsuario?)context.HttpContext.Items["User"];
             if (user == null)
             {
                 // not logged in or role not authorized

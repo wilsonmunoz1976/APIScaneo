@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class ConfigEmail
+    public class EmailConfig
     {
         public string MailServer { get; set; } = "mail.saberempresarial.com";
         public int MailPuerto { get; set; } = 465;

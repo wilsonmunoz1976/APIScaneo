@@ -2,9 +2,9 @@ using clsScaneo.Entidades;
 
 namespace clsScaneo.Entidades
 {
-    public class CofreUrnaResp
+    public class CofreUrnaListaResponse
     {
         public RespuestaEjecucion? Respuesta { get; set; }
-        public List<CofreUrnaDet>? Detalle { get; set; }
+        public List<CofreUrnaListaResponseDetalle>? Detalle { get; set; }
     }
 }

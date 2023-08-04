@@ -2,9 +2,9 @@ using clsScaneo.Entidades;
 
 namespace clsScaneo.Entidades
 {
-    public class Bodega
+    public class BodegaResponse
     {
         public RespuestaEjecucion? Respuesta { get; set; }
-        public List<BodegaDet>? Detalle { get; set; }
+        public List<BodegaResponseDetalle>? Detalle { get; set; }
     }
 }

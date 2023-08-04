@@ -1,6 +1,6 @@
 namespace clsScaneo.Entidades
 {
-    public class CofreUrnaDato
+    public class CofreUrnaDatoResponseDetalle
     {
         public string? CodArticulo { get; set; } = string.Empty;
         public string? DesArticulo { get; set; } = string.Empty;

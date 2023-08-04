@@ -114,7 +114,7 @@ namespace clsScaneo.Clases
             return oResp;
         }
 
-        public RespuestaEjecucion? RegistrarEmergencia(EmergenciaReq? oEmergencia, ref RespRegistro respRegistro)
+        public RespuestaEjecucion? RegistrarEmergencia(RegistroEmergenciaRequest? oEmergencia, ref RegistroEmergenciaResponse respRegistro)
         {
             RespuestaEjecucion? oResp;
             try
