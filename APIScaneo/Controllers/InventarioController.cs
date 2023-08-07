@@ -229,7 +229,7 @@ namespace APIScaneo.Controllers
             {
                 return new()
                 {
-                    Codigo = -9,
+                    Codigo = 100,
                     Mensaje = "Token es invalido o esta expirado"
                 };
             }
