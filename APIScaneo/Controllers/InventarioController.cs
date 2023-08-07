@@ -41,45 +41,48 @@ namespace APIScaneo.Controllers
         {
             List<BodegaResponseDetalle> oBodegas = new();
             RespuestaEjecucion? oResp = IsTokenValido();
-            if (oResp.Codigo == 0)
+            if (oResp != null)
             {
-                try
+                if (oResp.Codigo == 0)
                 {
-                    if (Conectividad != null)
+                    try
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetBodegas(ref oResp);
-                            if (oData != null)
+                            if (Conectividad != null)
                             {
-                                oBodegas = (from DataRow dr in oData.Rows
-                                            select new BodegaResponseDetalle()
-                                            {
-                                                Codigobodega = dr["ci_bodega"].ToString(),
-                                                Nombrebodega = dr["tx_nombrebodega"].ToString(),
-                                            }
-                                           ).ToList();
+                                DataTable oData = Conectividad.GetBodegas(ref oResp);
+                                if (oData != null)
+                                {
+                                    oBodegas = (from DataRow dr in oData.Rows
+                                                select new BodegaResponseDetalle()
+                                                {
+                                                    Codigobodega = dr["ci_bodega"].ToString(),
+                                                    Nombrebodega = dr["tx_nombrebodega"].ToString(),
+                                                }
+                                               ).ToList();
+                                }
+                            }
+                            else
+                            {
+                                oResp.Codigo = -2;
+                                oResp.Mensaje = "No esta instanciada la clase de Inventario";
+                                logger.Error("No esta instanciada la clase de Inventario");
                             }
                         }
                         else
                         {
                             oResp.Codigo = -2;
-                            oResp.Mensaje = "No esta instanciada la clase de Inventario";
-                            logger.Error("No esta instanciada la clase de Inventario");
+                            oResp.Mensaje = "No hay conectividad con la base de datos, solicite soporte";
+                            logger.Error("No hay conectividad con la base de datos, solicite soporte");
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
                         oResp.Codigo = -2;
-                        oResp.Mensaje = "No hay conectividad con la base de datos, solicite soporte";
-                        logger.Error("No hay conectividad con la base de datos, solicite soporte");
+                        oResp.Mensaje = ex.Message;
+                        logger.Error(ex.GetType().FullName + " - " + ex.Message + "\r\n" + ex.StackTrace);
                     }
-                }
-                catch (Exception ex)
-                {
-                    oResp.Codigo = -2;
-                    oResp.Mensaje = ex.Message;
-                    logger.Error(ex.GetType().FullName + " - " + ex.Message + "\r\n" + ex.StackTrace);
                 }
             }
             return new BodegaResponse() { Respuesta = oResp, Detalle = oBodegas };
@@ -90,42 +93,45 @@ namespace APIScaneo.Controllers
         {
             List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = IsTokenValido();
-            if (oResp.Codigo == 0)
+            if (oResp != null)
             {
-                try
+                if (oResp.Codigo == 0)
                 {
-                    if (Conectividad != null)
+                    try
                     {
-                        DataTable oData = Conectividad.GetInventario(bodega, ref oResp);
-                        if (oData != null)
+                        if (Conectividad != null)
                         {
-                            oInventario = (from DataRow dr in oData.Rows
-                                           select new InventarioDetalle()
-                                           {
-                                               Codigo = dr["Codigo"].ToString(),
-                                               Articulo = dr["Articulo"].ToString(),
-                                               Existencia = Convert.ToDecimal(dr["Existencia"]),
-                                               TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
-                                               Diferencia = Convert.ToDecimal(dr["Diferencia"])
-                                           }
-                                             ).ToList();
+                            DataTable oData = Conectividad.GetInventario(bodega, ref oResp);
+                            if (oData != null)
+                            {
+                                oInventario = (from DataRow dr in oData.Rows
+                                               select new InventarioDetalle()
+                                               {
+                                                   Codigo = dr["Codigo"].ToString(),
+                                                   Articulo = dr["Articulo"].ToString(),
+                                                   Existencia = Convert.ToDecimal(dr["Existencia"]),
+                                                   TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
+                                                   Diferencia = Convert.ToDecimal(dr["Diferencia"])
+                                               }
+                                                 ).ToList();
+                            }
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                Codigo = -2,
+                                Mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        oResp = new()
-                        {
-                            Codigo = -2,
-                            Mensaje = "No esta instanciada la clase de Inventario"
-                        };
-                        logger.Error("No esta instanciada la clase de Inventario");
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
-                }
-                catch (Exception ex)
-                {
-                    oResp.Codigo = -2;
-                    oResp.Mensaje = ex.Message;
-                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                 }
             }
             return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
@@ -136,79 +142,86 @@ namespace APIScaneo.Controllers
         {
             List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = IsTokenValido();
-            if (oResp.Codigo == 0)
+            if (oResp != null)
             {
-                try
+                if (oResp.Codigo == 0)
                 {
-                    if (Conectividad != null)
+                    try
                     {
-                        DataTable oData = Conectividad.GetInventario(bodega, codigo, ref oResp);
-                        if (oData != null)
+                        if (Conectividad != null)
                         {
-                            oInventario = (from DataRow dr in oData.Rows
-                                           select new InventarioDetalle()
-                                           {
-                                               Codigo = dr["Codigo"].ToString(),
-                                               Articulo = dr["Articulo"].ToString(),
-                                               Existencia = Convert.ToDecimal(dr["Existencia"]),
-                                               TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
-                                               Diferencia = Convert.ToDecimal(dr["Diferencia"])
-                                           }
-                                             ).ToList();
+                            DataTable oData = Conectividad.GetInventario(bodega, codigo, ref oResp);
+                            if (oData != null)
+                            {
+                                oInventario = (from DataRow dr in oData.Rows
+                                               select new InventarioDetalle()
+                                               {
+                                                   Codigo = dr["Codigo"].ToString(),
+                                                   Articulo = dr["Articulo"].ToString(),
+                                                   Existencia = Convert.ToDecimal(dr["Existencia"]),
+                                                   TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
+                                                   Diferencia = Convert.ToDecimal(dr["Diferencia"])
+                                               }
+                                              ).ToList();
+                            }
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                Codigo = -2,
+                                Mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        oResp = new()
-                        {
-                            Codigo = -2,
-                            Mensaje = "No esta instanciada la clase de Inventario"
-                        };
-                        logger.Error("No esta instanciada la clase de Inventario");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    oResp.Codigo = -2;
-                    oResp.Mensaje = ex.Message;
-                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
 
+                    }
                 }
             }
             return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
         }
 
         [HttpPost("ActualizarInventario")]
-        public RespuestaEjecucion ActualizarInventario([FromBody] InventarioRequest oReq)
+        public RespuestaEjecucion? ActualizarInventario([FromBody] InventarioRequest oReq)
         {
             RespuestaEjecucion? oResp = IsTokenValido();
-            if (oResp.Codigo == 0)
+            if (oResp != null)
             {
-                try
+                if (oResp.Codigo == 0)
                 {
-                    if (Conectividad != null)
+                    try
                     {
-                        oResp = Conectividad.ActualizarInventario(oReq);
-                    }
-                    else
-                    {
-                        oResp = new()
+                        if (Conectividad != null)
                         {
-                            Codigo = -2,
-                            Mensaje = "No esta instanciada la clase de Inventario"
-                        };
-                        logger.Error("No esta instanciada la clase de Inventario");
+                            oResp = Conectividad.ActualizarInventario(oReq);
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                Codigo = -2,
+                                Mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    oResp.Codigo = -2;
-                    oResp.Mensaje = ex.Message;
-                    logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                    catch (Exception ex)
+                    {
+                        oResp.Codigo = -2;
+                        oResp.Mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                    }
                 }
             }
             return oResp;
         }
+
         private RespuestaEjecucion? IsTokenValido()
         {
             var context = HttpContext;
