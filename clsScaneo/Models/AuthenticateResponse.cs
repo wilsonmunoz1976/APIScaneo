@@ -4,7 +4,7 @@ namespace clsScaneo.Models
 
     public class AuthenticateResponse
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Username { get; set; }
@@ -13,9 +13,9 @@ namespace clsScaneo.Models
 
         public AuthenticateResponse(LoginResponseInfoUsuario user, string token)
         {
-            Id = user.Id;
-            FirstName = user.Nombres;
-            Username = user.Username;
+            Id = user.id;
+            FirstName = user.nombres;
+            Username = user.username;
             Token = token;
         }
     }

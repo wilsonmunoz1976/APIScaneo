@@ -33,7 +33,7 @@ public class JwtUtils : IJwtUtils
         var key = Encoding.ASCII.GetBytes(_Settings.Secret!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.id.ToString()) }),
             Expires = DateTime.UtcNow.AddMinutes(_Settings.HorasExpiracion * 60),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

@@ -2,10 +2,14 @@ namespace clsScaneo.Entidades
 {
     public class InventarioDetalle
     {
-        public string? Codigo { get; set; } = "I0000099999";
-        public string? Articulo { get; set; } = "C100";
-        public decimal? Existencia { get; set; } = 0;
-        public decimal? TomaFisica { get; set; } = 0;
-        public decimal? Diferencia { get; set; } = 0;
+        public string? codigo { get; set; } = string.Empty;
+        public string? articulo { get; set; } = string.Empty;
+        public double? existencia { get; set; } = 0;
+        public double? enConsignacion { get; set; } = 0;
+        public double? retapizandose { get; set; } = 0;
+        public double? planillaPorCerrar { get; set; } = 0;
+        public double? tomaFisica { get; set; } = 0;
+        public double? diferencia { get; set; } = 0;
+        public string? observacion { get; set; } = string.Empty;
     }
 }

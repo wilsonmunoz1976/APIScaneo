@@ -44,16 +44,16 @@ namespace clsScaneo.Clases
                 dt.Load(cmd.ExecuteReader());
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
@@ -78,16 +78,16 @@ namespace clsScaneo.Clases
 
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
@@ -113,16 +113,16 @@ namespace clsScaneo.Clases
 
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
@@ -150,7 +150,7 @@ namespace clsScaneo.Clases
                       <anio>2023</anio>
                       <mes>07</mes>
                    </Cabecera>
-                   <Detalle>
+                   <detalle>
                         <Conteo>
                             <articulo>C91</articulo>
                             <existencia>5</existencia>
@@ -169,7 +169,7 @@ namespace clsScaneo.Clases
                             <tomafisica>6</tomafisica>
                             <diferencia>0</diferencia>
                         </Conteo>
-                   </Detalle>
+                   </detalle>
                 </Inventario>
                 *****************************************
                  */
@@ -177,28 +177,28 @@ namespace clsScaneo.Clases
                 string DetalleXML = "";
                 DetalleXML += "<Inventario>\r\n";
                 DetalleXML += "   <Cabecera>\r\n";
-                DetalleXML += "      <usuario>" + oReq.Usuario + "</usuario>\r\n";
-                DetalleXML += "      <anio>" + oReq.Anio + "</anio>\r\n";
-                DetalleXML += "      <mes>" + oReq.Mes + "</mes>\r\n";
+                DetalleXML += "      <usuario>" + oReq.usuario + "</usuario>\r\n";
+                DetalleXML += "      <anio>" + oReq.anio + "</anio>\r\n";
+                DetalleXML += "      <mes>" + oReq.mes + "</mes>\r\n";
                 DetalleXML += "   </Cabecera>\r\n";
-                DetalleXML += "   <Detalle>\r\n";
-                if (oReq.Detalle != null)
+                DetalleXML += "   <detalle>\r\n";
+                if (oReq.detalle != null)
                 {
-                    foreach (InventarioDetalle? oDet in oReq.Detalle)
+                    foreach (InventarioDetalle? oDet in oReq.detalle)
                     {
                         DetalleXML += "       <Conteo>\r\n";
-                        DetalleXML += "           <articulo>" + oDet.Articulo + "</articulo>\r\n";
-                        DetalleXML += "           <existencia>" + Convert.ToString(oDet.Existencia) + "</existencia>\r\n";
-                        DetalleXML += "           <tomafisica>" + Convert.ToString(oDet.TomaFisica) + "</tomafisica>\r\n";
-                        DetalleXML += "           <diferencia>" + Convert.ToString(oDet.Diferencia) + "</diferencia>\r\n";
+                        DetalleXML += "           <articulo>" + oDet.articulo + "</articulo>\r\n";
+                        DetalleXML += "           <existencia>" + Convert.ToString(oDet.existencia) + "</existencia>\r\n";
+                        DetalleXML += "           <tomafisica>" + Convert.ToString(oDet.tomaFisica) + "</tomafisica>\r\n";
+                        DetalleXML += "           <diferencia>" + Convert.ToString(oDet.diferencia) + "</diferencia>\r\n";
                         DetalleXML += "       </Conteo>\r\n";
                     }
                 }
-                DetalleXML += "    </Detalle>\r\n";
+                DetalleXML += "    </detalle>\r\n";
                 DetalleXML += "</Inventario>\r\n";
 
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "UP" });
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oReq.Bodega });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oReq.bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_dataxml", SqlDbType = SqlDbType.Xml, Value = DetalleXML });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
@@ -207,16 +207,16 @@ namespace clsScaneo.Clases
 
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }

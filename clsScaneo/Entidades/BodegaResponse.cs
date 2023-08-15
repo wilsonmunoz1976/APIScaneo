@@ -4,7 +4,7 @@ namespace clsScaneo.Entidades
 {
     public class BodegaResponse
     {
-        public RespuestaEjecucion? Respuesta { get; set; }
-        public List<BodegaResponseDetalle>? Detalle { get; set; }
+        public RespuestaEjecucion? respuesta { get; set; }
+        public List<BodegaResponseDetalle>? detalle { get; set; }
     }
 }

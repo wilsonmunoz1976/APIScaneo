@@ -8,10 +8,10 @@ namespace clsScaneo.Entidades
 {
     public class RegistroEmergenciaResponse
     {
-        public string? CodigoPlanilla { get; set; } = string.Empty;
-        public int? CodigoSolicEgre { get; set; } = 0;
-        public string? DesArticulo { get; set; } = string.Empty;
-        public string? Bodega { get; set; } = string.Empty;
+        public string? codigoPlanilla { get; set; } = string.Empty;
+        public int? codigoSolicEgre { get; set; } = 0;
+        public string? desArticulo { get; set; } = string.Empty;
+        public string? bodega { get; set; } = string.Empty;
     }
 
 }

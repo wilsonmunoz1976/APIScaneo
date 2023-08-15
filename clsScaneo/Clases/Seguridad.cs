@@ -51,16 +51,16 @@ namespace clsScaneo.Clases
                 dt.Load(cmd.ExecuteReader());
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
@@ -88,16 +88,16 @@ namespace clsScaneo.Clases
 
                 oResp = new()
                 {
-                    Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                    Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
             }
             catch (Exception ex)
             {
                 oResp = new()
                 {
-                    Codigo = -9,
-                    Mensaje = ex.Message
+                    codigo = -9,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }

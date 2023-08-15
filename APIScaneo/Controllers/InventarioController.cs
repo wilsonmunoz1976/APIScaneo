@@ -43,7 +43,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -57,35 +57,35 @@ namespace APIScaneo.Controllers
                                     oBodegas = (from DataRow dr in oData.Rows
                                                 select new BodegaResponseDetalle()
                                                 {
-                                                    Codigobodega = dr["ci_bodega"].ToString(),
-                                                    Nombrebodega = dr["tx_nombrebodega"].ToString(),
+                                                    codigoBodega = dr["ci_bodega"]==DBNull.Value? null: dr["ci_bodega"].ToString(),
+                                                    nombreBodega = dr["tx_nombrebodega"] == DBNull.Value ? null : dr["tx_nombrebodega"].ToString(),
                                                 }
                                                ).ToList();
                                 }
                             }
                             else
                             {
-                                oResp.Codigo = -2;
-                                oResp.Mensaje = "No esta instanciada la clase de Inventario";
+                                oResp.codigo = -2;
+                                oResp.mensaje = "No esta instanciada la clase de Inventario";
                                 logger.Error("No esta instanciada la clase de Inventario");
                             }
                         }
                         else
                         {
-                            oResp.Codigo = -2;
-                            oResp.Mensaje = "No hay conectividad con la base de datos, solicite soporte";
+                            oResp.codigo = -2;
+                            oResp.mensaje = "No hay conectividad con la base de datos, solicite soporte";
                             logger.Error("No hay conectividad con la base de datos, solicite soporte");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.GetType().FullName + " - " + ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
             }
-            return new BodegaResponse() { Respuesta = oResp, Detalle = oBodegas };
+            return new BodegaResponse() { respuesta = oResp, detalle = oBodegas };
         }
 
         [HttpPost("GetInventario/{bodega}")]
@@ -95,7 +95,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -107,11 +107,15 @@ namespace APIScaneo.Controllers
                                 oInventario = (from DataRow dr in oData.Rows
                                                select new InventarioDetalle()
                                                {
-                                                   Codigo = dr["Codigo"].ToString(),
-                                                   Articulo = dr["Articulo"].ToString(),
-                                                   Existencia = Convert.ToDecimal(dr["Existencia"]),
-                                                   TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
-                                                   Diferencia = Convert.ToDecimal(dr["Diferencia"])
+                                                   codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                   articulo = dr["articulo"] == DBNull.Value ? null : dr["articulo"].ToString(),
+                                                   existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
+                                                   enConsignacion = dr["EnConsignacion"] == null ? null :   Convert.ToDouble(dr["EnConsignacion"]),
+                                                   retapizandose = dr["Retapizandose"] == DBNull.Value ? null : Convert.ToDouble(dr["Retapizandose"]),
+                                                   planillaPorCerrar = dr["PlanillaPorCerrar"]==DBNull.Value ?null:Convert.ToDouble(dr["PlanillaPorCerrar"]),
+                                                   tomaFisica = dr["TomaFisica"]==DBNull.Value ? null: Convert.ToDouble(dr["TomaFisica"]),
+                                                   diferencia = dr["Diferencia"]==DBNull.Value ? null: Convert.ToDouble(dr["Diferencia"]),
+                                                   observacion = dr["Observacion"]==DBNull.Value ? null: dr["Observacion"].ToString()
                                                }
                                                  ).ToList();
                             }
@@ -120,31 +124,31 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new()
                             {
-                                Codigo = -2,
-                                Mensaje = "No esta instanciada la clase de Inventario"
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
                             };
                             logger.Error("No esta instanciada la clase de Inventario");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
             }
-            return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
+            return new InventarioResponse() { respuesta = oResp, detalle = oInventario };
         }
 
-        [HttpPost("GetInventario/{bodega}/{Codigo}")]
+        [HttpPost("GetInventario/{bodega}/{codigo}")]
         public InventarioResponse GetInventario(string codigo, string bodega="1")
         {
             List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -156,11 +160,15 @@ namespace APIScaneo.Controllers
                                 oInventario = (from DataRow dr in oData.Rows
                                                select new InventarioDetalle()
                                                {
-                                                   Codigo = dr["Codigo"].ToString(),
-                                                   Articulo = dr["Articulo"].ToString(),
-                                                   Existencia = Convert.ToDecimal(dr["Existencia"]),
-                                                   TomaFisica = Convert.ToDecimal(dr["TomaFisica"]),
-                                                   Diferencia = Convert.ToDecimal(dr["Diferencia"])
+                                                   codigo = dr["codigo"]==DBNull.Value? null : dr["codigo"].ToString(),
+                                                   articulo = dr["articulo"]== DBNull.Value ? null: dr["articulo"].ToString(),
+                                                   existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
+                                                   enConsignacion = dr["EnConsignacion"] == DBNull.Value ? null : Convert.ToDouble(dr["EnConsignacion"]),
+                                                   retapizandose = dr["Retapizandose"] == DBNull.Value ? null : Convert.ToDouble(dr["Retapizandose"]),
+                                                   planillaPorCerrar = dr["PlanillaPorCerrar"] == DBNull.Value ? null : Convert.ToDouble(dr["PlanillaPorCerrar"]),
+                                                   tomaFisica = dr["TomaFisica"] == DBNull.Value ? null : Convert.ToDouble(dr["TomaFisica"]),
+                                                   diferencia = dr["Diferencia"] == DBNull.Value ? null : Convert.ToDouble(dr["Diferencia"]),
+                                                   observacion = dr["Observacion"] == DBNull.Value ? null : dr["Observacion"].ToString()
                                                }
                                               ).ToList();
                             }
@@ -169,22 +177,22 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new()
                             {
-                                Codigo = -2,
-                                Mensaje = "No esta instanciada la clase de Inventario"
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
                             };
                             logger.Error("No esta instanciada la clase de Inventario");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
 
                     }
                 }
             }
-            return new InventarioResponse() { Respuesta = oResp, Detalle = oInventario };
+            return new InventarioResponse() { respuesta = oResp, detalle = oInventario };
         }
 
         [HttpPost("ActualizarInventario")]
@@ -193,7 +201,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -205,16 +213,16 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new()
                             {
-                                Codigo = -2,
-                                Mensaje = "No esta instanciada la clase de Inventario"
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
                             };
                             logger.Error("No esta instanciada la clase de Inventario");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
@@ -225,20 +233,20 @@ namespace APIScaneo.Controllers
         private RespuestaEjecucion? IsTokenValido()
         {
             var context = HttpContext;
-            if (context.Response.Headers["Token-Expired"] == "true")
+            if (context.Response.Headers["token-Expired"] == "true")
             {
                 return new()
                 {
-                    Codigo = 100,
-                    Mensaje = "Token es invalido o esta expirado"
+                    codigo = 100,
+                    mensaje = "token es invalido o esta expirado"
                 };
             }
             else
             {
                 return new()
                 {
-                    Codigo = 0,
-                    Mensaje = "Token valido"
+                    codigo = 0,
+                    mensaje = "token valido"
                 };
             }
         }

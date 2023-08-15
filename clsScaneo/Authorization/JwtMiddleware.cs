@@ -25,7 +25,7 @@ namespace APIScaneo.Authorization
                 int? userId = jwtUtils.ValidateJwtToken(token); // ?? throw new Exception("El token suministrado no es correcto");
                 if (userId == null)
                 {
-                    context.Response.Headers.Add("Token-Expired", "true");
+                    context.Response.Headers.Add("token-Expired", "true");
                 }
 
             }

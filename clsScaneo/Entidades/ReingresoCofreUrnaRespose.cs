@@ -2,13 +2,13 @@ namespace clsScaneo.Entidades
 {
     public class ReingresoCofreUrnaRespose
     {
-        public string? CodArticuloOrigen { get; set; } = string.Empty;
-        public string? DesArticuloOrigen { get; set; } = string.Empty;
-        public string? CodArticuloDestino { get; set; } = string.Empty;
-        public string? DesArticuloDestino { get; set; } = string.Empty;
-        public string? CodPlanilla { get; set; } = string.Empty;
-        public int? CodSoliEgre { get; set; } = null;
-        public string? NombreFallecido { get; set; } = string.Empty;
-        public string? Usuario { get; set; } = string.Empty;
+        public string? codArticuloOrigen { get; set; } = string.Empty;
+        public string? desArticuloOrigen { get; set; } = string.Empty;
+        public string? codArticuloDestino { get; set; } = string.Empty;
+        public string? desArticuloDestino { get; set; } = string.Empty;
+        public string? codPlanilla { get; set; } = string.Empty;
+        public int? codSoliEgre { get; set; } = null;
+        public string? nombreFallecido { get; set; } = string.Empty;
+        public string? usuario { get; set; } = string.Empty;
     }
 }

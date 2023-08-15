@@ -90,15 +90,15 @@ namespace clsScaneo.Clases
 
                     oMsg.Send();
 
-                    oResp.Codigo = 0;
-                    oResp.Mensaje = "Mensaje Enviado Correctamente";
+                    oResp.codigo = 0;
+                    oResp.mensaje = "mensaje Enviado Correctamente";
                 }
                 else
                 {
                     oResp = new()
                     {
-                        Codigo = -1,
-                        Mensaje = "Llamada a metodo sin parametros de entrada"
+                        codigo = -1,
+                        mensaje = "Llamada a metodo sin parametros de entrada"
                     };
                 }
             }
@@ -106,8 +106,8 @@ namespace clsScaneo.Clases
             {
                 oResp = new()
                 {
-                    Codigo = -2,
-                    Mensaje = ex.Message + "\r\n" + ex.StackTrace
+                    codigo = -2,
+                    mensaje = ex.Message + "\r\n" + ex.StackTrace
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
@@ -126,9 +126,9 @@ namespace clsScaneo.Clases
                     cmd.CommandText = "dbo.pr_Emergencia";
                     cmd.Parameters.Clear();
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "RG" });
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_nombres", SqlDbType = SqlDbType.VarChar, Size = 100, Value = oEmergencia.Nombres });
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size = 20, Value = oEmergencia.Articulo });
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = oEmergencia.Usuario });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_nombres", SqlDbType = SqlDbType.VarChar, Size = 100, Value = oEmergencia.nombres });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size = 20, Value = oEmergencia.articulo });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = oEmergencia.usuario });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codplanilla", SqlDbType = SqlDbType.VarChar, Size = 15 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codsoliegre", SqlDbType = SqlDbType.Int });
@@ -138,23 +138,23 @@ namespace clsScaneo.Clases
 
                     _ = cmd.ExecuteNonQuery();
 
-                    respRegistro.CodigoPlanilla = Convert.ToString(cmd.Parameters["@o_codplanilla"].Value);
-                    respRegistro.CodigoSolicEgre = Convert.ToInt32(cmd.Parameters["@o_codsoliegre"].Value);
-                    respRegistro.Bodega = Convert.ToString(cmd.Parameters["@o_bodega"].Value);
-                    respRegistro.DesArticulo = Convert.ToString(cmd.Parameters["@o_descarticulo"].Value);
+                    respRegistro.codigoPlanilla = Convert.ToString(cmd.Parameters["@o_codplanilla"].Value);
+                    respRegistro.codigoSolicEgre = Convert.ToInt32(cmd.Parameters["@o_codsoliegre"].Value);
+                    respRegistro.bodega = Convert.ToString(cmd.Parameters["@o_bodega"].Value);
+                    respRegistro.desArticulo = Convert.ToString(cmd.Parameters["@o_descarticulo"].Value);
 
                     oResp = new()
                     {
-                        Codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
-                        Mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                        codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                        mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                     };
                 }
                 else
                 {
                     oResp = new()
                     {
-                        Codigo = -1,
-                        Mensaje = "Llamada a metodo sin parametros de entrada"
+                        codigo = -1,
+                        mensaje = "Llamada a metodo sin parametros de entrada"
                     };
                 }
             }
@@ -162,8 +162,8 @@ namespace clsScaneo.Clases
             {
                 oResp = new()
                 {
-                    Codigo = -2,
-                    Mensaje = ex.Message
+                    codigo = -2,
+                    mensaje = ex.Message
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }

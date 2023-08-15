@@ -2,11 +2,11 @@ namespace clsScaneo.Entidades
 {
     public class CambiaEstadoCofreUrnaRequest
     {
-        public string? Bodega { get; set; } = string.Empty;
-        public int? Codigo { get; set; } = 0;
-        public int? Estado { get; set; } = 0;
-        public string? Comentario { get; set; } = string.Empty;
-        public string? Fotografia { get; set; } = string.Empty;
-        public string? Usuario { get; set; } = string.Empty;
+        public string? bodega { get; set; } = string.Empty;
+        public int? codigo { get; set; } = 0;
+        public int? estado { get; set; } = 0;
+        public string? comentario { get; set; } = string.Empty;
+        public string? fotografia { get; set; } = string.Empty;
+        public string? usuario { get; set; } = string.Empty;
     }
 }

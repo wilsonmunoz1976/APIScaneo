@@ -45,7 +45,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
 
                     try
@@ -55,17 +55,17 @@ namespace APIScaneo.Controllers
                             oResp = Conectividad.RegistrarEmergencia(oReq, ref respRegistro);
                             if (oResp != null)
                             {
-                                if (oResp.Codigo == 0)
+                                if (oResp.codigo == 0)
                                 {
                                     oResp = NotificacionEmail(oReq, ref respRegistro);
                                 }
                                 else
                                 {
-                                    string? sMensaje = oResp.Mensaje;
+                                    string? sMensaje = oResp.mensaje;
                                     oResp = new()
                                     {
-                                        Codigo = -1,
-                                        Mensaje = sMensaje ?? ""
+                                        codigo = -1,
+                                        mensaje = sMensaje ?? ""
                                     };
 
                                 }
@@ -74,8 +74,8 @@ namespace APIScaneo.Controllers
                             {
                                 oResp = new()
                                 {
-                                    Codigo = -2,
-                                    Mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
+                                    codigo = -2,
+                                    mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
                                 };
                                 logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
                             }
@@ -84,8 +84,8 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new()
                             {
-                                Codigo = -2,
-                                Mensaje = "No esta instanciada la clase de Emergencia"
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Emergencia"
                             };
                             logger.Error("No esta instanciada la clase de Emergencia");
                         }
@@ -94,8 +94,8 @@ namespace APIScaneo.Controllers
                     {
                         oResp = new()
                         {
-                            Codigo = -2,
-                            Mensaje = ex.Message
+                            codigo = -2,
+                            mensaje = ex.Message
                         };
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
@@ -109,7 +109,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -131,13 +131,13 @@ namespace APIScaneo.Controllers
                         }
                         if (oReq != null)
                         {
-                            htmlBody = htmlBody.Replace("[CodArticulo]", oReq.Articulo);
-                            htmlBody = htmlBody.Replace("[DesArticulo]", respRegistro.DesArticulo);
-                            htmlBody = htmlBody.Replace("[Bodega]", respRegistro.Bodega);
-                            htmlBody = htmlBody.Replace("[NombreCompleto]", oReq.Nombres);
-                            htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
-                            htmlBody = htmlBody.Replace("[CodigoSoliEgre]", respRegistro.CodigoSolicEgre.ToString());
-                            htmlBody = htmlBody.Replace("[CodigoPlanilla]", respRegistro.CodigoPlanilla);
+                            htmlBody = htmlBody.Replace("[codArticulo]", oReq.articulo);
+                            htmlBody = htmlBody.Replace("[desArticulo]", respRegistro.desArticulo);
+                            htmlBody = htmlBody.Replace("[bodega]", respRegistro.bodega);
+                            htmlBody = htmlBody.Replace("[NombreCompleto]", oReq.nombres);
+                            htmlBody = htmlBody.Replace("[usuario]", oReq.usuario);
+                            htmlBody = htmlBody.Replace("[CodigoSoliEgre]", respRegistro.codigoSolicEgre.ToString());
+                            htmlBody = htmlBody.Replace("[codigoPlanilla]", respRegistro.codigoPlanilla);
                         }
 
                         EmailMessage? oMail = new()
@@ -164,8 +164,8 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new()
                             {
-                                Codigo = -2,
-                                Mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
+                                codigo = -2,
+                                mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
                             };
                             logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
                         }
@@ -174,8 +174,8 @@ namespace APIScaneo.Controllers
                         {
                             oResp = new RespuestaEjecucion()
                             {
-                                Codigo = -2,
-                                Mensaje = "No hay conectividad con la base de datos, solicite soporte"
+                                codigo = -2,
+                                mensaje = "No hay conectividad con la base de datos, solicite soporte"
                             };
                             logger.Error("No hay conectividad con la base de datos, solicite soporte");
                         }
@@ -188,20 +188,20 @@ namespace APIScaneo.Controllers
         private RespuestaEjecucion? IsTokenValido()
         {
             var context = HttpContext;
-            if (context.Response.Headers["Token-Expired"] == "true")
+            if (context.Response.Headers["token-Expired"] == "true")
             {
                 return new()
                 {
-                    Codigo = 100,
-                    Mensaje = "Token es invalido o esta expirado"
+                    codigo = 100,
+                    mensaje = "token es invalido o esta expirado"
                 };
             }
             else
             {
                 return new()
                 {
-                    Codigo = 0,
-                    Mensaje = "Token valido"
+                    codigo = 0,
+                    mensaje = "token valido"
                 };
             }
         }

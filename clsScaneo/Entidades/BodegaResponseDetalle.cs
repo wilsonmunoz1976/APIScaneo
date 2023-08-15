@@ -2,7 +2,7 @@ namespace clsScaneo.Entidades
 {
     public class BodegaResponseDetalle
     {
-        public string? Codigobodega { get; set; }
-        public string? Nombrebodega { get; set; }
+        public string? codigoBodega { get; set; }
+        public string? nombreBodega { get; set; }
     }
 }

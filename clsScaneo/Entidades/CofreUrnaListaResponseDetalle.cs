@@ -2,16 +2,16 @@ namespace clsScaneo.Entidades
 {
     public class CofreUrnaListaResponseDetalle
     {
-        public string? Codigo { get; set; }
-        public string? Bodega { get; set; }
-        public string? Producto { get; set; }
-        public string? Inhumado { get; set; }
-        public string? NombreProveedor { get; set; }
-        public int? Estado { get; set; }
-        public string? Comentario { get; set; }
-        public string? ObservacionRetiro { get; set; }
-        public string? ObservacionEntrega { get; set; }
-        public string? ObservacionSala { get; set; }
-        public string? FotografiaSala { get; set; }
+        public string? codigo { get; set; }
+        public string? bodega { get; set; }
+        public string? producto { get; set; }
+        public string? inhumado { get; set; }
+        public string? nombreProveedor { get; set; }
+        public int? estado { get; set; }
+        public string? comentario { get; set; }
+        public string? observacionRetiro { get; set; }
+        public string? observacionEntrega { get; set; }
+        public string? observacionSala { get; set; }
+        public string? fotografiaSala { get; set; }
     }
 }

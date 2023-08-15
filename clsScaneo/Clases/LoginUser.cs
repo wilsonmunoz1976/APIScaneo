@@ -31,7 +31,7 @@ namespace clsScaneo.Clases
                 if (_jwtUtils != null)
                 {
                     Token = _jwtUtils.GenerateJwtToken(new LoginResponseInfoUsuario()
-                    { Id = Convert.ToInt32(Id), Nombres = Nombres, Username = Usuario, Password = Password });
+                    { id = Convert.ToInt32(Id), nombres = Nombres, username = Usuario, password = Password });
                 }
             return Token;
         }

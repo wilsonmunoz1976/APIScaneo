@@ -8,7 +8,7 @@ namespace clsScaneo.Entidades
 {
     public class RespuestaEjecucion
     {
-        public int Codigo { get; set; }
-        public string? Mensaje { get; set; }
+        public int codigo { get; set; }
+        public string? mensaje { get; set; }
     }
 }

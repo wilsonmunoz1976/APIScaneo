@@ -5,8 +5,8 @@ namespace clsScaneo.Entidades
     public class LoginRequest
     {
         [Required]
-        public string? Usuario  { get; set; }
+        public string? usuario  { get; set; }
         [Required]
-        public string? Password { get; set; }
+        public string? password { get; set; }
     }
 }

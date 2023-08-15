@@ -2,8 +2,8 @@ namespace clsScaneo.Entidades
 {
     public class ReingresoCofreUrnaRequest
     {
-        public int? CodSolicitudEgreso { get; set; } = null;
-        public string? CodCofreUrnaNuevo { get; set; } = string.Empty;
-        public string? Usuario { get; set; } = string.Empty;
+        public int? codSolicitudEgreso { get; set; } = null;
+        public string? codCofreUrnaNuevo { get; set; } = string.Empty;
+        public string? usuario { get; set; } = string.Empty;
     }
 }

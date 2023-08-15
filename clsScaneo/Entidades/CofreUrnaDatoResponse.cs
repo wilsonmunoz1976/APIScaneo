@@ -2,7 +2,7 @@ namespace clsScaneo.Entidades
 {
     public class CofreUrnaDatoResponse
     {
-        public RespuestaEjecucion? Respuesta { get; set; } = null;
-        public CofreUrnaDatoResponseDetalle? Detalle { get; set; } = null;
+        public RespuestaEjecucion? respuesta { get; set; } = null;
+        public CofreUrnaDatoResponseDetalle? detalle { get; set; } = null;
     }
 }

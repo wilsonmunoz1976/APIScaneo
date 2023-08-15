@@ -44,7 +44,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -57,30 +57,30 @@ namespace APIScaneo.Controllers
                                 oActivosFijos = (from DataRow dr in oData.Rows
                                                  select new ActivoFijoResponseDetalle()
                                                  {
-                                                     Codigo = dr["Codigo"].ToString(),
-                                                     Activo = dr["Activo"].ToString(),
-                                                     Custodio = dr["Custodio"].ToString(),
-                                                     Costo = Convert.ToDecimal(dr["Costo"]),
+                                                     codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
+                                                     activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
+                                                     custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
+                                                     costo = dr["costo"] == DBNull.Value? null: Convert.ToDecimal(dr["costo"])
                                                  }
                                                  ).ToList();
                             }
                         }
                         else
                         {
-                            oResp.Codigo = -2;
-                            oResp.Mensaje = "No esta instanciada la clase de Activos Fijos";
+                            oResp.codigo = -2;
+                            oResp.mensaje = "No esta instanciada la clase de Activos Fijos";
                             logger.Error("No esta instanciada la clase de Activos Fijos");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
             }
-            return new ActivoFijoResponse() { Respuesta = oResp, Detalle=oActivosFijos };
+            return new ActivoFijoResponse() { respuesta = oResp, detalle=oActivosFijos };
         }
 
         [HttpPost("GetActivosFijos/{codigo}")]
@@ -90,7 +90,7 @@ namespace APIScaneo.Controllers
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
-                if (oResp.Codigo == 0)
+                if (oResp.codigo == 0)
                 {
                     try
                     {
@@ -102,49 +102,49 @@ namespace APIScaneo.Controllers
                                 oActivosFijos = (from DataRow dr in oData.Rows
                                                  select new ActivoFijoResponseDetalle()
                                                  {
-                                                     Codigo = dr["Codigo"].ToString(),
-                                                     Activo = dr["Activo"].ToString(),
-                                                     Custodio = dr["Custodio"].ToString(),
-                                                     Costo = Convert.ToDecimal(dr["Costo"]),
+                                                     codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                     activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
+                                                     custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
+                                                     costo = dr["costo"] == DBNull.Value ? null : Convert.ToDecimal(dr["costo"])
                                                  }
                                                  ).ToList();
                             }
                         }
                         else
                         {
-                            oResp.Codigo = -2;
-                            oResp.Mensaje = "No esta instanciada la clase de Activos Fijos";
+                            oResp.codigo = -2;
+                            oResp.mensaje = "No esta instanciada la clase de Activos Fijos";
                             logger.Error("No esta instanciada la clase de Activos Fijos");
                         }
                     }
                     catch (Exception ex)
                     {
-                        oResp.Codigo = -2;
-                        oResp.Mensaje = ex.Message;
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
                         logger.Error(ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
             }
-            return new ActivoFijoResponse() { Respuesta = oResp, Detalle = oActivosFijos };
+            return new ActivoFijoResponse() { respuesta = oResp, detalle = oActivosFijos };
         }
 
         private RespuestaEjecucion IsTokenValido()
         {
             var context = HttpContext;
-            if (context.Response.Headers["Token-Expired"] == "true")
+            if (context.Response.Headers["token-Expired"] == "true")
             {
                 return new()
                 {
-                    Codigo = 100,
-                    Mensaje = "Token es invalido o esta expirado"
+                    codigo = 100,
+                    mensaje = "token es invalido o esta expirado"
                 };
             }
             else
             {
                 return new()
                 {
-                    Codigo = 0,
-                    Mensaje = "Token valido"
+                    codigo = 0,
+                    mensaje = "token valido"
                 };
             }
         }
