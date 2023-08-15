@@ -76,12 +76,12 @@ INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3,
 						   null, null, null, null, 
 						   null, null, null)
 
-SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuario] where ci_usuario='WMUNOZ'
+SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuario] where ci_usuario='JFALQUEZ'
 insert into [dbJardinesEsperanza].[dbo].[setUsuario]
-SELECT [ci_usuario]='WMUNOZ'
-      ,[tx_usuario]='Wilson Muñoz'
+SELECT [ci_usuario]='JFALQUEZ'
+      ,[tx_usuario]='Jaime Falquez'
       ,[ci_empleado]
-      ,[tx_contraseña]='12345'
+      ,[tx_contraseña]='123456'
       ,[tx_contraseñaanterior]
       ,[tx_verificar]
       ,[tx_expira]
@@ -133,23 +133,25 @@ SELECT [ci_usuario]='WMUNOZ'
 
   SELECT * FROM [dbo].[setEmpresa]
 
-  SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuarioEmpresa] WHERE ci_usuario='WMUNOZ'
+  SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuarioEmpresa] WHERE ci_usuario='JFALQUEZ'
 
-  INSERT INTO [dbJardinesEsperanza].[dbo].[setUsuarioEmpresa] (ci_codigo, ci_usuario, ci_empresa) VALUES (null, 'WMUNOZ', 'J01')
+  INSERT INTO [dbJardinesEsperanza].[dbo].[setUsuarioEmpresa] (ci_codigo, ci_usuario, ci_empresa) VALUES (null, 'JFALQUEZ', 'J01')
 
   SELECT * FROM [dbo].[setUsuarioSucursal] WHERE ci_usuario='WMUNOZ'
 
-  INSERT INTO [dbo].[setUsuarioSucursal] (ci_usuario, ci_empresa, tx_tipodocumento, ci_sucursal) VALUES ('WMUNOZ', 'J01', 'FV', '001')
+  INSERT INTO [dbo].[setUsuarioSucursal] (ci_usuario, ci_empresa, tx_tipodocumento, ci_sucursal) VALUES ('JFALQUEZ', 'J01', 'FV', '001')
 
   SELECT * FROM [dbo].[setParametrosGenerales]
 
   INSERT INTO [dbo].[setParametrosGenerales] (ci_empresa, ci_aplicacion, ci_parametro, tx_parametro, tx_descripcion)
   SELECT '000','MOV','RGOHOR', '19:00|09:00', 'Rango Horario de Emergencia'
   
-  SELECT * FROM [dbo].[setPermisosUsuario] where ci_usuario='WMUNOZ' AND ci_nivel0='MOV'
+  SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='JFALQUEZ' AND ci_nivel0='MOV'
 
-  INSERT INTO [dbo].[setPermisosUsuario] (ci_usuario, ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos)
-  SELECT ci_usuario='WMUNOZ', ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos='NMECI' from setMenuNivel3 WHERE ci_nivel0='MOV'
+  DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='JFALQUEZ' and ci_nivel2='MOV1120'
+  select * from [dbJardinesEsperanza].[dbo].setMenuNivel2 where ci_nivel2='MOV1120'
+  INSERT INTO [dbJardinesEsperanza].[dbo].[setPermisosUsuario] (ci_usuario, ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos)
+  SELECT ci_usuario='JFALQUEZ', ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos='NMECI' from [dbJardinesEsperanza].[dbo].setMenuNivel3 WHERE ci_nivel0='MOV'
   
   GO
 

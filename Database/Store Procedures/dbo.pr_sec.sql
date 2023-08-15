@@ -16,12 +16,12 @@ BEGIN
 	DECLARE @w_anio VARCHAR(4) = CONVERT(VARCHAR(4), YEAR(GETDATE()))
 	BEGIN TRY
 		SELECT @o_sec = 
-		   CASE WHEN @i_inout='OU'  THEN ISNULL(qn_sec_ou,0)  + 1
-		        WHEN @i_inout='IN'  THEN ISNULL(qn_sec_in,0)  + 1
-				WHEN @i_inout='RB'  THEN ISNULL(qn_sec_rb,0)  + 1
+		   CASE WHEN @i_inout='OU'  THEN ISNULL(qn_sec_ou ,0) + 1
+		        WHEN @i_inout='IN'  THEN ISNULL(qn_sec_in ,0) + 1
+				WHEN @i_inout='RB'  THEN ISNULL(qn_sec_rb ,0) + 1
 				WHEN @i_inout='PED' THEN ISNULL(qn_sec_ped,0) + 1
 				WHEN @i_inout='EGR' THEN ISNULL(qn_sec_egr,0) + 1
-				WHEN @i_inout='OR'  THEN ISNULL(qn_sec_or,0)  + 1
+				WHEN @i_inout='OR'  THEN ISNULL(qn_sec_or ,0) + 1
 				ELSE 0
 		   END
 		  FROM dbo.adqt_SecTrans 
@@ -60,12 +60,12 @@ BEGIN
 		ELSE
 		BEGIN
 		    UPDATE dbo.adqt_SecTrans
-               SET qn_sec_in  = qn_sec_in  + IIF(@i_inout='IN',  1, 0),
-                   qn_sec_ou  = qn_sec_ou  + IIF(@i_inout='OU',  1, 0),
-                   qn_sec_rb  = qn_sec_rb  + IIF(@i_inout='RB',  1, 0),
-                   qn_sec_ped = qn_sec_ped + IIF(@i_inout='PED', 1, 0),
-                   qn_sec_egr = qn_sec_egr + IIF(@i_inout='EGR', 1, 0),
-                   qn_sec_or  = qn_sec_or  + IIF(@i_inout='OR',  1, 0)
+               SET qn_sec_in  = ISNULL(qn_sec_in  + IIF(@i_inout='IN',  1, 0), 1),
+                   qn_sec_ou  = ISNULL(qn_sec_ou  + IIF(@i_inout='OU',  1, 0), 1),
+                   qn_sec_rb  = ISNULL(qn_sec_rb  + IIF(@i_inout='RB',  1, 0), 1),
+                   qn_sec_ped = ISNULL(qn_sec_ped + IIF(@i_inout='PED', 1, 0), 1),
+                   qn_sec_egr = ISNULL(qn_sec_egr + IIF(@i_inout='EGR', 1, 0), 1),
+                   qn_sec_or  = ISNULL(qn_sec_or  + IIF(@i_inout='OR',  1, 0), 1)
 			 WHERE qn_anio    = @w_anio
 			   AND ci_bodega  = @i_bodega
 

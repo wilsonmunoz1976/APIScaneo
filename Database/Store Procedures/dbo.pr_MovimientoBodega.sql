@@ -13,7 +13,7 @@ GO
 
 ALTER PROCEDURE dbo.pr_MovimientoBodega
 (
-    @i_tipomov       CHAR(2)        = 'OU',
+    @i_tipomov       CHAR(2),
 	@i_articulo      varchar(20)    = '',
 	@i_planilla      varchar(20)    = '',
     @i_usuario       varchar(15)    = null,
@@ -37,7 +37,8 @@ BEGIN
             @w_inhumado      varchar(220) = '',
             @w_sectransac    int          = 0,
             @w_bodega        varchar(3)   = '',
-			@w_fechacontable datetime    
+			@w_fechacontable datetime,
+			@w_ret           int    
 
     BEGIN TRANSACTION [MovimientoBodega]
         BEGIN TRY
@@ -51,8 +52,19 @@ BEGIN
               FROM dbJardiesaDC.dbo.scit_ArticulosBodegas
              WHERE ci_articulo = @i_articulo 
     
-            EXEC dbJardiesaDC.dbo.pr_sec @i_bodega=@w_bodega, @i_inout=@i_tipomov, @o_sec = @w_sectransac OUTPUT, @o_msgerror = @o_msgerror OUTPUT
+            EXEC @w_ret      = dbJardiesaDC.dbo.pr_sec 
+			     @i_bodega   = @w_bodega, 
+				 @i_inout    = @i_tipomov, 
+				 @o_sec      = @w_sectransac OUTPUT, 
+				 @o_msgerror = @o_msgerror OUTPUT
     
+	        IF @w_ret != 0
+			BEGIN
+        		SELECT @o_msgerror = 'Error: No se pudo obtener secuencia de Transaccion'
+        		ROLLBACK TRANSACTION [MovimientoBodega]
+				RETURN -2
+			END 
+
             SELECT @w_secuencia = FORMAT(@w_sectransac,'0000')
             SELECT @w_transaccion = @w_anio+@w_bodega+@w_secuencia
     
@@ -108,7 +120,7 @@ BEGIN
                  qn_existencia_ant,   qn_cantidad,          ci_medida,       va_costo_unitario,    
                  va_iva,              va_precio_unitario,   qn_devolucion,   bd_promedioincluyeimpuestos)
             VALUES 
-                (@i_tipomov,          @w_transaccion,       7,               @i_articulo, 
+                (@i_tipomov,          @w_transaccion,       7,               ISNULL(@i_articulo,''), 
                  @w_anterior,         1,                    @w_medida,       @w_valorUnit, 
                  @w_valorIVA,         @w_total,             0.00,            'S')    
             

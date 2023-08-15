@@ -407,7 +407,7 @@ namespace APIScaneo.Controllers
                     htmlBody = htmlBody.Replace("[CodCofreOrig]", oReq.CodArticuloOrigen);
                     htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.DesArticuloOrigen);
                     htmlBody = htmlBody.Replace("[CodCofreDest]", oReq.CodArticuloDestino);
-                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.DesArticuloDestino);
+                    htmlBody = htmlBody.Replace("[DesCofreDest]", oReq.DesArticuloDestino);
                     htmlBody = htmlBody.Replace("[Usuario]", oReq.Usuario);
                     htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oReq.CodSoliEgre.ToString());
                     htmlBody = htmlBody.Replace("[CodigoPlanilla]", oReq.CodPlanilla);
