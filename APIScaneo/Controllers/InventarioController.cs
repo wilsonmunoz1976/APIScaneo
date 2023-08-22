@@ -107,6 +107,7 @@ namespace APIScaneo.Controllers
                                 oInventario = (from DataRow dr in oData.Rows
                                                select new InventarioDetalle()
                                                {
+                                                   codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
                                                    articulo = dr["articulo"] == DBNull.Value ? null : dr["articulo"].ToString(),
                                                    existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
                                                    enConsignacion = dr["EnConsignacion"] == null ? null :   Convert.ToDouble(dr["EnConsignacion"]),
@@ -159,6 +160,7 @@ namespace APIScaneo.Controllers
                                 oInventario = (from DataRow dr in oData.Rows
                                                select new InventarioDetalle()
                                                {
+                                                   codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
                                                    articulo = dr["articulo"]== DBNull.Value ? null: dr["articulo"].ToString(),
                                                    existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
                                                    enConsignacion = dr["EnConsignacion"] == DBNull.Value ? null : Convert.ToDouble(dr["EnConsignacion"]),

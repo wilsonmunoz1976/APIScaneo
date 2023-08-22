@@ -187,11 +187,11 @@ namespace clsScaneo.Clases
                     foreach (InventarioDetalle? oDet in oReq.detalle)
                     {
                         DetalleXML += "       <Conteo>\r\n";
-                        DetalleXML += "           <articulo>" + oDet.articulo + "</articulo>\r\n";
+                        DetalleXML += "           <articulo>" + oDet.codigo + "</articulo>\r\n";
                         DetalleXML += "           <existencia>" + Convert.ToString(oDet.existencia) + "</existencia>\r\n";
                         DetalleXML += "           <tomafisica>" + Convert.ToString(oDet.tomaFisica) + "</tomafisica>\r\n";
                         DetalleXML += "           <diferencia>" + Convert.ToString(oDet.diferencia) + "</diferencia>\r\n";
-                        DetalleXML += "           <observacion>" + Convert.ToString(oDet.observacion) + "</observacion>\r\n";
+                        DetalleXML += "           <observacion>" + oDet.observacion + "</observacion>\r\n";
                         DetalleXML += "       </Conteo>\r\n";
                     }
                 }
