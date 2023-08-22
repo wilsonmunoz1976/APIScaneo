@@ -30,6 +30,37 @@ CREATE TABLE dbo.scit_CabInventario
 
 GO
 
+
+IF EXISTS(SELECT * FROM sys.extended_properties INNER JOIN sys.all_columns ON extended_properties.major_id=all_columns.object_id and extended_properties.minor_id=all_columns.column_id WHERE extended_properties.major_id=OBJECT_ID('dbo.scit_CabInventario') and extended_properties.name='MS_Description' AND all_columns.name='ci_anio')
+   EXEC sp_dropextendedproperty  @name=N'MS_Description' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'TABLE', @level1name = 'scit_CabInventario', @level2type = 'COLUMN', @level2name = 'ci_anio'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Año del inventario' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'scit_CabInventario', @level2type=N'COLUMN',@level2name=N'ci_anio'
+GO
+
+IF EXISTS(SELECT * FROM sys.extended_properties INNER JOIN sys.all_columns ON extended_properties.major_id=all_columns.object_id and extended_properties.minor_id=all_columns.column_id WHERE extended_properties.major_id=OBJECT_ID('dbo.scit_CabInventario') and extended_properties.name='MS_Description' AND all_columns.name='ci_mes')
+   EXEC sp_dropextendedproperty  @name=N'MS_Description' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'TABLE', @level1name = 'scit_CabInventario', @level2type = 'COLUMN', @level2name = 'ci_mes'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Mes del inventario' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'scit_CabInventario', @level2type=N'COLUMN',@level2name=N'ci_mes'
+GO
+
+IF EXISTS(SELECT * FROM sys.extended_properties INNER JOIN sys.all_columns ON extended_properties.major_id=all_columns.object_id and extended_properties.minor_id=all_columns.column_id WHERE extended_properties.major_id=OBJECT_ID('dbo.scit_CabInventario') and extended_properties.name='MS_Description' AND all_columns.name='fx_creacion')
+   EXEC sp_dropextendedproperty  @name=N'MS_Description' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'TABLE', @level1name = 'scit_CabInventario', @level2type = 'COLUMN', @level2name = 'fx_creacion'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Fecha de Creación' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'scit_CabInventario', @level2type=N'COLUMN',@level2name=N'fx_creacion'
+GO
+
+IF EXISTS(SELECT * FROM sys.extended_properties INNER JOIN sys.all_columns ON extended_properties.major_id=all_columns.object_id and extended_properties.minor_id=all_columns.column_id WHERE extended_properties.major_id=OBJECT_ID('dbo.scit_CabInventario') and extended_properties.name='MS_Description' AND all_columns.name='ci_usuario')
+   EXEC sp_dropextendedproperty  @name=N'MS_Description' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'TABLE', @level1name = 'scit_CabInventario', @level2type = 'COLUMN', @level2name = 'ci_usuario'
+GO
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Usuario de Creación/Modificación' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'scit_CabInventario', @level2type=N'COLUMN',@level2name=N'ci_usuario'
+GO
+
+IF EXISTS(SELECT * FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.scit_CabInventario') and name='descripcion')
+   EXEC sp_dropextendedproperty  @name = 'descripcion' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'TABLE', @level1name = 'scit_CabInventario'
+GO
+EXEC sys.sp_addextendedproperty @name=N'descripcion', @value=N'Tabla cabecera de Inventario' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'scit_CabInventario'
+GO
+
 dbo.sp_help scit_CabInventario
 GO
 

@@ -104,5 +104,29 @@ BEGIN
 END
 GO
 
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_Seguridad') and name='@i_accion')
+   EXEC sp_dropextendedproperty  @name = '@i_accion' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_Seguridad'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_accion', @value=N'Loginname de acceso' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_Seguridad'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_Seguridad') and name='@i_password')
+   EXEC sp_dropextendedproperty  @name = '@i_password' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_Seguridad'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_password', @value=N'Contraseña de acceso' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_Seguridad'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_Seguridad') and name='@o_msgerror')
+   EXEC sp_dropextendedproperty  @name = '@o_msgerror' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_Seguridad'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@o_msgerror', @value=N'Mensaje de respuesta del SP' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_Seguridad'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_Seguridad') and name='descripcion')
+   EXEC sp_dropextendedproperty  @name = 'descripcion' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_Seguridad'
+GO
+EXEC sys.sp_addextendedproperty @name=N'descripcion', @value=N'SP para manejar la parte de seguridad de la APIRest' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_Seguridad'
+GO
+
 dbo.sp_help pr_Seguridad
 GO

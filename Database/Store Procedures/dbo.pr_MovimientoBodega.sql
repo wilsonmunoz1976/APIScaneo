@@ -175,5 +175,41 @@ BEGIN
 END
 GO
 
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='@i_articulo')
+   EXEC sp_dropextendedproperty  @name = '@i_articulo' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_articulo', @value=N'Codigo de Articulo' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='@i_planilla')
+   EXEC sp_dropextendedproperty  @name = '@i_planilla' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_planilla', @value=N'Codigo de Planilla' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='@i_tipomov')
+   EXEC sp_dropextendedproperty  @name = '@i_tipomov' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_tipomov', @value=N'Tipo de Movimiento' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='@i_usuario')
+   EXEC sp_dropextendedproperty  @name = '@i_usuario' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_usuario', @value=N'Loginname de Usuario que invoca el SP' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='@o_msgerror')
+   EXEC sp_dropextendedproperty  @name = '@o_msgerror' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@o_msgerror', @value=N'Mensaje de Error que devuelve el SP' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_MovimientoBodega') and name='descripcion')
+   EXEC sp_dropextendedproperty  @name = 'descripcion' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_MovimientoBodega'
+GO
+EXEC sys.sp_addextendedproperty @name=N'descripcion', @value=N'Registra Movimientos de Bodega y es auxiliar de pr_Emergencia' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_MovimientoBodega'
+GO
+
 dbo.sp_help pr_MovimientoBodega
 GO

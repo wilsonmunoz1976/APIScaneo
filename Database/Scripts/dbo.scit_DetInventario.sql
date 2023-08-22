@@ -24,6 +24,7 @@ CREATE TABLE dbo.scit_DetInventario(
 	qn_existencia bigint NOT NULL,
 	qn_toma_fisica bigint NOT NULL,
 	qn_diferencia bigint NOT NULL,
+	tx_observacion varchar(200) NULL
  CONSTRAINT PK_scit_DetInventario PRIMARY KEY NONCLUSTERED 
 (
 	ci_anio ASC,

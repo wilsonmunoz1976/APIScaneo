@@ -86,5 +86,35 @@ BEGIN
 END
 GO
 
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_sec') and name='@i_bodega')
+   EXEC sp_dropextendedproperty  @name = '@i_bodega' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_sec'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_bodega', @value=N'Bodega a Solicitar secuencial' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_sec'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_sec') and name='@i_inout')
+   EXEC sp_dropextendedproperty  @name = '@i_inout' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_sec'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@i_inout', @value=N'Tipo de Secuencial a solicitar' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_sec'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_sec') and name='@o_msgerror')
+   EXEC sp_dropextendedproperty  @name = '@o_msgerror' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_sec'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@o_msgerror', @value=N'Mensaje de respuesta del SP' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_sec'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_sec') and name='@o_sec')
+   EXEC sp_dropextendedproperty  @name = '@o_sec' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_sec'
+GO
+EXEC sys.sp_addextendedproperty @name=N'@o_sec', @value=N'Numero secuencial a retornar' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_sec'
+GO
+
+IF EXISTS(SELECT 1 FROM sys.extended_properties WHERE major_id=OBJECT_ID('dbo.pr_sec') and name='descripcion')
+   EXEC sp_dropextendedproperty  @name = 'descripcion' ,@level0type = 'SCHEMA', @level0name = 'dbo', @level1type = 'PROCEDURE', @level1name = 'pr_sec'
+GO
+EXEC sys.sp_addextendedproperty @name=N'descripcion', @value=N'SP para obtener el ultimo secuencial de una tabla' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'PROCEDURE',@level1name=N'pr_sec'
+GO
+
 dbo.sp_help pr_sec
 GO
