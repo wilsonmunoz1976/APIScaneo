@@ -3,6 +3,9 @@ using System.Data;
 using clsScaneo.Entidades;
 using NLog;
 using Microsoft.Extensions.Configuration;
+using SixLabors.ImageSharp.Formats.Webp;
+using SixLaborsResizeMode = SixLabors.ImageSharp.Processing.ResizeMode;
+using SixLabors.ImageSharp;
 
 namespace clsScaneo.Clases
 {
@@ -184,8 +187,18 @@ namespace clsScaneo.Clases
                 {
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_comentario", SqlDbType = SqlDbType.VarChar, Value = Comentario });
                 }
-                if (Fotografia != null)
+                
+                if (Fotografia == null) { Fotografia = ""; }
+
+                if (Fotografia != "")
                 {
+                    byte[] imageBytes = Convert.FromBase64String(Fotografia);
+                    var image = SixLabors.ImageSharp.Image.Load(imageBytes);
+                    string sFilenameOrig = Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".webp";
+                    image.SaveAsWebp(sFilenameOrig);
+                    imageBytes = File.ReadAllBytes(sFilenameOrig);
+                    File.Delete(sFilenameOrig);
+                    Fotografia = Convert.ToBase64String(imageBytes);
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_fotografia", SqlDbType = SqlDbType.NVarChar, Value = Fotografia });
                 }
                 if (Usuario != null)

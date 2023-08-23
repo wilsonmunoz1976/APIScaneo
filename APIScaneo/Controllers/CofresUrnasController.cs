@@ -103,6 +103,7 @@ namespace APIScaneo.Controllers
                                                  {
                                                      codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
                                                      bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                     codproducto = dr["codProducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
                                                      producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
                                                      inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
                                                      nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
@@ -361,10 +362,9 @@ namespace APIScaneo.Controllers
                     htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.desArticuloOrigen);
                     htmlBody = htmlBody.Replace("[CodCofreDest]", oReq.codArticuloDestino);
                     htmlBody = htmlBody.Replace("[DesCofreDest]", oReq.desArticuloDestino);
-                    htmlBody = htmlBody.Replace("[usuario]", oReq.usuario);
+                    htmlBody = htmlBody.Replace("[Usuario]", oReq.usuario);
                     htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oReq.codSoliEgre.ToString());
-                    htmlBody = htmlBody.Replace("[codigoPlanilla]", oReq.codPlanilla);
-                    htmlBody = htmlBody.Replace("[usuario]", oReq.usuario);
+                    htmlBody = htmlBody.Replace("[CodigoPlanilla]", oReq.codPlanilla);
                 }
 
                 EmailMessage? oMail = new()

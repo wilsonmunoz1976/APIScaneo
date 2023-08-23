@@ -94,7 +94,7 @@ namespace APIScaneo.Controllers
                             DataRow dr = tbDatos.Rows[0];
                             oDato = new()
                             {
-                                id = dr["id"]==DBNull.Value? null: Convert.ToInt32(dr["id"]),
+                                id = dr["id"]==DBNull.Value? 0: Convert.ToInt32(dr["id"]),
                                 nombres = dr["nombres"] == DBNull.Value ? null : dr["nombres"].ToString(),
                                 username = oReq.usuario,
                                 password = oReq.password

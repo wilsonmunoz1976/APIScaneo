@@ -131,13 +131,13 @@ namespace APIScaneo.Controllers
                         }
                         if (oReq != null)
                         {
-                            htmlBody = htmlBody.Replace("[codArticulo]", oReq.articulo);
-                            htmlBody = htmlBody.Replace("[desArticulo]", respRegistro.desArticulo);
-                            htmlBody = htmlBody.Replace("[bodega]", respRegistro.bodega);
+                            htmlBody = htmlBody.Replace("[CodArticulo]", oReq.articulo);
+                            htmlBody = htmlBody.Replace("[DesArticulo]", respRegistro.desArticulo);
+                            htmlBody = htmlBody.Replace("[Bodega]", respRegistro.bodega);
                             htmlBody = htmlBody.Replace("[NombreCompleto]", oReq.nombres);
-                            htmlBody = htmlBody.Replace("[usuario]", oReq.usuario);
+                            htmlBody = htmlBody.Replace("[Usuario]", oReq.usuario);
                             htmlBody = htmlBody.Replace("[CodigoSoliEgre]", respRegistro.codigoSolicEgre.ToString());
-                            htmlBody = htmlBody.Replace("[codigoPlanilla]", respRegistro.codigoPlanilla);
+                            htmlBody = htmlBody.Replace("[CodigoPlanilla]", respRegistro.codigoPlanilla);
                         }
 
                         EmailMessage? oMail = new()

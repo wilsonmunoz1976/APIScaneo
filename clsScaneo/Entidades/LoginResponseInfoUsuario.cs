@@ -5,7 +5,7 @@ namespace clsScaneo.Entidades
 {
     public class LoginResponseInfoUsuario
     {
-        public int? id { get; set; }
+        public int id { get; set; } = 0;
         public string? nombres { get; set; }
         public string? username { get; set; }
 

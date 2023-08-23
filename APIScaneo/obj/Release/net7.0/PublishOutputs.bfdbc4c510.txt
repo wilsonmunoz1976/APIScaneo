@@ -31,6 +31,7 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Mic
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\NLog.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\NLog.Extensions.Logging.dll
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\SixLabors.ImageSharp.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

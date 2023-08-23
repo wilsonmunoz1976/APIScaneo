@@ -158,3 +158,4 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\refint\APIScan
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\APIScaneo.pdb
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\APIScaneo.genruntimeconfig.cache
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\ref\APIScaneo.dll
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Release\net7.0\SixLabors.ImageSharp.dll
