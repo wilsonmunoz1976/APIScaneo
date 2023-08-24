@@ -194,6 +194,11 @@ namespace clsScaneo.Clases
                 {
                     byte[] imageBytes = Convert.FromBase64String(Fotografia);
                     var image = SixLabors.ImageSharp.Image.Load(imageBytes);
+                    image.Mutate(x => x.Resize(new ResizeOptions
+                    {
+                        Size = new SixLabors.ImageSharp.Size(1280, 720), // Tamaño en HD
+                        Mode = SixLaborsResizeMode.Max
+                    }));
                     string sFilenameOrig = Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".webp";
                     image.SaveAsWebp(sFilenameOrig);
                     imageBytes = File.ReadAllBytes(sFilenameOrig);
