@@ -42,6 +42,7 @@ namespace APIScaneo.Controllers
         public RespuestaEjecucion? RegistrarEmergencia([FromBody] RegistroEmergenciaRequest? oReq)
         {
             RegistroEmergenciaResponse respRegistro = new();
+            RespuestaEjecucion? oRespEmail = new();
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
@@ -57,7 +58,7 @@ namespace APIScaneo.Controllers
                             {
                                 if (oResp.codigo == 0)
                                 {
-                                    oResp = NotificacionEmail(oReq, ref respRegistro);
+                                    oRespEmail = NotificacionEmail(oReq, ref respRegistro);
                                 }
                                 else
                                 {

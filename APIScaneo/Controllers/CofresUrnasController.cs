@@ -280,6 +280,7 @@ namespace APIScaneo.Controllers
         public RespuestaEjecucion? ReingresoCofresUrnas([FromBody] ReingresoCofreUrnaRequest reingresoCofreUrna)
         {
             RespuestaEjecucion? oResp = IsTokenValido();
+            RespuestaEjecucion? oRespEmail = new();
             if (oResp != null)
             {
                 if (oResp.codigo == 0)
@@ -306,7 +307,7 @@ namespace APIScaneo.Controllers
                                         nombreFallecido = dr["nombreFallecido"] == DBNull.Value ? null : dr["nombreFallecido"].ToString(),
                                         usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString()
                                     };
-                                    oResp = NotificarReingreso(oDato);
+                                    oRespEmail = NotificarReingreso(oDato);
                                 }
                             }
                         }

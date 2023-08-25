@@ -22,7 +22,7 @@ namespace APIScaneo.Authorization
             if (!(context.Request.Path.Value.Contains("/api/Login/")))
             {
                 var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-                int? userId = jwtUtils.ValidateJwtToken(token); // ?? throw new Exception("El token suministrado no es correcto");
+                int? userId = jwtUtils.ValidateJwtToken(token); 
                 if (userId == null)
                 {
                     context.Response.Headers.Add("token-Expired", "true");
