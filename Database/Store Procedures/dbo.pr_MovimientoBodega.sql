@@ -171,6 +171,7 @@ BEGIN
         RETURN -1
     END CATCH
   --END TRANSACTION
+    SELECT @o_msgerror = 'Movimiento de Bodega registrado correctamente'
     RETURN 0
 END
 GO

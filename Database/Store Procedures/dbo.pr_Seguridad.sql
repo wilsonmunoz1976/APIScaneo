@@ -38,13 +38,11 @@ BEGIN
             RETURN -1
         END
 
-        SELECT @w_password = tx_contraseña,
-		       @w_id = ci_empleado,
-			   @w_nombres = tx_usuario
-          FROM dbo.setUsuario
-         INNER JOIN dbo.setUsuarioEmpresa
-            ON setUsuarioEmpresa.ci_usuario = setUsuario.ci_usuario
-         WHERE setUsuario.ci_usuario = @i_usuario
+        SELECT @w_password = tx_contrasena,
+		       @w_id       = CONVERT(INT,(RAND() * 100)),
+			   @w_nombres  = tx_usuario
+          FROM [dbJardiesaDC].[dbo].ssatUsuario
+         WHERE ci_usuariointegrado = @i_usuario
         
         IF @@ROWCOUNT = 0
         BEGIN
@@ -85,9 +83,8 @@ BEGIN
         SELECT nom_parametro = ci_parametro,
                val_parametro = tx_parametro, 
                des_parametro = tx_descripcion 
-          FROM dbo.setParametrosGenerales
-         WHERE ci_empresa='000' 
-           AND ci_aplicacion='MOV'
+          FROM [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
+         WHERE ci_aplicacion='MOV'
 
         IF @@ROWCOUNT = 0
         BEGIN
@@ -97,7 +94,7 @@ BEGIN
 
        SELECT  Id=@w_id, Nombres= @w_nombres
 
-       SELECT @o_msgerror = 'Ejecucion Ok'
+       SELECT @o_msgerror = 'Login correcto'
     END
 
     RETURN 0

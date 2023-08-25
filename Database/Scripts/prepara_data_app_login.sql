@@ -1,6 +1,9 @@
 USE dbJardinesEsperanza
 GO
 
+INSERT INTO [dbJardiesaDC].[dbo].ssatAplicacion
+SELECT ci_aplicacion='MOV', tx_aplicacion='Aplicacion Scaneo Movil', tx_basedatos='dbJardinesEsperanza', tx_servidor='192.168.0.98', ci_user='sa', tx_password='J173@2016¡p', bd_mostrar=0, ci_secuencia=0
+
 SELECT * FROM setMenuNivel0 WHERE ci_nivel0='MOV'
 
 INSERT INTO setMenuNivel0 (ci_nivel0, tx_nivel0) VALUES ('MOV', 'APLICACION MOVIL')
@@ -131,6 +134,12 @@ SELECT [ci_usuario]='CGONZALEZ'
   FROM [dbJardinesEsperanza].[dbo].[setUsuario]
   where ci_usuario='ADMIN'
 
+INSERT INTO [dbJardiesaDC].[dbo].ssatUsuario
+SELECT ci_usuario='JFALQUEZ', tx_usuario='Jaime Falquez', tx_contrasena='123456', ce_tipousuario='A', tx_observacion='', ci_expira=0, qn_dias=15, fx_ultcambioclave=GETDATE(), tx_terminal=@@SERVERNAME, ce_usuario='A', ci_usuariointegrado='JFALQUEZ', ci_usuarioprodubanco=null
+
+INSERT INTO [dbJardiesaDC].[dbo].ssatUsuario
+SELECT ci_usuario='WMUNOZ', tx_usuario='Wilson Muñoz', tx_contrasena='12345', ce_tipousuario='A', tx_observacion='', ci_expira=0, qn_dias=15, fx_ultcambioclave=GETDATE(), tx_terminal=@@SERVERNAME, ce_usuario='A', ci_usuariointegrado='WMUNOZ', ci_usuarioprodubanco=null
+
   SELECT * FROM [dbo].[setEmpresa]
 
   SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuarioEmpresa] WHERE ci_usuario='CGONZALEZ'
@@ -141,11 +150,15 @@ SELECT [ci_usuario]='CGONZALEZ'
 
   INSERT INTO [dbo].[setUsuarioSucursal] (ci_usuario, ci_empresa, tx_tipodocumento, ci_sucursal) VALUES ('CGONZALEZ', 'J01', 'FV', '001')
 
-  SELECT * FROM [dbo].[setParametrosGenerales]
+SELECT * FROM [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
 
-  INSERT INTO [dbo].[setParametrosGenerales] (ci_empresa, ci_aplicacion, ci_parametro, tx_parametro, tx_descripcion)
-  SELECT '000','MOV','RGOHOR', '19:00|09:00', 'Rango Horario de Emergencia'
-  
+INSERT INTO [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
+SELECT ci_aplicacion='MOV', ci_parametro='DEBUG', tx_parametro='SI', tx_descripcion='Se indica si hay modalidad Debug', ci_banco=null
+
+INSERT INTO [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
+SELECT ci_aplicacion='MOV', ci_parametro='RGOHOR', tx_parametro='08:00|18:00', tx_descripcion='Rango Horario de Emergencia', ci_banco=null
+
+
   SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='CGONZALEZ' AND ci_nivel0='MOV'
 
   DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='CGONZALEZ' and ci_nivel2='MOV1120'

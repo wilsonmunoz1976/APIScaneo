@@ -81,6 +81,7 @@ BEGIN
 	    RETURN -1
 	END CATCH
 
+	SELECT @o_msgerror = 'Secuencia obtenida correctamente'
 	RETURN 0
 
 END
