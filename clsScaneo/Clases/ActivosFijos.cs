@@ -61,7 +61,7 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public DataTable GetActivosFijos(string Codigo, ref RespuestaEjecucion oResp)
+        public DataTable GetActivosFijos(string Codigo, string Usuario, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -72,6 +72,7 @@ namespace clsScaneo.Clases
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CO" });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codigo", SqlDbType = SqlDbType.VarChar, Size = 50, Value = Codigo });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
                 dt.Load(cmd.ExecuteReader());

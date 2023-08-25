@@ -83,8 +83,8 @@ namespace APIScaneo.Controllers
             return new ActivoFijoResponse() { respuesta = oResp, detalle=oActivosFijos };
         }
 
-        [HttpPost("GetActivosFijos/{codigo}")]
-        public ActivoFijoResponse GetActivosFijos(string codigo)
+        [HttpPost("GetActivosFijos/{codigo}/{usuario}")]
+        public ActivoFijoResponse GetActivosFijos(string codigo, string usuario)
         {
             List<ActivoFijoResponseDetalle> oActivosFijos = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -96,7 +96,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetActivosFijos(codigo, ref oResp);
+                            DataTable oData = Conectividad.GetActivosFijos(codigo, usuario, ref oResp);
                             if (oData != null)
                             {
                                 oActivosFijos = (from DataRow dr in oData.Rows

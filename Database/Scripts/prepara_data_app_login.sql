@@ -22,6 +22,10 @@ INSERT INTO setMenuNivel2 (ci_nivel0, ci_nivel1, ci_nivel2, tx_nivel2, ci_tipo) 
 INSERT INTO setMenuNivel2 (ci_nivel0, ci_nivel1, ci_nivel2, tx_nivel2, ci_tipo) VALUES('MOV', 'MOV1000', 'MOV1130', 'Puesta en Sala', 'A')
 INSERT INTO setMenuNivel2 (ci_nivel0, ci_nivel1, ci_nivel2, tx_nivel2, ci_tipo) VALUES('MOV', 'MOV1000', 'MOV1140', 'Emergencia', 'A')
 
+INSERT INTO setMenuNivel2 (ci_nivel0, ci_nivel1, ci_nivel2, tx_nivel2, ci_tipo) VALUES('MOV', 'MOV2000', 'MOV2100', 'Consulta de Activos Fijos', 'A')
+
+INSERT INTO setMenuNivel2 (ci_nivel0, ci_nivel1, ci_nivel2, tx_nivel2, ci_tipo) VALUES('MOV', 'MOV3000', 'MOV3100', 'Actualizacion de Inventario', 'A')
+
 SELECT * FROM setMenuNivel3 WHERE ci_nivel0='MOV'
 
 INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, 
@@ -42,6 +46,17 @@ INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3,
 						   tx_rutapaginaintegradoweb, ci_webexterna, tx_rutapaginawebexterna) 
 				    VALUES('MOV', 'MOV1000', 'MOV1110', 0, 
 					       'Reingreso Cofre', 'MOV11100', 'A', '',
+						   'A', null, null, 'N', 
+						   null, null, null, null, 
+						   null, null, null)
+
+INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, 
+                           tx_nivel3, ci_codigo, ce_nivel3, tx_ejecutable, 
+						   te_web, tx_carpeta, tx_clase, te_presentaweb, 
+						   tx_pagina, te_marketingapp, tx_rutamarketingapp, te_integradoweb, 
+						   tx_rutapaginaintegradoweb, ci_webexterna, tx_rutapaginawebexterna) 
+				    VALUES('MOV', 'MOV1000', 'MOV1110', 1, 
+					       'Permiso de visualizar precios', 'MOV11100', 'A', '',
 						   'A', null, null, 'N', 
 						   null, null, null, null, 
 						   null, null, null)
@@ -78,6 +93,41 @@ INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3,
 						   'A', null, null, 'N', 
 						   null, null, null, null, 
 						   null, null, null)
+
+INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, 
+                           tx_nivel3, ci_codigo, ce_nivel3, tx_ejecutable, 
+						   te_web, tx_carpeta, tx_clase, te_presentaweb, 
+						   tx_pagina, te_marketingapp, tx_rutamarketingapp, te_integradoweb, 
+						   tx_rutapaginaintegradoweb, ci_webexterna, tx_rutapaginawebexterna) 
+				    VALUES('MOV', 'MOV2000', 'MOV2100', 0, 
+					       'Activos Fijos', 'MOV21000', 'A', '',
+						   'A', null, null, 'N', 
+						   null, null, null, null, 
+						   null, null, null)
+
+INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, 
+                           tx_nivel3, ci_codigo, ce_nivel3, tx_ejecutable, 
+						   te_web, tx_carpeta, tx_clase, te_presentaweb, 
+						   tx_pagina, te_marketingapp, tx_rutamarketingapp, te_integradoweb, 
+						   tx_rutapaginaintegradoweb, ci_webexterna, tx_rutapaginawebexterna) 
+				    VALUES('MOV', 'MOV2000', 'MOV2100', 1, 
+					       'Permiso de visualizar costos', 'MOV21001', 'A', '',
+						   'A', null, null, 'N', 
+						   null, null, null, null, 
+						   null, null, null)
+
+INSERT INTO setMenuNivel3 (ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, 
+                           tx_nivel3, ci_codigo, ce_nivel3, tx_ejecutable, 
+						   te_web, tx_carpeta, tx_clase, te_presentaweb, 
+						   tx_pagina, te_marketingapp, tx_rutamarketingapp, te_integradoweb, 
+						   tx_rutapaginaintegradoweb, ci_webexterna, tx_rutapaginawebexterna) 
+				    VALUES('MOV', 'MOV3000', 'MOV3100', 0, 
+					       'Mantenimiento de Inventario', 'MOV31000', 'A', '',
+						   'A', null, null, 'N', 
+						   null, null, null, null, 
+						   null, null, null)
+
+
 
 SELECT * FROM [dbJardinesEsperanza].[dbo].[setUsuario] where ci_usuario='CGONZALEZ'
 insert into [dbJardinesEsperanza].[dbo].[setUsuario]
@@ -159,11 +209,13 @@ INSERT INTO [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
 SELECT ci_aplicacion='MOV', ci_parametro='RGOHOR', tx_parametro='08:00|18:00', tx_descripcion='Rango Horario de Emergencia', ci_banco=null
 
 
-  SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='CGONZALEZ' AND ci_nivel0='MOV'
+  SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='wmunoz' AND ci_nivel0='MOV'
+  DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='wmunoz' AND ci_nivel0='MOV' and ci_nivel2='MOV3100'
 
-  DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='CGONZALEZ' and ci_nivel2='MOV1120'
+  DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='jfalquez' and ci_nivel2='MOV1120'
   select * from [dbJardinesEsperanza].[dbo].setMenuNivel2 where ci_nivel2='MOV1120'
   
+  DELETE [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='cgonzalez' and ci_nivel0='MOV'
 
   INSERT INTO [dbJardinesEsperanza].[dbo].[setPermisosUsuario] (ci_usuario, ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos)
   SELECT ci_usuario='CGONZALEZ', ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos='NMECI' 
