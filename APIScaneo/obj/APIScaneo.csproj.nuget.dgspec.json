@@ -52,11 +52,11 @@
           "dependencies": {
             "Microsoft.Extensions.Configuration.FileExtensions": {
               "target": "Package",
-              "version": "[8.0.0-preview.5.23280.8, )"
+              "version": "[8.0.0-rc.1.23419.4, )"
             },
             "NLog.Extensions.Logging": {
               "target": "Package",
-              "version": "[5.3.2, )"
+              "version": "[5.3.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -64,7 +64,7 @@
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[6.32.1, )"
+              "version": "[7.0.0, )"
             }
           },
           "imports": [
@@ -131,29 +131,21 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "AIM": {
+            "AspNetCoreCompatibility": {
               "target": "Package",
-              "version": "[1.1.1, )"
-            },
-            "Microsoft.AspNetCore.Http.Abstractions": {
-              "target": "Package",
-              "version": "[2.2.0, )"
-            },
-            "Microsoft.AspNetCore.Mvc.Abstractions": {
-              "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[1.1.0, )"
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
-              "version": "[5.1.1, )"
+              "version": "[5.2.0-preview3.23201.1, )"
             },
             "NLog.Extensions.Logging": {
               "target": "Package",
-              "version": "[5.3.2, )"
+              "version": "[5.3.4, )"
             },
             "SixLabors.ImageSharp": {
               "target": "Package",
-              "version": "[3.0.1, )"
+              "version": "[3.0.2, )"
             }
           },
           "imports": [

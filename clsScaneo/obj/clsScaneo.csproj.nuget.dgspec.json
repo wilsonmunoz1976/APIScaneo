@@ -45,29 +45,21 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "AIM": {
+            "AspNetCoreCompatibility": {
               "target": "Package",
-              "version": "[1.1.1, )"
-            },
-            "Microsoft.AspNetCore.Http.Abstractions": {
-              "target": "Package",
-              "version": "[2.2.0, )"
-            },
-            "Microsoft.AspNetCore.Mvc.Abstractions": {
-              "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[1.1.0, )"
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
-              "version": "[5.1.1, )"
+              "version": "[5.2.0-preview3.23201.1, )"
             },
             "NLog.Extensions.Logging": {
               "target": "Package",
-              "version": "[5.3.2, )"
+              "version": "[5.3.4, )"
             },
             "SixLabors.ImageSharp": {
               "target": "Package",
-              "version": "[3.0.1, )"
+              "version": "[3.0.2, )"
             }
           },
           "imports": [

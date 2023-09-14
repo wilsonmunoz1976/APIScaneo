@@ -7,6 +7,7 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\API
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\APIScaneo.deps.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\APIScaneo.runtimeconfig.json
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\APIScaneo.pdb
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\AspNetCoreCompatibility.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Azure.Core.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Azure.Identity.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Microsoft.Bcl.AsyncInterfaces.dll
@@ -43,8 +44,8 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\Sys
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\System.Security.Permissions.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\System.Windows.Extensions.dll
-D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
-D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\unix\lib\net7.0\Microsoft.Data.SqlClient.dll
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\win\lib\net7.0\Microsoft.Data.SqlClient.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\PubTmp\Out\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
