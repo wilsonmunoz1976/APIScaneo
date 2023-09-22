@@ -307,7 +307,7 @@ namespace APIScaneo.Controllers
                                         nombreFallecido = dr["nombreFallecido"] == DBNull.Value ? null : dr["nombreFallecido"].ToString(),
                                         usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString()
                                     };
-                                    oRespEmail = NotificarReingreso(oDato);
+                                    oRespEmail = NotificarReingreso(reingresoCofreUrna, oDato);
                                 }
                             }
                         }
@@ -335,9 +335,9 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
-        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRespose? oReq)
+        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp)
         {
-            RespuestaEjecucion? oResp = null;
+            RespuestaEjecucion? oRespuesta = null;
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -357,15 +357,15 @@ namespace APIScaneo.Controllers
                         htmlBody += line + CrLf;
                     }
                 }
-                if (oReq != null)
+                if (oResp != null)
                 {
-                    htmlBody = htmlBody.Replace("[CodCofreOrig]", oReq.codArticuloOrigen);
-                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oReq.desArticuloOrigen);
-                    htmlBody = htmlBody.Replace("[CodCofreDest]", oReq.codArticuloDestino);
-                    htmlBody = htmlBody.Replace("[DesCofreDest]", oReq.desArticuloDestino);
-                    htmlBody = htmlBody.Replace("[Usuario]", oReq.usuario);
-                    htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oReq.codSoliEgre.ToString());
-                    htmlBody = htmlBody.Replace("[CodigoPlanilla]", oReq.codPlanilla);
+                    htmlBody = htmlBody.Replace("[CodCofreOrig]", oResp.codArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oResp.desArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[CodCofreDest]", oResp.codArticuloDestino);
+                    htmlBody = htmlBody.Replace("[DesCofreDest]", oResp.desArticuloDestino);
+                    htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);
+                    htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oResp.codSoliEgre.ToString());
+                    htmlBody = htmlBody.Replace("[CodigoPlanilla]", oResp.codPlanilla);
                 }
 
                 EmailMessage? oMail = new()
@@ -384,13 +384,18 @@ namespace APIScaneo.Controllers
                     Body = htmlBody
                 };
 
+                if (oReq != null)
+                {
+                    if (oReq.email != null) { oMail.CC.Add(oReq.email); }
+                }
+
                 if (MailAgente != null)
                 {
-                    oResp = MailAgente.EnviarCorreoNotificacion(oMail);
+                    oRespuesta = MailAgente.EnviarCorreoNotificacion(oMail);
                 }
                 else
                 {
-                    oResp = new()
+                    oRespuesta = new()
                     {
                         codigo = -2,
                         mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
@@ -398,9 +403,9 @@ namespace APIScaneo.Controllers
                     logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
                 }
 
-                if (oResp == null)
+                if (oRespuesta == null)
                 {
-                    oResp = new RespuestaEjecucion()
+                    oRespuesta = new RespuestaEjecucion()
                     {
                         codigo = -2,
                         mensaje = "No hay conectividad con la base de datos, solicite soporte"
@@ -408,7 +413,7 @@ namespace APIScaneo.Controllers
                     logger.Error("No hay conectividad con la base de datos, solicite soporte");
                 }
             }
-            return oResp;
+            return oRespuesta;
         }
 
         private RespuestaEjecucion? IsTokenValido()

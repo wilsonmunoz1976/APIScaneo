@@ -56,63 +56,67 @@ namespace APIScaneo.Controllers
                 if (Conectividad != null)
                 {
                     DataSet oData = Conectividad.LoginApp(Usuario: oReq.usuario, Password: oReq.password, ref oResp);
-                    if (oData.Tables.Count > 0)
+                    if (oResp.codigo == 0)
                     {
-                        DataTable tbPermisos = oData.Tables[0];
-                        DataTable tbParametros = oData.Tables[1];
-                        DataTable tbDatos = oData.Tables[2];
-
-                        if (tbPermisos != null)
+                        if (oData.Tables.Count > 0)
                         {
-                            oPermiso = (from DataRow dr in tbPermisos.Rows
-                                        select new LoginResponsePermiso()
-                                        {
-                                            codigoModulo = dr["cod_modulo"]==DBNull.Value? null: dr["cod_modulo"].ToString(),
-                                            descripcionModulo = dr["des_modulo"] == DBNull.Value ? null : dr["des_modulo"].ToString(),
-                                            codigoOpcion = dr["cod_opcion"] == DBNull.Value ? null : dr["cod_opcion"].ToString(),
-                                            numeroOpcion = dr["num_opcion"] == DBNull.Value ? null: Convert.ToUInt16(dr["num_opcion"]),
-                                            descripcionOpcion = dr["des_opcion"] == DBNull.Value ? null : dr["des_opcion"].ToString(),
-                                            permisos = dr["permisos"] == DBNull.Value ? null : dr["permisos"].ToString()
-                                        }
-                                        ).ToList();
-                        }
+                            DataTable tbPermisos = oData.Tables[0];
+                            DataTable tbParametros = oData.Tables[1];
+                            DataTable tbDatos = oData.Tables[2];
 
-                        if (tbParametros != null)
-                        {
-                            oParametro = (from DataRow dr in tbParametros.Rows
-                                          select new LoginResponseParametro()
-                                          {
-                                              nombreParametro = dr["nom_parametro"]==DBNull.Value? null: dr["nom_parametro"].ToString(),
-                                              valorParametro = dr["val_parametro"] == DBNull.Value ? null : dr["val_parametro"].ToString(),
-                                              descripcionParametro = dr["des_parametro"] == DBNull.Value ? null : dr["des_parametro"].ToString()
-                                          }
-                                        ).ToList();
-                        }
-
-                        if (tbDatos != null)
-                        {
-                            DataRow dr = tbDatos.Rows[0];
-                            oDato = new()
+                            if (tbPermisos != null)
                             {
-                                id = dr["id"]==DBNull.Value? 0: Convert.ToInt32(dr["id"]),
-                                nombres = dr["nombres"] == DBNull.Value ? null : dr["nombres"].ToString(),
-                                username = oReq.usuario,
-                                password = oReq.password
-                            };
+                                oPermiso = (from DataRow dr in tbPermisos.Rows
+                                            select new LoginResponsePermiso()
+                                            {
+                                                codigoModulo = dr["cod_modulo"] == DBNull.Value ? null : dr["cod_modulo"].ToString(),
+                                                descripcionModulo = dr["des_modulo"] == DBNull.Value ? null : dr["des_modulo"].ToString(),
+                                                codigoOpcion = dr["cod_opcion"] == DBNull.Value ? null : dr["cod_opcion"].ToString(),
+                                                numeroOpcion = dr["num_opcion"] == DBNull.Value ? null : Convert.ToUInt16(dr["num_opcion"]),
+                                                descripcionOpcion = dr["des_opcion"] == DBNull.Value ? null : dr["des_opcion"].ToString(),
+                                                permisos = dr["permisos"] == DBNull.Value ? null : dr["permisos"].ToString()
+                                            }
+                                            ).ToList();
+                            }
 
-                            if (_loginUser != null)
+                            if (tbParametros != null)
                             {
-                                sToken = _loginUser.TokenLogin(Convert.ToInt32(dr["id"]), dr["nombres"].ToString(), oReq.usuario, oReq.password);
+                                oParametro = (from DataRow dr in tbParametros.Rows
+                                              select new LoginResponseParametro()
+                                              {
+                                                  nombreParametro = dr["nom_parametro"] == DBNull.Value ? null : dr["nom_parametro"].ToString(),
+                                                  valorParametro = dr["val_parametro"] == DBNull.Value ? null : dr["val_parametro"].ToString(),
+                                                  descripcionParametro = dr["des_parametro"] == DBNull.Value ? null : dr["des_parametro"].ToString()
+                                              }
+                                            ).ToList();
+                            }
+
+                            if (tbDatos != null)
+                            {
+                                DataRow dr = tbDatos.Rows[0];
+                                oDato = new()
+                                {
+                                    id = dr["id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["id"]),
+                                    nombres = dr["nombres"] == DBNull.Value ? null : dr["nombres"].ToString(),
+                                    email = dr["email"] == DBNull.Value ? null : dr["email"].ToString(),
+                                    username = oReq.usuario,
+                                    password = oReq.password
+                                };
+
+                                if (_loginUser != null)
+                                {
+                                    sToken = _loginUser.TokenLogin(Convert.ToInt32(dr["id"]), dr["nombres"].ToString(), oReq.usuario, oReq.password);
+                                }
+
                             }
 
                         }
-
-                    }
-                    else
-                    {
-                        oResp.codigo = oResp.codigo;
-                        oResp.mensaje = oResp.mensaje;
-                        logger.Error(oResp.mensaje);
+                        else
+                        {
+                            oResp.codigo = oResp.codigo;
+                            oResp.mensaje = oResp.mensaje;
+                            logger.Error(oResp.mensaje);
+                        }
                     }
                 }
             }

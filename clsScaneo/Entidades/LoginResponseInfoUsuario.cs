@@ -8,6 +8,7 @@ namespace clsScaneo.Entidades
         public int id { get; set; } = 0;
         public string? nombres { get; set; }
         public string? username { get; set; }
+        public string? email { get; set; }
 
         [JsonIgnore]
         public string? password { get; set; }

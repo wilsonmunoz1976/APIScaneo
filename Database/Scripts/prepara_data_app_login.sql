@@ -234,3 +234,10 @@ select * from [dbJardinesEsperanza].[dbo].[setUsuario] where ci_usuario='wmunoz'
 
 SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='CGONZALEZ' AND ci_nivel0='MOV'
 SELECT * FROM [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='wmunoz' AND ci_nivel0='MOV'
+
+
+delete [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='YRODRIGUEZ'
+select * from [dbJardinesEsperanza].[dbo].[setPermisosUsuario] where ci_usuario='JFALQUEZ'
+
+insert into [dbJardinesEsperanza].[dbo].[setPermisosUsuario]
+SELECT ci_usuario='YRODRIGUEZ',ci_nivel0, ci_nivel1, ci_nivel2, ci_nivel3, tx_permisos='NMECI' FROM [dbJardinesEsperanza].[dbo].setMenuNivel3 WHERE ci_nivel0='MOV'

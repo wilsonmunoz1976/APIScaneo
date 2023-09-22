@@ -157,6 +157,11 @@ namespace APIScaneo.Controllers
                             Body = htmlBody
                         };
 
+                        if (oReq != null)
+                        {
+                            if (oReq.email != null) { oMail.CC.Add(oReq.email); }
+                        }
+
                         if (Conectividad != null)
                         {
                             oResp = Conectividad.EnviarCorreoNotificacion(oMail);

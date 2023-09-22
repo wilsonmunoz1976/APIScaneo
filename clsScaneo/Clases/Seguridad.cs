@@ -84,13 +84,18 @@ namespace clsScaneo.Clases
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 
                 da.SelectCommand = cmd;
-                da.Fill(ds);
+
+                if (oResp.codigo == 0)
+                {
+                    da.Fill(ds);
+                }
 
                 oResp = new()
                 {
                     codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
                     mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                 };
+
             }
             catch (Exception ex)
             {
