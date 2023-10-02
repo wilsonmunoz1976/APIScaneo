@@ -32,7 +32,7 @@ namespace clsScaneo.Clases
         #endregion "Construccion"
 
         #region "Cofres Urnas"
-        public DataTable GetBodegas(ref RespuestaEjecucion oResp)
+        public DataTable GetBodegas(string usuario, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -42,6 +42,7 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_CofresUrnas";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "BO" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 

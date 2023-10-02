@@ -37,7 +37,7 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("GetBodegas")]
-        public BodegaResponse GetBodegas()
+        public BodegaResponse GetBodegas(string usuario)
         {
             List<BodegaResponseDetalle> oBodegas = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -51,7 +51,7 @@ namespace APIScaneo.Controllers
                         {
                             if (Conectividad != null)
                             {
-                                DataTable oData = Conectividad.GetBodegas(ref oResp);
+                                DataTable oData = Conectividad.GetBodegas(usuario, ref oResp);
                                 if (oData != null)
                                 {
                                     oBodegas = (from DataRow dr in oData.Rows
@@ -88,8 +88,8 @@ namespace APIScaneo.Controllers
             return new BodegaResponse() { respuesta = oResp, detalle = oBodegas };
         }
 
-        [HttpPost("GetInventario/{bodega}")]
-        public InventarioResponse GetInventario(string bodega)
+        [HttpPost("GetInventario/{usuario}/{bodega}")]
+        public InventarioResponse GetInventario(string usuario, string bodega)
         {
             List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -101,7 +101,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetInventario(bodega, ref oResp);
+                            DataTable oData = Conectividad.GetInventario(usuario, bodega, ref oResp);
                             if (oData != null)
                             {
                                 oInventario = (from DataRow dr in oData.Rows
@@ -115,7 +115,8 @@ namespace APIScaneo.Controllers
                                                    planillaPorCerrar = dr["PlanillaPorCerrar"]==DBNull.Value ?null:Convert.ToDouble(dr["PlanillaPorCerrar"]),
                                                    tomaFisica = dr["TomaFisica"]==DBNull.Value ? null: Convert.ToDouble(dr["TomaFisica"]),
                                                    diferencia = dr["Diferencia"]==DBNull.Value ? null: Convert.ToDouble(dr["Diferencia"]),
-                                                   observacion = dr["Observacion"]==DBNull.Value ? null: dr["Observacion"].ToString()
+                                                   observacion = dr["Observacion"]==DBNull.Value ? null: dr["Observacion"].ToString(),
+                                                   modificar = dr["Modificar"] == DBNull.Value ? null : dr["Modificar"].ToString()
                                                }
                                                  ).ToList();
                             }
@@ -141,8 +142,8 @@ namespace APIScaneo.Controllers
             return new InventarioResponse() { respuesta = oResp, detalle = oInventario };
         }
 
-        [HttpPost("GetInventario/{bodega}/{codigo}")]
-        public InventarioResponse GetInventario(string codigo, string bodega="1")
+        [HttpPost("GetInventario/{usuario}/{bodega}/{codigo}")]
+        public InventarioResponse GetInventario(string usuario, string codigo, string bodega="1")
         {
             List<InventarioDetalle> oInventario = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -154,7 +155,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetInventario(bodega, codigo, ref oResp);
+                            DataTable oData = Conectividad.GetInventario(usuario, bodega, codigo, ref oResp);
                             if (oData != null)
                             {
                                 oInventario = (from DataRow dr in oData.Rows
@@ -168,7 +169,8 @@ namespace APIScaneo.Controllers
                                                    planillaPorCerrar = dr["PlanillaPorCerrar"] == DBNull.Value ? null : Convert.ToDouble(dr["PlanillaPorCerrar"]),
                                                    tomaFisica = dr["TomaFisica"] == DBNull.Value ? null : Convert.ToDouble(dr["TomaFisica"]),
                                                    diferencia = dr["Diferencia"] == DBNull.Value ? null : Convert.ToDouble(dr["Diferencia"]),
-                                                   observacion = dr["Observacion"] == DBNull.Value ? null : dr["Observacion"].ToString()
+                                                   observacion = dr["Observacion"] == DBNull.Value ? null : dr["Observacion"].ToString(),
+                                                   modificar = dr["Modificar"] == DBNull.Value ? null : dr["Modificar"].ToString()
                                                }
                                               ).ToList();
                             }

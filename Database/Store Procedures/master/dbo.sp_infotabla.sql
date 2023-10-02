@@ -1,14 +1,17 @@
 USE master
 GO
 
-IF EXISTS(SELECT 1 FROM SYS.all_objects WHERE object_id=OBJECT_ID('dbo.sp_infotabla') and type='P')
-   DROP PROCEDURE dbo.sp_infotabla
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE id=OBJECT_ID('dbo.sp_infotabla') AND type='P')
+BEGIN
+   EXEC ('CREATE PROCEDURE dbo.sp_infotabla AS BEGIN RETURN 0 END')
+END
 GO
 
-CREATE PROCEDURE dbo.sp_infotabla (
+ALTER PROCEDURE dbo.sp_infotabla (
     @pr_objectname varchar(max))
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @objectid int
     SELECT @objectid = OBJECT_ID(@pr_objectname)
 

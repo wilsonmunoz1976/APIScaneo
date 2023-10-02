@@ -11,5 +11,6 @@ namespace clsScaneo.Entidades
         public double? tomaFisica { get; set; } = 0;
         public double? diferencia { get; set; } = 0;
         public string? observacion { get; set; } = string.Empty;
+        public string? modificar { get; set; } = string.Empty;
     }
 }

@@ -39,7 +39,7 @@ namespace APIScaneo.Controllers
         }
 
         [HttpPost("GetBodegas")]
-        public BodegaResponse GetBodegas()
+        public BodegaResponse GetBodegas(string usuario)
         {
             List<BodegaResponseDetalle> oBodegas = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -51,7 +51,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetBodegas(ref oResp);
+                            DataTable oData = Conectividad.GetBodegas(usuario, ref oResp);
                             if (oData != null)
                             {
                                 oBodegas = (from DataRow dr in oData.Rows

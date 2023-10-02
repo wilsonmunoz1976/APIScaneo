@@ -28,7 +28,7 @@ namespace clsScaneo.Clases
         #endregion "Construccion"
 
         #region "Inventario"
-        public DataTable GetBodegas(ref RespuestaEjecucion oResp)
+        public DataTable GetBodegas(string usuario, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -38,6 +38,7 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_Inventario";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "BO" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 
@@ -61,7 +62,7 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public DataTable GetInventario(string? Bodega, ref RespuestaEjecucion oResp)
+        public DataTable GetInventario(string Usuario, string? Bodega, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -71,6 +72,7 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_Inventario";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "LI" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = Bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
@@ -95,7 +97,7 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public DataTable GetInventario(string Bodega, string Codigo, ref RespuestaEjecucion oResp)
+        public DataTable GetInventario(string Usuario, string Bodega, string Codigo, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -105,6 +107,7 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_Inventario";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CO" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = Bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codigo", SqlDbType = SqlDbType.VarChar, Size = 50, Value = Codigo });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
@@ -191,6 +194,9 @@ namespace clsScaneo.Clases
                         DetalleXML += "           <existencia>" + Convert.ToString(oDet.existencia) + "</existencia>\r\n";
                         DetalleXML += "           <tomafisica>" + Convert.ToString(oDet.tomaFisica) + "</tomafisica>\r\n";
                         DetalleXML += "           <diferencia>" + Convert.ToString(oDet.diferencia) + "</diferencia>\r\n";
+                        DetalleXML += "           <retapizando>" + Convert.ToString(oDet.retapizandose) + "</retapizando>\r\n";
+                        DetalleXML += "           <consignacion>" + Convert.ToString(oDet.enConsignacion) + "</consignacion>\r\n";
+                        DetalleXML += "           <planillaxcerrar>" + Convert.ToString(oDet.planillaPorCerrar) + "</planillaxcerrar>\r\n";
                         DetalleXML += "           <observacion>" + oDet.observacion + "</observacion>\r\n";
                         DetalleXML += "       </Conteo>\r\n";
                     }
