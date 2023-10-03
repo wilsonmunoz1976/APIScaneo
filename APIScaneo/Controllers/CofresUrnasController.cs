@@ -382,6 +382,43 @@ namespace APIScaneo.Controllers
             return new UsuariosAppResponse() { respuesta = oResp, detalle = detalle } ;
         }
 
+        [HttpPost("ReasignacionUsuario")]
+        public RespuestaEjecucion? ReasignacionUsuario([FromBody] ReasignacionRequest oReq)
+        {
+            List<UsuariosAppResponseDetalle> detalle = new();
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            oResp = Conectividad.ReasignacionUsuario(oReq);
+                        }
+                        else
+                        {
+                            oResp = new RespuestaEjecucion()
+                            {
+                                codigo = -1,
+                                mensaje = "Error de Conectividad con la Clase"
+                            };
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp = new RespuestaEjecucion()
+                        {
+                            codigo = -9,
+                            mensaje = "Error de Excepcion: " + ex.Message
+                        };
+                    }
+                }
+            }
+            return oResp;
+        }
+
         private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp)
         {
             RespuestaEjecucion? oRespuesta = null;
