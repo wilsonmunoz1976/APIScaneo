@@ -335,6 +335,53 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
+        [HttpPost("GetListadoUsuariosApp/{usuario}")]
+        public UsuariosAppResponse? GetListadoUsuariosApp(string usuario)
+        {
+            List<UsuariosAppResponseDetalle> detalle = new();
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            DataTable oData = Conectividad.GetListadoUsuariosApp(usuario, ref oResp);
+                            if (oData != null)
+                            {
+                                if (oData.Rows.Count > 0)
+                                {
+                                    foreach (DataRow dr in oData.Rows)
+                                    {
+                                        UsuariosAppResponseDetalle oDetalle = new()
+                                        {
+                                            usuario   = dr["ci_usuario"] == DBNull.Value ? null : dr["ci_usuario"].ToString(),
+                                            nombres   = dr["tx_usuario"] == DBNull.Value ? null : dr["tx_usuario"].ToString(),
+                                            codbodega = dr["ci_bodega"] == DBNull.Value ? null : dr["ci_bodega"].ToString(),
+                                            desbodega = dr["tx_nombrebodega"] == DBNull.Value ? null : dr["tx_nombrebodega"].ToString()
+                                        };
+                                        detalle.Add(oDetalle);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                oResp.codigo = -2;
+                                oResp.mensaje = "No esta instanciada la clase de CofresUrnas";
+                                logger.Error("No esta instanciada la clase de CofresUrnas");
+                            }
+                        }
+                    }
+                    catch (Exception ex) { 
+                    
+                    }
+                }
+            }
+            return new UsuariosAppResponse() { respuesta = oResp, detalle = detalle } ;
+        }
+
         private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp)
         {
             RespuestaEjecucion? oRespuesta = null;

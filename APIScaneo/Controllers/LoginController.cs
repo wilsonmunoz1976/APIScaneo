@@ -128,5 +128,6 @@ namespace APIScaneo.Controllers
             }
             return new LoginResponse() { respuesta = oResp, parametro = oParametro, permiso = oPermiso, loginDato = oDato, token = sToken };
         }
+
     }
 }
