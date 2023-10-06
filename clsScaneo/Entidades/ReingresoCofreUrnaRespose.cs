@@ -10,5 +10,7 @@ namespace clsScaneo.Entidades
         public int? codSoliEgre { get; set; } = null;
         public string? nombreFallecido { get; set; } = string.Empty;
         public string? usuario { get; set; } = string.Empty;
+        public string? codBodega { get; set; } = string.Empty;
+        public string? desBodega { get; set; } = string.Empty;
     }
 }

@@ -6,5 +6,6 @@
         public string? Secret { get; set; }
         public bool? ValidarToken { get; set; }
         public double HorasExpiracion { get; set; }
+        public string? Version { get; set; }
     }
 }

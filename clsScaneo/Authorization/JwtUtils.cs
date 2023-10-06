@@ -12,6 +12,7 @@ public interface IJwtUtils
 {
     public string GenerateJwtToken(LoginResponseInfoUsuario user);
     public int? ValidateJwtToken(string? token);
+    public string? VersionApp();
 }
 
 public class JwtUtils : IJwtUtils
@@ -24,6 +25,11 @@ public class JwtUtils : IJwtUtils
 
         if (string.IsNullOrEmpty(_Settings.Secret))
             throw new Exception("JWT secret not configured");
+    }
+
+    public string? VersionApp()
+    {
+        return _Settings.Version;
     }
 
     public string GenerateJwtToken(LoginResponseInfoUsuario user)

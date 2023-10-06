@@ -13,6 +13,7 @@ namespace clsScaneo.Clases
     {
         string TokenLogin(int? Id, string? Nombres, string? Usuario, string? Password);
         bool ValidaTokenLogin(string? Token);
+        string? GetVersion();
     }
 
     public class LoginUser : ILoginUser
@@ -36,6 +37,15 @@ namespace clsScaneo.Clases
             return Token;
         }
 
+        public string? GetVersion()
+        {
+            string sRetorno = "";
+            if (_jwtUtils != null)
+            {
+                sRetorno = _jwtUtils.VersionApp();
+            }
+            return sRetorno;
+        }
         public bool ValidaTokenLogin(string? Token)
         {
             int? iRet = null;

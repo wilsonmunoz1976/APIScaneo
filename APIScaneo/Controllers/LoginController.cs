@@ -1,6 +1,7 @@
 using APIScaneo.Authorization;
 using clsScaneo.Clases;
 using clsScaneo.Entidades;
+using clsScaneo.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.Data;
@@ -12,7 +13,7 @@ namespace APIScaneo.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-
+        private readonly IConfiguration _configuration;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ILoginUser? _loginUser;
 
@@ -51,6 +52,26 @@ namespace APIScaneo.Controllers
             LoginResponseInfoUsuario oDato = new();
             string sToken = string.Empty;
             RespuestaEjecucion oResp = new();
+
+            if (_loginUser != null)
+            {
+                if (_loginUser.GetVersion() != oReq.version)
+                {
+                    oResp = new()
+                    {
+                        codigo = -1,
+                        mensaje = "La versión instalada de la App no esta actualizada"
+                    };
+                    return new LoginResponse() { 
+                         respuesta = oResp,
+                         loginDato = oDato,
+                         parametro = oParametro,
+                         permiso = oPermiso,
+                         token = sToken
+                       };
+                }
+            }
+
             try
             {
                 if (Conectividad != null)

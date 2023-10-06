@@ -108,6 +108,7 @@ namespace APIScaneo.Controllers
                                                select new InventarioDetalle()
                                                {
                                                    codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                   bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
                                                    articulo = dr["articulo"] == DBNull.Value ? null : dr["articulo"].ToString(),
                                                    existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
                                                    enConsignacion = dr["EnConsignacion"] == null ? null :   Convert.ToDouble(dr["EnConsignacion"]),
@@ -161,9 +162,10 @@ namespace APIScaneo.Controllers
                                 oInventario = (from DataRow dr in oData.Rows
                                                select new InventarioDetalle()
                                                {
-                                                   codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
-                                                   articulo = dr["articulo"]== DBNull.Value ? null: dr["articulo"].ToString(),
-                                                   existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
+                                                   codigo = dr["Codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                   bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                   articulo = dr["Articulo"]== DBNull.Value ? null: dr["articulo"].ToString(),
+                                                   existencia = dr["Existencia"] == DBNull.Value ? null : Convert.ToDouble(dr["existencia"]),
                                                    enConsignacion = dr["EnConsignacion"] == DBNull.Value ? null : Convert.ToDouble(dr["EnConsignacion"]),
                                                    retapizandose = dr["Retapizandose"] == DBNull.Value ? null : Convert.ToDouble(dr["Retapizandose"]),
                                                    planillaPorCerrar = dr["PlanillaPorCerrar"] == DBNull.Value ? null : Convert.ToDouble(dr["PlanillaPorCerrar"]),

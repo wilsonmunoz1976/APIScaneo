@@ -130,6 +130,54 @@ namespace APIScaneo.Controllers
             return new CofreUrnaListaResponse() { respuesta = oResp, detalle = oActivosFijos };
         }
 
+        [HttpPost("GetRetapizados/{usuario}")]
+        public CofreUrnaListaResponse GetRetapizados(string? usuario = null)
+        {
+            List<CofreUrnaListaResponseDetalle>? oActivosFijos = new();
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            DataTable oData = Conectividad.GetRetapizados(usuario, ref oResp);
+                            if (oData != null)
+                            {
+                                oActivosFijos = (from DataRow dr in oData.Rows
+                                                 select new CofreUrnaListaResponseDetalle()
+                                                 {
+                                                     codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                     bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                     codproducto = dr["codProducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
+                                                     producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
+                                                     inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
+                                                     nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
+                                                     estado = dr["estado"] == DBNull.Value ? null : Convert.ToInt16(dr["estado"])
+                                                 }
+                                                 ).ToList();
+                            }
+                        }
+                        else
+                        {
+                            oResp.codigo = -2;
+                            oResp.mensaje = "No esta instanciada la clase de CofresUrnas";
+                            logger.Error("No esta instanciada la clase de CofresUrnas");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                    }
+                }
+            }
+            return new CofreUrnaListaResponse() { respuesta = oResp, detalle = oActivosFijos };
+        }
+
         [HttpPost("GetCofreUrna/{articulo}")]
         public CofreUrnaDatoResponse GetCofreUrna(string? articulo)
         {
@@ -289,7 +337,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, ref oResp);
+                            DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, "RI", ref oResp);
                             if (oResp.codigo == 0)
                             {
                                 if (dt.Rows.Count > 0)
@@ -305,9 +353,72 @@ namespace APIScaneo.Controllers
                                         codSoliEgre = dr["codSoliEgre"] == DBNull.Value ? null : Convert.ToInt32(dr["codSoliEgre"]),
                                         codPlanilla = dr["codPlanilla"] == DBNull.Value ? null : dr["codPlanilla"].ToString(),
                                         nombreFallecido = dr["nombreFallecido"] == DBNull.Value ? null : dr["nombreFallecido"].ToString(),
-                                        usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString()
+                                        usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString(),
+                                        codBodega = dr["codBodega"] == DBNull.Value ? null : dr["codBodega"].ToString(),
+                                        desBodega = dr["desBodega"] == DBNull.Value ? null : dr["desBodega"].ToString()
                                     };
-                                    oRespEmail = NotificarReingreso(reingresoCofreUrna, oDato);
+                                    oRespEmail = NotificarReingreso(reingresoCofreUrna, oDato, "Reposicion");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de CofresUrnas"
+                            };
+                            logger.Error("No esta instanciada la clase de CofresUrnas");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp = new()
+                        {
+                            codigo = -2,
+                            mensaje = ex.Message
+                        };
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+                    }
+                }
+            }
+            return oResp;
+        }
+
+        [HttpPost("ReingresoRetapizado")]
+        public RespuestaEjecucion? ReingresoRetapizado([FromBody] ReingresoCofreUrnaRequest reingresoCofreUrna)
+        {
+            RespuestaEjecucion? oResp = IsTokenValido();
+            RespuestaEjecucion? oRespEmail = new();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            DataTable dt = Conectividad.ReingresoCofresUrnas(reingresoCofreUrna, "RR", ref oResp);
+                            if (oResp.codigo == 0)
+                            {
+                                if (dt.Rows.Count > 0)
+                                {
+                                    ReingresoCofreUrnaRespose? oDato = null;
+                                    DataRow dr = dt.Rows[0];
+                                    oDato = new()
+                                    {
+                                        codArticuloOrigen = dr["codArticuloOrigen"] == DBNull.Value ? null : dr["codArticuloOrigen"].ToString(),
+                                        desArticuloOrigen = dr["desArticuloOrigen"] == DBNull.Value ? null : dr["desArticuloOrigen"].ToString(),
+                                        codArticuloDestino = dr["codArticuloDestino"] == DBNull.Value ? null : dr["codArticuloDestino"].ToString(),
+                                        desArticuloDestino = dr["desArticuloDestino"] == DBNull.Value ? null : dr["desArticuloDestino"].ToString(),
+                                        codSoliEgre = dr["codSoliEgre"] == DBNull.Value ? null : Convert.ToInt32(dr["codSoliEgre"]),
+                                        codPlanilla = dr["codPlanilla"] == DBNull.Value ? null : dr["codPlanilla"].ToString(),
+                                        nombreFallecido = dr["nombreFallecido"] == DBNull.Value ? null : dr["nombreFallecido"].ToString(),
+                                        usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString(),
+                                        codBodega = dr["codBodega"] == DBNull.Value ? null : dr["codBodega"].ToString(),
+                                        desBodega = dr["desBodega"] == DBNull.Value ? null : dr["desBodega"].ToString()
+                                    };
+                                    oRespEmail = NotificarReingreso(reingresoCofreUrna, oDato, "Retapizado");
                                 }
                             }
                         }
@@ -419,7 +530,111 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
-        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp)
+        private RespuestaEjecucion? NotificarReingreso(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp, string TipoReingreso)
+        {
+            RespuestaEjecucion? oRespuesta = null;
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            EmailConfig? configEmail = configuration.GetSection("ConfigEmail").Get<EmailConfig>();
+            string htmlBody = string.Empty;
+            if (configEmail != null)
+            {
+                string fileName = "";
+                switch (TipoReingreso) 
+                {
+                    case "Retapizado":
+                        fileName = Environment.CurrentDirectory + "\\plantilla_mail_reingreso_retapizado.html";
+                        break;
+                    default:
+                        fileName = Environment.CurrentDirectory + "\\plantilla_mail_reingreso.html";
+                        break;
+                }
+                using (StreamReader reader = new(fileName))
+                {
+                    string? line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        htmlBody += line + CrLf;
+                    }
+                }
+                if (oResp != null)
+                {
+                    switch (TipoReingreso)
+                    {
+                        case "Retapizado":
+                            htmlBody = htmlBody.Replace("[CodCofre]", oResp.codArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[DesCofre]", oResp.desArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[CodBodega]", oResp.codBodega);
+                            htmlBody = htmlBody.Replace("[DesBodega]", oResp.desBodega);
+                            htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oResp.codSoliEgre.ToString());
+                            htmlBody = htmlBody.Replace("[CodigoPlanilla]", oResp.codPlanilla);
+                            htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);
+                            break;
+                        default:
+                            htmlBody = htmlBody.Replace("[CodCofreOrig]", oResp.codArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[DesCofreOrig]", oResp.desArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[CodCofreDest]", oResp.codArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[DesCofreDest]", oResp.desArticuloOrigen);
+                            htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oResp.codSoliEgre.ToString());
+                            htmlBody = htmlBody.Replace("[CodigoPlanilla]", oResp.codPlanilla);
+                            htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);
+                            break;
+                    }
+                }
+
+                EmailMessage? oMail = new()
+                {
+                    ServidorMail = configEmail.MailServer,
+                    PortMail = configEmail.MailPuerto,
+                    UseSSL = true,
+                    FromMail = configEmail.FromEmail,
+                    FromName = configEmail.FromName,
+                    Subject = configEmail.MailSubject,
+                    UsuarioMail = configEmail.MailUsuario,
+                    PasswordMail = configEmail.MailPassword,
+                    To = new List<string?>(configEmail.MailTo.Split(";")),
+                    CC = new List<string?>(configEmail.MailCC.Split(";")),
+                    CCO = new List<string?>(configEmail.MailCCO.Split(";")),
+                    Body = htmlBody
+                };
+
+                if (oReq != null)
+                {
+                    if (oReq.email != null) { oMail.CC.Add(oReq.email); }
+                }
+
+                if (MailAgente != null)
+                {
+                    oRespuesta = MailAgente.EnviarCorreoNotificacion(oMail);
+                }
+                else
+                {
+                    oRespuesta = new()
+                    {
+                        codigo = -2,
+                        mensaje = "Hubo un error al ejecutar RegistrarEmergencia"
+                    };
+                    logger.Error("Hubo un error al ejecutar RegistrarEmergencia");
+                }
+
+                if (oRespuesta == null)
+                {
+                    oRespuesta = new RespuestaEjecucion()
+                    {
+                        codigo = -2,
+                        mensaje = "No hay conectividad con la base de datos, solicite soporte"
+                    };
+                    logger.Error("No hay conectividad con la base de datos, solicite soporte");
+                }
+            }
+            return oRespuesta;
+        }
+
+        private RespuestaEjecucion? NotificarReingresoRetapizado(ReingresoCofreUrnaRequest? oReq, ReingresoCofreUrnaRespose? oResp)
         {
             RespuestaEjecucion? oRespuesta = null;
 
@@ -443,8 +658,8 @@ namespace APIScaneo.Controllers
                 }
                 if (oResp != null)
                 {
-                    htmlBody = htmlBody.Replace("[CodCofreOrig]", oResp.codArticuloOrigen);
-                    htmlBody = htmlBody.Replace("[DesCofreOrig]", oResp.desArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[CodCofre]", oResp.codArticuloOrigen);
+                    htmlBody = htmlBody.Replace("[DesCofre]", oResp.desArticuloOrigen);
                     htmlBody = htmlBody.Replace("[CodCofreDest]", oResp.codArticuloDestino);
                     htmlBody = htmlBody.Replace("[DesCofreDest]", oResp.desArticuloDestino);
                     htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);

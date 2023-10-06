@@ -25,6 +25,9 @@
     <None Update="plantilla_mail_notificacion.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="plantilla_mail_reingreso_retapizado.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

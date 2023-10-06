@@ -8,5 +8,7 @@ namespace clsScaneo.Entidades
         public string? usuario  { get; set; }
         [Required]
         public string? password { get; set; }
+        [Required]
+        public string? version { get; set; }
     }
 }
