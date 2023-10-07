@@ -49,7 +49,7 @@ BEGIN
           FROM dbo.ssatUsuario
 		  LEFT JOIN dbo.ssatCorreoUsuarios
 		    ON ssatUsuario.ci_usuario = ssatCorreoUsuarios.ci_usuario
-         WHERE ci_usuariointegrado = @i_usuario
+         WHERE ssatUsuario.ci_usuario = @i_usuario
         
         IF @@ROWCOUNT = 0
         BEGIN

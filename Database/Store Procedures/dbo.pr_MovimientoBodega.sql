@@ -17,7 +17,9 @@ ALTER PROCEDURE dbo.pr_MovimientoBodega
     @i_articulo      varchar(20)    = '',
     @i_planilla      varchar(20)    = '',
     @i_usuario       varchar(15)    = null,
+	@i_bodega        varchar(3)     = null,
     @o_msgerror      varchar(200)   = '' OUTPUT
+
 )
 AS
 BEGIN
@@ -37,37 +39,47 @@ BEGIN
             @w_nota_entrega  varchar(25)  = '',
             @w_inhumado      varchar(220) = '',
             @w_sectransac    int          = 0,
-            @w_bodega        varchar(3)   = '',
+            --@w_bodega        varchar(3)   = '',
             @w_fechacontable datetime,
             @w_ret           int    
 
-    BEGIN TRANSACTION [MovimientoBodega]
+    --BEGIN TRANSACTION [MovimientoBodega]
         BEGIN TRY
     
+            SELECT @w_observacion = CASE WHEN @i_tipomov = 'IN' THEN 'Ingreso'
+                                         WHEN @i_tipomov = 'OU' THEN 'Egreso'
+                                         WHEN @i_tipomov = 'RB' THEN 'Reingreso'
+										 WHEN @i_tipomov = 'RE' THEN 'Egreso de Retapizado'
+                                         ELSE 'Movimiento'
+                                    END
+              + ' por planilla ' + @i_planilla + ', del Inhumado ' + @w_inhumado
+    
+	        IF @i_tipomov = 'RE' SELECT @i_tipomov = 'OU'
+
             SELECT @w_fechacontable = fx_fechacontable
               FROM dbJardiesaDC.dbo.ssatFechaContable
              WHERE ci_aplicacion = 'SCG'
 
             SELECT @w_anio = CONVERT(VARCHAR(4), YEAR(GETDATE()))
-            SELECT @w_bodega   = ci_bodega
-              FROM scit_ArticulosBodegas
-             WHERE ci_articulo = @i_articulo 
+            --SELECT @w_bodega   = ci_bodega
+            --  FROM scit_ArticulosBodegas
+            -- WHERE ci_articulo = @i_articulo 
     
             EXEC @w_ret      = dbo.pr_sectrans 
-                 @i_bodega   = @w_bodega, 
+                 @i_bodega   = @i_bodega, 
                  @i_inout    = @i_tipomov, 
                  @o_sec      = @w_sectransac OUTPUT, 
                  @o_msgerror = @o_msgerror OUTPUT
     
             IF @w_ret != 0
             BEGIN
+                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo obtener secuencia de Transaccion'
-                ROLLBACK TRANSACTION [MovimientoBodega]
                 RETURN -2
             END 
 
             SELECT @w_secuencia = FORMAT(@w_sectransac,'0000')
-            SELECT @w_transaccion = @w_anio+@w_bodega+@w_secuencia
+            SELECT @w_transaccion = @w_anio+@i_bodega+@w_secuencia
     
             SELECT @w_inhumado      = tx_nombrefallecido,
                    @w_fechacreacion = fx_creacion 
@@ -86,12 +98,8 @@ BEGIN
             SELECT @w_valorIVA = @w_valorUnit * 0.12
             SELECT @w_total = @w_valorUnit + @w_valorIVA
     
-            SELECT @w_observacion = CASE WHEN @i_tipomov = 'IN' THEN 'Ingreso'
-                                         WHEN @i_tipomov = 'OU' THEN 'Egreso'
-                                         ELSE 'Movimiento'
-                                    END
-              + ' por planilla ' + @i_planilla + ', del Inhumado ' + @w_inhumado
-    
+
+
             INSERT INTO scit_CabTransaccion 
                 (ci_tipo_transaccion,   ci_transaccion,                        ci_motivo,                           ci_bodega,
                  ci_bodega_destino,     fx_creacion,                           hr_creacion,                         ci_moneda,
@@ -101,18 +109,18 @@ BEGIN
                  tx_tipo,               ci_cuentacontable,                     ci_proveedor,                        bd_obras,
                  fx_contable)               
             VALUES                      
-                (@i_tipomov,            @w_transaccion,                        'NONE',                              @w_bodega,
+                (@i_tipomov,            @w_transaccion,                        'NONE',                              @i_bodega,
                  '',                    FORMAT(GETDATE(),'yyyy-MM-dd'),        FORMAT(GETDATE(),'HH:mm:ss'),        '02',
                  1.00,                  @w_observacion,                        ISNULL(@i_usuario,''),               @w_nota_entrega,
                  '',                    '',                                    YEAR(GETDATE()),                     MONTH(GETDATE()),
-                 'S',                   'S',                                   0,                                   '',
+                 'S',                   'N',                                   0,                                   '',
                  '',                    '',                                    '',                                  '',
                  FORMAT(@w_fechacontable,'yyyy-MM-dd'))
     
             IF @@ROWCOUNT = 0
             BEGIN
+                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo ingresar Cabecera de Transacción'
-                ROLLBACK TRANSACTION [MovimientoBodega]
                 RETURN -2
             END 
 
@@ -123,52 +131,52 @@ BEGIN
             VALUES 
                 (@i_tipomov,          @w_transaccion,       7,               ISNULL(@i_articulo,''), 
                  @w_anterior,         1,                    @w_medida,       @w_valorUnit, 
-                 @w_valorIVA,         @w_total,             0.00,            'S')    
+                 0,                   @w_valorUnit,         0.00,            'S')    
             
             IF @@ROWCOUNT = 0
             BEGIN
+                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo ingresar Detalle de Transacción'
-                ROLLBACK TRANSACTION [MovimientoBodega]
                 RETURN -2
             END 
 
             UPDATE dbJardiesaDC.dbo.scit_Articulos 
                SET qn_existencia = qn_existencia + 
-                                 CASE WHEN @i_tipomov = 'IN' THEN 1
+                                 CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
                                       WHEN @i_tipomov = 'OU' THEN -1
                                       ELSE 0
                                  END 
              WHERE ci_articulo   = @i_articulo
-    
+
             IF @@ROWCOUNT = 0
             BEGIN
+                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo'
-                ROLLBACK TRANSACTION [MovimientoBodega]
                 RETURN -2
             END 
 
             UPDATE dbJardiesaDC.dbo.scit_ArticulosBodegas 
                SET qn_existencia = qn_existencia + 
-                                   CASE WHEN @i_tipomov = 'IN' THEN 1
-                                        WHEN @i_tipomov = 'OU' THEN -1
-                                        ELSE 0
-                                   END  
-             WHERE ci_bodega     = @w_bodega 
-               AND ci_articulo   = @i_articulo
-
+                                 CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
+                                      WHEN @i_tipomov = 'OU' THEN -1
+                                      ELSE 0
+                                 END 
+             WHERE ci_articulo   = @i_articulo
+			   AND ci_bodega     = @i_bodega
+    
             IF @@ROWCOUNT = 0
             BEGIN
-                SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia de la Bodega'
-                ROLLBACK TRANSACTION [MovimientoBodega]
+                --ROLLBACK TRANSACTION [MovimientoBodega]
+                SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo Bodega'
                 RETURN -2
             END 
-    
-        COMMIT TRANSACTION [MovimientoBodega]
+
+        --COMMIT TRANSACTION [MovimientoBodega]
     
        END TRY
     BEGIN CATCH
+        --ROLLBACK TRANSACTION [MovimientoBodega]
         SELECT @o_msgerror = 'Error: ' + ERROR_MESSAGE() + ' - ' + CONVERT(VARCHAR(MAX), ERROR_LINE())
-        ROLLBACK TRANSACTION [MovimientoBodega]
         RETURN -1
     END CATCH
   --END TRANSACTION

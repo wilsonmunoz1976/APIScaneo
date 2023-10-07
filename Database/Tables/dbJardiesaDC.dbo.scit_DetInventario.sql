@@ -16,13 +16,16 @@ IF EXISTS(SELECT 1 FROM sysobjects WHERE id=OBJECT_ID('dbo.scit_DetInventario'))
 GO
 
 CREATE TABLE dbo.scit_DetInventario(
-	ci_anio        varchar(4)  NOT NULL,
-	ci_mes         varchar(2)  NOT NULL,
-	ci_bodega      varchar(3)  NOT NULL,
-	ci_articulo    varchar(20) NOT NULL,
-	qn_existencia  bigint      NOT NULL,
-	qn_toma_fisica bigint      NOT NULL,
-	qn_diferencia  bigint      NOT NULL,
+	ci_anio           varchar(4)  NOT NULL,
+	ci_mes            varchar(2)  NOT NULL,
+	ci_bodega         varchar(3)  NOT NULL,
+	ci_articulo       varchar(20) NOT NULL,
+	qn_existencia     bigint      NOT NULL,
+	qn_toma_fisica    bigint      NOT NULL,
+	qn_diferencia     bigint      NOT NULL,
+	qn_consignacion   bigint      NOT NULL,
+	qn_retapizandose  bigint      NOT NULL,
+	qn_panillaxcerrar bigint      NOT NULL,
 	tx_observacion varchar(200)    NULL,
  CONSTRAINT PK_scit_DetInventario PRIMARY KEY NONCLUSTERED 
 (
