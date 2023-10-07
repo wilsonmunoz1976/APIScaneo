@@ -17,7 +17,7 @@ namespace APIScaneo.Controllers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ILoginUser? _loginUser;
 
-        private readonly Seguridad? Conectividad = null;
+        private readonly Seguridad? Conectividad;
 
         public LoginController(ILoginUser loginUser)
         {

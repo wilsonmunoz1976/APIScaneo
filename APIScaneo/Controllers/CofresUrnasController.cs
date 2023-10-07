@@ -485,8 +485,11 @@ namespace APIScaneo.Controllers
                             }
                         }
                     }
-                    catch (Exception ex) { 
-                    
+                    catch (Exception ex) {
+                        oResp.codigo = -2;
+                        oResp.mensaje = "Error" + ex.Message;
+                        logger.Error("Error" + ex.StackTrace);
+
                     }
                 }
             }

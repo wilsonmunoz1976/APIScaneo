@@ -42,7 +42,8 @@ namespace clsScaneo.Clases
             string sRetorno = "";
             if (_jwtUtils != null)
             {
-                sRetorno = _jwtUtils.VersionApp();
+                string? oRetorno = _jwtUtils.VersionApp();
+                sRetorno = oRetorno==null? "": oRetorno;
             }
             return sRetorno;
         }
