@@ -65,6 +65,7 @@ BEGIN
             --  FROM scit_ArticulosBodegas
             -- WHERE ci_articulo = @i_articulo 
     
+
             EXEC @w_ret      = dbo.pr_sectrans 
                  @i_bodega   = @i_bodega, 
                  @i_inout    = @i_tipomov, 

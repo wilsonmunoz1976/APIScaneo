@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[futEmergencia](
 	[ci_solicitudegreso] bigint NOT NULL,
 	[ci_planilla] [varchar](15) NOT NULL,
 	[ci_articulo]	varchar(20),
+	[ci_bodega] varchar(3) NULL,
 	[tx_nombrefallecido] varchar(100) NULL,
 	[fx_fecharegistro] [datetime] NULL,
 	[ci_usuarioregistro] [varchar](15) NULL,

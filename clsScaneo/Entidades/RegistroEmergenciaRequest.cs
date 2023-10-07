@@ -4,6 +4,7 @@ namespace clsScaneo.Entidades
     {
         public string nombres { get; set; } = "";
         public string articulo { get; set; } = "";
+        public string bodega { get; set; } = "";
         public string usuario { get; set; } = "";
         public string? email { get; set; } = "";
     }

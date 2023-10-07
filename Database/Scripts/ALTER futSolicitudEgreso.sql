@@ -10,6 +10,9 @@ ALTER TABLE dbJardinesEsperanza.dbo.futSolicitudEgreso ADD CONSTRAINT PK_futSoli
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
 GO
 
+
+
+
 ALTER TABLE dbCautisaJE.dbo.futSolicitudEgreso DROP CONSTRAINT PK_futSolicitudEgreso
 GO
 
@@ -20,4 +23,12 @@ ALTER TABLE dbCautisaJE.dbo.futSolicitudEgreso ADD CONSTRAINT PK_futSolicitudEgr
 (
 	ci_solicitudegreso ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) 
+GO
+
+
+ALTER TABLE dbJardinesEsperanza.dbo.futSolicitudEgreso ADD ci_bodega varchar(3) NOT NULL DEFAULT '009'
+GO
+
+
+ALTER TABLE dbCautisaJE.dbo.futSolicitudEgreso ADD ci_bodega varchar(3) NOT NULL DEFAULT '015'
 GO

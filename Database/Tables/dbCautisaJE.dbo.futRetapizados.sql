@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[futRetapizados](
 	[tx_planilla] [varchar](20) NOT NULL,
 	[ci_solegreorg] int NOT NULL,
 	[fx_fecharegistro] [datetime] NOT NULL,
-	[ci_bodega] [varchar](25) NOT NULL,
+	[ci_bodega] [varchar](3) NOT NULL,
 	[ce_retapizado] varchar(2) DEFAULT('I'),
 	[fx_fechareingreso] [datetime] NULL,
 	[ci_usuarioretapizado]  [varchar](15) NOT NULL,

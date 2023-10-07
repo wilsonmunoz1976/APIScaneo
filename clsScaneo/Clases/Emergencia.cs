@@ -129,6 +129,7 @@ namespace clsScaneo.Clases
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_nombres", SqlDbType = SqlDbType.VarChar, Size = 100, Value = oEmergencia.nombres });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size = 20, Value = oEmergencia.articulo });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = oEmergencia.usuario });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oEmergencia.bodega });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codplanilla", SqlDbType = SqlDbType.VarChar, Size = 15 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codsoliegre", SqlDbType = SqlDbType.Int });
@@ -138,16 +139,19 @@ namespace clsScaneo.Clases
 
                     _ = cmd.ExecuteNonQuery();
 
-                    respRegistro.codigoPlanilla = Convert.ToString(cmd.Parameters["@o_codplanilla"].Value);
-                    respRegistro.codigoSolicEgre = Convert.ToInt32(cmd.Parameters["@o_codsoliegre"].Value);
-                    respRegistro.bodega = Convert.ToString(cmd.Parameters["@o_bodega"].Value);
-                    respRegistro.desArticulo = Convert.ToString(cmd.Parameters["@o_descarticulo"].Value);
-
                     oResp = new()
                     {
                         codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
                         mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
                     };
+
+                    if (oResp.codigo == 0)
+                    {
+                        respRegistro.codigoPlanilla = Convert.ToString(cmd.Parameters["@o_codplanilla"].Value);
+                        respRegistro.codigoSolicEgre = Convert.ToInt32(cmd.Parameters["@o_codsoliegre"].Value);
+                        respRegistro.bodega = Convert.ToString(cmd.Parameters["@o_bodega"].Value);
+                        respRegistro.desArticulo = Convert.ToString(cmd.Parameters["@o_descarticulo"].Value);
+                    }
                 }
                 else
                 {
