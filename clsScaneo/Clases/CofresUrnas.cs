@@ -140,7 +140,7 @@ namespace clsScaneo.Clases
 
             return dt;
         }
-        public DataTable GetCofreUrna(string? codigoArticulo, ref RespuestaEjecucion oResp)
+        public DataTable GetCofreUrna(string? codigoArticulo, string? bodega, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try { 
@@ -150,6 +150,7 @@ namespace clsScaneo.Clases
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CO" });
             cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size=20, Value = codigoArticulo });
+            cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size=3, Value = bodega });
             cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
             cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 
@@ -281,9 +282,11 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_CofresUrnas";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = Accion });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = reingresoCofreUrna.bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = reingresoCofreUrna.usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codsolegre", SqlDbType = SqlDbType.BigInt, Value = reingresoCofreUrna.codSolicitudEgreso });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size=20, Value = reingresoCofreUrna.codCofreUrnaNuevo });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_retapizado", SqlDbType = SqlDbType.Bit, Value = reingresoCofreUrna.retapizado });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 

@@ -178,8 +178,8 @@ namespace APIScaneo.Controllers
             return new CofreUrnaListaResponse() { respuesta = oResp, detalle = oActivosFijos };
         }
 
-        [HttpPost("GetCofreUrna/{articulo}")]
-        public CofreUrnaDatoResponse GetCofreUrna(string? articulo)
+        [HttpPost("GetCofreUrna/{articulo}/{bodega}")]
+        public CofreUrnaDatoResponse GetCofreUrna(string? articulo, string? bodega)
         {
             CofreUrnaDatoResponseDetalle detalle = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -191,7 +191,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetCofreUrna(articulo, ref oResp);
+                            DataTable oData = Conectividad.GetCofreUrna(articulo, bodega, ref oResp);
                             if (oData != null)
                             {
                                 if (oData.Rows.Count > 0)
@@ -248,6 +248,7 @@ namespace APIScaneo.Controllers
                                                 {
                                                     codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
                                                     bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                    codproducto = dr["codproducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
                                                     producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
                                                     inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
                                                     nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
@@ -470,8 +471,6 @@ namespace APIScaneo.Controllers
                                         {
                                             usuario   = dr["ci_usuario"] == DBNull.Value ? null : dr["ci_usuario"].ToString(),
                                             nombres   = dr["tx_usuario"] == DBNull.Value ? null : dr["tx_usuario"].ToString(),
-                                            codbodega = dr["ci_bodega"] == DBNull.Value ? null : dr["ci_bodega"].ToString(),
-                                            desbodega = dr["tx_nombrebodega"] == DBNull.Value ? null : dr["tx_nombrebodega"].ToString()
                                         };
                                         detalle.Add(oDetalle);
                                     }
