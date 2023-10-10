@@ -26,9 +26,7 @@ BEGIN
 	BEGIN
 	    BEGIN TRY
 			SELECT DISTINCT ci_usuario = lower(a.ci_usuario), 
-			                a.tx_usuario, 
-							c.ci_bodega, 
-							d.tx_nombrebodega
+			                tx_usuario = lower(a.ci_usuario) + ' - ' + a.tx_usuario
 			  FROM dbo.ssatUsuario a
 			 INNER JOIN dbo.ssatTransaccionxUsuario b
 				ON a.ci_usuario = b.ci_usuario

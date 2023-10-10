@@ -18,6 +18,8 @@ ALTER PROCEDURE dbo.pr_MovimientoBodega
     @i_planilla      varchar(20)    = '',
     @i_usuario       varchar(15)    = null,
 	@i_bodega        varchar(3)     = null,
+	@i_solegre       int            = 0,
+	@o_transaccion   varchar(11)    = '' OUTPUT,
     @o_msgerror      varchar(200)   = '' OUTPUT
 
 )
@@ -33,19 +35,63 @@ BEGIN
             @w_valorUnit     money        = 0,
             @w_total         money        = 0,
             @w_valorIVA      money        = 0,
+			@w_porciva       money        = 0,
             @w_fechacreacion datetime,
             @w_medida        varchar(3)   = '',
             @w_observacion   varchar(255) = '',
             @w_nota_entrega  varchar(25)  = '',
-            @w_inhumado      varchar(220) = '',
+            @w_inhumado      varchar(255) = '',
             @w_sectransac    int          = 0,
-            --@w_bodega        varchar(3)   = '',
+			@w_articulo      varchar(20)  = '',
             @w_fechacontable datetime,
-            @w_ret           int    
+            @w_ret           int,
+			@w_va_costo      money,
+			@w_qn_existencia money,
+			@w_costopromedio money,
+			@w_tipotransacc  varchar(3)
 
-    --BEGIN TRANSACTION [MovimientoBodega]
         BEGIN TRY
     
+		    IF ('0001' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a  WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b  WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
+			BEGIN
+				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen
+				  FROM dbJardinesEsperanza.dbo.futSolicitudEgreso WITH (NOLOCK)
+				 WHERE ci_solicitudegreso = @i_solegre
+
+		        IF @w_tipotransacc = 'FAC'
+			        SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
+					       @w_fechacreacion = vetCabeceraFactura.fx_creacion
+			          FROM dbJardinesEsperanza.dbo.vetCabeceraFactura WITH (NOLOCK)
+			         WHERE vetCabeceraFactura.ci_factura = @i_planilla
+			           AND vetCabeceraFactura.tx_tipodocumento = 'FA'
+
+				IF @w_tipotransacc = 'INH'
+                    SELECT @w_inhumado      = tx_nombrefallecido,
+                           @w_fechacreacion = fx_creacion 
+                      FROM dbJardinesEsperanza.dbo.futPlanilla  WITH (NOLOCK)
+                     WHERE ci_planilla      = @i_planilla
+			END
+
+		    IF ('0002' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
+			BEGIN
+				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen
+				  FROM dbCautisaJE.dbo.futSolicitudEgreso WITH (NOLOCK)
+				 WHERE ci_solicitudegreso = @i_solegre
+
+		        IF @w_tipotransacc = 'FAC'
+			        SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
+					       @w_fechacreacion = vetCabeceraFactura.fx_creacion
+			          FROM dbCautisaJE.dbo.vetCabeceraFactura WITH (NOLOCK)
+			         WHERE vetCabeceraFactura.ci_factura = @i_planilla
+			           AND vetCabeceraFactura.tx_tipodocumento = 'FA'
+
+				IF @w_tipotransacc = 'INH'
+                    SELECT @w_inhumado      = tx_nombrefallecido,
+                           @w_fechacreacion = fx_creacion 
+                      FROM dbCautisaJE.dbo.futPlanilla WITH (NOLOCK)
+                     WHERE ci_planilla      = @i_planilla
+			END
+
             SELECT @w_observacion = CASE WHEN @i_tipomov = 'IN' THEN 'Ingreso'
                                          WHEN @i_tipomov = 'OU' THEN 'Egreso'
                                          WHEN @i_tipomov = 'RB' THEN 'Reingreso'
@@ -57,14 +103,12 @@ BEGIN
 	        IF @i_tipomov = 'RE' SELECT @i_tipomov = 'OU'
 
             SELECT @w_fechacontable = fx_fechacontable
-              FROM dbJardiesaDC.dbo.ssatFechaContable
+              FROM dbJardiesaDC.dbo.ssatFechaContable WITH (NOLOCK)
              WHERE ci_aplicacion = 'SCG'
 
             SELECT @w_anio = CONVERT(VARCHAR(4), YEAR(GETDATE()))
-            --SELECT @w_bodega   = ci_bodega
-            --  FROM scit_ArticulosBodegas
-            -- WHERE ci_articulo = @i_articulo 
     
+	        SELECT @w_porciva = va_iva FROM dbo.ssatIva WITH (NOLOCK) WHERE ce_iva=1
 
             EXEC @w_ret      = dbo.pr_sectrans 
                  @i_bodega   = @i_bodega, 
@@ -74,32 +118,55 @@ BEGIN
     
             IF @w_ret != 0
             BEGIN
-                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo obtener secuencia de Transaccion'
                 RETURN -2
             END 
 
             SELECT @w_secuencia = FORMAT(@w_sectransac,'0000')
             SELECT @w_transaccion = @w_anio+@i_bodega+@w_secuencia
-    
-            SELECT @w_inhumado      = tx_nombrefallecido,
-                   @w_fechacreacion = fx_creacion 
-              FROM dbJardinesEsperanza.dbo.futPlanilla 
-             WHERE ci_planilla      = @i_planilla
+            SELECT @o_transaccion = @w_transaccion
     
             SELECT @w_anterior = qn_existencia 
-              FROM dbJardiesaDC.dbo.scit_Articulos 
-             WHERE ci_articulo=@i_articulo
+              FROM dbJardiesaDC.dbo.scit_ArticulosBodegas 
+             WHERE ci_articulo = @i_articulo
+			   AND ci_bodega   = @i_bodega
     
-            SELECT @w_valorUnit = va_costo,
-                   @w_medida    = ci_medida
-              FROM dbo.scit_Articulos
+	        IF @i_tipomov = 'RB'
+			BEGIN
+			    IF ('0001' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
+				BEGIN
+			        SELECT @w_valorUnit    = scit_DetTransaccion.va_costo_unitario,
+					       @w_nota_entrega = futSolicitudEgreso.ci_transaccionegreso
+				      FROM dbJardinesEsperanza.dbo.futSolicitudEgreso WITH (NOLOCK)
+				     INNER JOIN dbo.scit_DetTransaccion WITH (NOLOCK)
+				        ON scit_DetTransaccion.ci_transaccion      = futSolicitudEgreso.ci_transaccionegreso
+				       AND scit_DetTransaccion.ci_tipo_transaccion = futSolicitudEgreso.ci_tipo_transaccionegreso
+				     WHERE futSolicitudEgreso.ci_solicitudegreso   = @i_solegre
+			    END
+			    IF ('0002' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
+				BEGIN
+			        SELECT @w_valorUnit    = scit_DetTransaccion.va_costo_unitario,
+					       @w_nota_entrega = futSolicitudEgreso.ci_transaccionegreso
+				      FROM dbCautisaJE.dbo.futSolicitudEgreso WITH (NOLOCK)
+				     INNER JOIN dbo.scit_DetTransaccion WITH (NOLOCK)
+				        ON scit_DetTransaccion.ci_transaccion      = futSolicitudEgreso.ci_transaccionegreso
+				       AND scit_DetTransaccion.ci_tipo_transaccion = futSolicitudEgreso.ci_tipo_transaccionegreso
+				     WHERE futSolicitudEgreso.ci_solicitudegreso   = @i_solegre
+			    END
+			END
+			ELSE
+			BEGIN
+                SELECT @w_valorUnit = scit_Articulos.va_costo
+                  FROM dbo.scit_Articulos WITH (NOLOCK)
+                 WHERE ci_articulo = @i_articulo
+			END
+
+            SELECT @w_medida    = ci_medida
+              FROM dbo.scit_Articulos WITH (NOLOCK)
              WHERE ci_articulo = @i_articulo
     
-            SELECT @w_valorIVA = @w_valorUnit * 0.12
+            SELECT @w_valorIVA = @w_valorUnit * (@w_porciva / 100)
             SELECT @w_total = @w_valorUnit + @w_valorIVA
-    
-
 
             INSERT INTO scit_CabTransaccion 
                 (ci_tipo_transaccion,   ci_transaccion,                        ci_motivo,                           ci_bodega,
@@ -112,7 +179,7 @@ BEGIN
             VALUES                      
                 (@i_tipomov,            @w_transaccion,                        'NONE',                              @i_bodega,
                  '',                    FORMAT(GETDATE(),'yyyy-MM-dd'),        FORMAT(GETDATE(),'HH:mm:ss'),        '02',
-                 1.00,                  @w_observacion,                        ISNULL(@i_usuario,''),               @w_nota_entrega,
+                 1.00,                  LEFT(@w_observacion,255),              ISNULL(@i_usuario,''),               @w_nota_entrega,
                  '',                    '',                                    YEAR(GETDATE()),                     MONTH(GETDATE()),
                  'S',                   'N',                                   0,                                   '',
                  '',                    '',                                    '',                                  '',
@@ -120,7 +187,6 @@ BEGIN
     
             IF @@ROWCOUNT = 0
             BEGIN
-                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo ingresar Cabecera de Transacción'
                 RETURN -2
             END 
@@ -136,22 +202,31 @@ BEGIN
             
             IF @@ROWCOUNT = 0
             BEGIN
-                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo ingresar Detalle de Transacción'
                 RETURN -2
             END 
 
+			SELECT @w_va_costo = scit_Articulos.va_costo,
+			       @w_qn_existencia = scit_Articulos.qn_existencia
+			  FROM dbJardiesaDC.dbo.scit_Articulos WITH (NOLOCK)
+			  WHERE ci_articulo   = @i_articulo
+
+            SELECT @w_costopromedio = ((@w_va_costo * @w_qn_existencia) + @w_valorUnit) / (@w_qn_existencia +  CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
+                                                                                                                    WHEN @i_tipomov = 'OU' THEN -1
+                                                                                                                    ELSE 0
+                                                                                                                END)   
+			 
             UPDATE dbJardiesaDC.dbo.scit_Articulos 
                SET qn_existencia = qn_existencia + 
                                  CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
                                       WHEN @i_tipomov = 'OU' THEN -1
                                       ELSE 0
-                                 END 
+                                 END,
+				   va_costo = ROUND(IIF(@i_tipomov IN ('IN', 'RB'), @w_costopromedio, va_costo),4)
              WHERE ci_articulo   = @i_articulo
 
             IF @@ROWCOUNT = 0
             BEGIN
-                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo'
                 RETURN -2
             END 
@@ -167,20 +242,16 @@ BEGIN
     
             IF @@ROWCOUNT = 0
             BEGIN
-                --ROLLBACK TRANSACTION [MovimientoBodega]
                 SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo Bodega'
                 RETURN -2
             END 
 
-        --COMMIT TRANSACTION [MovimientoBodega]
     
        END TRY
     BEGIN CATCH
-        --ROLLBACK TRANSACTION [MovimientoBodega]
         SELECT @o_msgerror = 'Error: ' + ERROR_MESSAGE() + ' - ' + CONVERT(VARCHAR(MAX), ERROR_LINE())
         RETURN -1
     END CATCH
-  --END TRANSACTION
     SELECT @o_msgerror = 'Movimiento de Bodega registrado correctamente'
     RETURN 0
 END
