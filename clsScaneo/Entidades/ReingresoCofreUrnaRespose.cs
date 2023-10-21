@@ -12,5 +12,6 @@ namespace clsScaneo.Entidades
         public string? usuario { get; set; } = string.Empty;
         public string? codBodega { get; set; } = string.Empty;
         public string? desBodega { get; set; } = string.Empty;
+        public string? observacion { get; set; } = string.Empty;
     }
 }

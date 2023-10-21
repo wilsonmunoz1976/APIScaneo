@@ -3,7 +3,9 @@ namespace clsScaneo.Entidades
     public class CofreUrnaListaResponseDetalle
     {
         public string? codigo { get; set; }
+        public string? codigoretapizado { get; set; } = null;
         public string? bodega { get; set; }
+        public string? nombrebodega { get; set; }
         public string? codproducto { get; set; }
         public string? producto { get; set; }
         public string? inhumado { get; set; }

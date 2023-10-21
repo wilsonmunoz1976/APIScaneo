@@ -60,7 +60,8 @@ namespace APIScaneo.Controllers
                                                      codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
                                                      activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
                                                      custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
-                                                     costo = dr["costo"] == DBNull.Value? null: Convert.ToDecimal(dr["costo"])
+                                                     costo = dr["costo"] == DBNull.Value? null: Convert.ToDecimal(dr["costo"]),
+                                                     existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToInt32(dr["existencia"])
                                                  }
                                                  ).ToList();
                             }
@@ -83,8 +84,8 @@ namespace APIScaneo.Controllers
             return new ActivoFijoResponse() { respuesta = oResp, detalle=oActivosFijos };
         }
 
-        [HttpPost("GetActivosFijos/{codigo}/{usuario}")]
-        public ActivoFijoResponse GetActivosFijos(string codigo, string usuario)
+        [HttpPost("GetActivosFijos/{bodega}/{codigo}/{usuario}")]
+        public ActivoFijoResponse GetActivosFijos(string bodega, string codigo, string usuario)
         {
             List<ActivoFijoResponseDetalle> oActivosFijos = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -96,7 +97,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetActivosFijos(codigo, usuario, ref oResp);
+                            DataTable oData = Conectividad.GetActivosFijos(bodega, codigo, usuario, ref oResp);
                             if (oData != null)
                             {
                                 oActivosFijos = (from DataRow dr in oData.Rows
@@ -105,7 +106,8 @@ namespace APIScaneo.Controllers
                                                      codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
                                                      activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
                                                      custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
-                                                     costo = dr["costo"] == DBNull.Value ? null : Convert.ToDecimal(dr["costo"])
+                                                     costo = dr["costo"] == DBNull.Value ? null : Convert.ToDecimal(dr["costo"]),
+                                                     existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToInt32(dr["existencia"])
                                                  }
                                                  ).ToList();
                             }

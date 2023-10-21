@@ -61,7 +61,7 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public DataTable GetActivosFijos(string Codigo, string Usuario, ref RespuestaEjecucion oResp)
+        public DataTable GetActivosFijos(string Bodega, string Codigo, string Usuario, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -71,6 +71,7 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_ActivosFijos";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CO" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = Bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codigo", SqlDbType = SqlDbType.VarChar, Size = 50, Value = Codigo });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });

@@ -209,7 +209,7 @@ namespace clsScaneo.Clases
 
             return dt;
         }
-        public RespuestaEjecucion? CambiaEstadoCofresUrnas(string? Bodega, int? Codigo, int? Estado, string? Comentario, string? Fotografia, string? Usuario)
+        public RespuestaEjecucion? CambiaEstadoCofresUrnas(CambiaEstadoCofreUrnaRequest oReq)
         {
             RespuestaEjecucion oResp;
             try
@@ -219,19 +219,23 @@ namespace clsScaneo.Clases
                 cmd.CommandText = "dbo.pr_CofresUrnas";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "UP" });
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = Bodega });
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codsolegre", SqlDbType = SqlDbType.BigInt, Value = Codigo });
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_estado", SqlDbType = SqlDbType.SmallInt, Value = Estado });
-                if (Comentario != null)
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oReq.bodega });
+                if (oReq.usuario != null)
                 {
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_comentario", SqlDbType = SqlDbType.VarChar, Value = Comentario });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = oReq.usuario });
+                }
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codsolegre", SqlDbType = SqlDbType.BigInt, Value = oReq.codigo });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_estado", SqlDbType = SqlDbType.SmallInt, Value = oReq.estado });
+                if (oReq.comentario != null)
+                {
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_comentario", SqlDbType = SqlDbType.VarChar, Value = oReq.comentario });
                 }
                 
-                if (Fotografia == null) { Fotografia = ""; }
+                if (oReq.fotografia == null) { oReq.fotografia = ""; }
 
-                if (Fotografia != "")
+                if (oReq.fotografia != "")
                 {
-                    byte[] imageBytes = Convert.FromBase64String(Fotografia);
+                    byte[] imageBytes = Convert.FromBase64String(oReq.fotografia);
                     var image = SixLabors.ImageSharp.Image.Load(imageBytes);
                     image.Mutate(x => x.Resize(new ResizeOptions
                     {
@@ -242,12 +246,8 @@ namespace clsScaneo.Clases
                     image.SaveAsWebp(sFilenameOrig);
                     imageBytes = File.ReadAllBytes(sFilenameOrig);
                     File.Delete(sFilenameOrig);
-                    Fotografia = Convert.ToBase64String(imageBytes);
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_fotografia", SqlDbType = SqlDbType.NVarChar, Value = Fotografia });
-                }
-                if (Usuario != null)
-                {
-                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
+                    oReq.fotografia = Convert.ToBase64String(imageBytes);
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_fotografia", SqlDbType = SqlDbType.NVarChar, Value = oReq.fotografia });
                 }
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
@@ -286,7 +286,11 @@ namespace clsScaneo.Clases
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = reingresoCofreUrna.usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codsolegre", SqlDbType = SqlDbType.BigInt, Value = reingresoCofreUrna.codSolicitudEgreso });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size=20, Value = reingresoCofreUrna.codCofreUrnaNuevo });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_estado", SqlDbType = SqlDbType.SmallInt, Value = reingresoCofreUrna.estado });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_retapizado", SqlDbType = SqlDbType.Bit, Value = reingresoCofreUrna.retapizado });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_factura", SqlDbType = SqlDbType.VarChar, Size=20, Value = reingresoCofreUrna.factura });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_nombrelimpieza", SqlDbType = SqlDbType.VarChar, Size = 50, Value = reingresoCofreUrna.nombrelimpieza });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_observacion", SqlDbType = SqlDbType.VarChar, Size = 200, Value = reingresoCofreUrna.observacion });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
 

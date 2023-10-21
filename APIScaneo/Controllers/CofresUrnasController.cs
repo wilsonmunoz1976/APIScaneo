@@ -103,6 +103,7 @@ namespace APIScaneo.Controllers
                                                  {
                                                      codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
                                                      bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                     nombrebodega = dr["nombrebodega"] == DBNull.Value ? null : dr["nombrebodega"].ToString(),
                                                      codproducto = dr["codProducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
                                                      producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
                                                      inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
@@ -150,6 +151,7 @@ namespace APIScaneo.Controllers
                                                  select new CofreUrnaListaResponseDetalle()
                                                  {
                                                      codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
+                                                     codigoretapizado = dr["codigoretapizado"] == DBNull.Value ? null : dr["codigoretapizado"].ToString(),
                                                      bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
                                                      codproducto = dr["codProducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
                                                      producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
@@ -292,14 +294,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            oResp = Conectividad.CambiaEstadoCofresUrnas(
-                                    Bodega: cofresUrnasReq.bodega,
-                                    Codigo: cofresUrnasReq.codigo,
-                                    Estado: cofresUrnasReq.estado,
-                                    Comentario: cofresUrnasReq.comentario,
-                                    Fotografia: cofresUrnasReq.fotografia,
-                                    Usuario: cofresUrnasReq.usuario
-                                    );
+                            oResp = Conectividad.CambiaEstadoCofresUrnas(cofresUrnasReq);
                         }
                         else
                         {
@@ -417,7 +412,8 @@ namespace APIScaneo.Controllers
                                         nombreFallecido = dr["nombreFallecido"] == DBNull.Value ? null : dr["nombreFallecido"].ToString(),
                                         usuario = dr["usuario"] == DBNull.Value ? null : dr["usuario"].ToString(),
                                         codBodega = dr["codBodega"] == DBNull.Value ? null : dr["codBodega"].ToString(),
-                                        desBodega = dr["desBodega"] == DBNull.Value ? null : dr["desBodega"].ToString()
+                                        desBodega = dr["desBodega"] == DBNull.Value ? null : dr["desBodega"].ToString(),
+                                        observacion = dr["observacion"] == DBNull.Value ? null : dr["observacion"].ToString()
                                     };
                                     oRespEmail = NotificarReingreso(reingresoCofreUrna, oDato, "Retapizado");
                                 }
@@ -575,6 +571,7 @@ namespace APIScaneo.Controllers
                             htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oResp.codSoliEgre.ToString());
                             htmlBody = htmlBody.Replace("[CodigoPlanilla]", oResp.codPlanilla);
                             htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);
+                            htmlBody = htmlBody.Replace("[Observacion]", oResp.observacion);
                             break;
                         default:
                             htmlBody = htmlBody.Replace("[CodCofreOrig]", oResp.codArticuloOrigen);
@@ -584,6 +581,7 @@ namespace APIScaneo.Controllers
                             htmlBody = htmlBody.Replace("[CodigoSoliEgre]", oResp.codSoliEgre.ToString());
                             htmlBody = htmlBody.Replace("[CodigoPlanilla]", oResp.codPlanilla);
                             htmlBody = htmlBody.Replace("[Usuario]", oResp.usuario);
+                            htmlBody = htmlBody.Replace("[Observacion]", oResp.observacion);
                             break;
                     }
                 }

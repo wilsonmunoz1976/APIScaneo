@@ -232,6 +232,111 @@ namespace clsScaneo.Clases
             return oResp;
         }
 
+        public DataTable ConsultarPeriodoActivo(string bodega, ref RespuestaEjecucion oResp)
+        {
+            DataTable dt = new("tb0");
+            try
+            {
+                SqlCommand cmd = oConnection.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "dbo.pr_Inventario";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "AC" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = bodega });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
+
+                dt.Load(cmd.ExecuteReader());
+                oResp = new()
+                {
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                };
+            }
+            catch (Exception ex)
+            {
+                oResp = new()
+                {
+                    codigo = -9,
+                    mensaje = ex.Message
+                };
+                logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
+            }
+
+            return dt;
+        }
+
+        public DataTable ConsultarConteoInventario(ConsultarConteoInventarioRequest oReq, ref RespuestaEjecucion oResp)
+        {
+            DataTable dt = new("tb0");
+            try
+            {
+                SqlCommand cmd = oConnection.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "dbo.pr_Inventario";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CC" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oReq.bodega });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_anio", SqlDbType = SqlDbType.VarChar, Size = 4, Value = oReq.anio });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_mes", SqlDbType = SqlDbType.VarChar, Size = 2, Value = oReq.mes });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
+
+                dt.Load(cmd.ExecuteReader());
+                oResp = new()
+                {
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                };
+            }
+            catch (Exception ex)
+            {
+                oResp = new()
+                {
+                    codigo = -9,
+                    mensaje = ex.Message
+                };
+                logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
+            }
+
+            return dt;
+
+        }
+
+        public void CerrarConteoInventario(ConsultarConteoInventarioRequest oReq, ref RespuestaEjecucion oResp)
+        {
+            DataTable dt = new("tb0");
+            try
+            {
+                SqlCommand cmd = oConnection.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "dbo.pr_Inventario";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CE" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oReq.bodega });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_anio", SqlDbType = SqlDbType.VarChar, Size = 4, Value = oReq.anio });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_mes", SqlDbType = SqlDbType.VarChar, Size = 2, Value = oReq.mes });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
+
+                cmd.ExecuteNonQuery();
+                oResp = new()
+                {
+                    codigo = Convert.ToInt16(cmd.Parameters["@return_value"].Value),
+                    mensaje = Convert.ToString(cmd.Parameters["@o_msgerror"].Value)
+                };
+            }
+            catch (Exception ex)
+            {
+                oResp = new()
+                {
+                    codigo = -9,
+                    mensaje = ex.Message
+                };
+                logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
+            }
+        }
+
         #endregion "Inventario"
 
     }

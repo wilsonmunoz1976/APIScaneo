@@ -234,6 +234,145 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
+        [HttpPost("ConsultarPeriodoActivo/{bodega}")]
+        public PeriodoActivoResponse ConsultarPeriodoActivo(string bodega) 
+        {
+            PeriodoActivoResponseDetalle? oDetalle = new();
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            DataTable oData = Conectividad.ConsultarPeriodoActivo(bodega, ref oResp);
+                            if (oData != null)
+                            {
+                                if (oData.Rows.Count > 0)
+                                {
+                                    DataRow dr = oData.Rows[0];
+                                    oDetalle = new()
+                                    {
+                                        anio = dr["anio"].ToString(),
+                                        mes = dr["mes"].ToString(),
+                                    };
+                                }
+                                    
+                            }
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+
+                    }
+                }
+            }
+            return new PeriodoActivoResponse() {  
+                respuesta = oResp, 
+                detalle = oDetalle 
+            };
+
+        }
+
+        [HttpPost("ConsultarConteoInventario")]
+        public ConsultarConteoInventarioResponse ConsultarConteoInventario([FromBody] ConsultarConteoInventarioRequest oReq)
+        {
+            double iConteo = 0;
+            double iCantidad = 0;
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            DataTable oData = Conectividad.ConsultarConteoInventario(oReq, ref oResp);
+                            if (oData != null)
+                            {
+                                if (oData.Rows.Count > 0)
+                                {
+                                    DataRow dr = oData.Rows[0];
+                                    iConteo = Convert.ToDouble(dr["qn_conteo"]);
+                                    iCantidad = Convert.ToDouble(dr["qn_cantidad"]);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+
+                    }
+                }
+            }
+            return new ConsultarConteoInventarioResponse() { respuesta = oResp, conteo = iConteo, cantidad = iCantidad };
+
+        }
+
+        [HttpPost("CerrarConteoInventario")]
+        public RespuestaEjecucion? CerrarConteoInventario([FromBody] ConsultarConteoInventarioRequest oReq)
+        {
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            Conectividad.CerrarConteoInventario(oReq, ref oResp);
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+
+                    }
+                }
+            }
+            return oResp;
+        }
+
         private RespuestaEjecucion? IsTokenValido()
         {
             var context = HttpContext;
