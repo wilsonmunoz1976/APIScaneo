@@ -7,5 +7,7 @@ namespace clsScaneo.Entidades
         public string bodega { get; set; } = "";
         public string usuario { get; set; } = "";
         public string? email { get; set; } = "";
+        public bool? tipogestion { get; set; }
+        public bool? tipoingreso { get; set; }
     }
 }

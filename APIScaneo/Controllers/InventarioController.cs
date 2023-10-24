@@ -257,6 +257,7 @@ namespace APIScaneo.Controllers
                                     {
                                         anio = dr["anio"].ToString(),
                                         mes = dr["mes"].ToString(),
+                                        secuencia = Convert.ToInt32(dr["secuencia"])
                                     };
                                 }
                                     
@@ -336,6 +337,43 @@ namespace APIScaneo.Controllers
             return new ConsultarConteoInventarioResponse() { respuesta = oResp, conteo = iConteo, cantidad = iCantidad };
 
         }
+
+        [HttpPost("IniciarConteoInventario")]
+        public RespuestaEjecucion? IniciarConteoInventario([FromBody] ConsultarConteoInventarioRequest oReq)
+        {
+            RespuestaEjecucion? oResp = IsTokenValido();
+            if (oResp != null)
+            {
+                if (oResp.codigo == 0)
+                {
+                    try
+                    {
+                        if (Conectividad != null)
+                        {
+                            Conectividad.IniciarConteoInventario(oReq, ref oResp);
+                        }
+                        else
+                        {
+                            oResp = new()
+                            {
+                                codigo = -2,
+                                mensaje = "No esta instanciada la clase de Inventario"
+                            };
+                            logger.Error("No esta instanciada la clase de Inventario");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        oResp.codigo = -2;
+                        oResp.mensaje = ex.Message;
+                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
+
+                    }
+                }
+            }
+            return oResp;
+        }
+
 
         [HttpPost("CerrarConteoInventario")]
         public RespuestaEjecucion? CerrarConteoInventario([FromBody] ConsultarConteoInventarioRequest oReq)

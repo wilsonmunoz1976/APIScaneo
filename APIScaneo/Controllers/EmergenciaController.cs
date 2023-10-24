@@ -59,16 +59,13 @@ namespace APIScaneo.Controllers
                                 if (oResp.codigo == 0)
                                 {
                                     oRespEmail = NotificacionEmail(oReq, ref respRegistro);
-                                }
-                                else
-                                {
-                                    string? sMensaje = oResp.mensaje;
-                                    oResp = new()
+                                    if (oRespEmail != null)
                                     {
-                                        codigo = -1,
-                                        mensaje = sMensaje ?? ""
-                                    };
-
+                                        if (oRespEmail.codigo != 0)
+                                        {
+                                            oResp = oRespEmail;
+                                        }
+                                    }
                                 }
                             }
                             else

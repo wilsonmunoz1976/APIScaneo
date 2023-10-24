@@ -101,14 +101,15 @@ namespace APIScaneo.Controllers
                                 oActivosFijos = (from DataRow dr in oData.Rows
                                                  select new CofreUrnaListaResponseDetalle()
                                                  {
-                                                     codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
-                                                     bodega = dr["bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
-                                                     nombrebodega = dr["nombrebodega"] == DBNull.Value ? null : dr["nombrebodega"].ToString(),
+                                                     codigo = dr["Codigo"] ==DBNull.Value? null: dr["codigo"].ToString(),
+                                                     bodega = dr["Bodega"] == DBNull.Value ? null : dr["bodega"].ToString(),
+                                                     nombrebodega = dr["NombreBodega"] == DBNull.Value ? null : dr["nombrebodega"].ToString(),
                                                      codproducto = dr["codProducto"] == DBNull.Value ? null : dr["codproducto"].ToString(),
-                                                     producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
-                                                     inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
-                                                     nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
-                                                     estado = dr["estado"] == DBNull.Value ? null : Convert.ToInt16(dr["estado"])
+                                                     producto = dr["Producto"] == DBNull.Value ? null : dr["producto"].ToString(),
+                                                     inhumado = dr["Inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
+                                                     nombreProveedor = dr["NombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
+                                                     salaVelacion = dr["SalaVelacion"] == DBNull.Value ? null : dr["SalaVelacion"].ToString(),
+                                                     estado = dr["Estado"] == DBNull.Value ? null : Convert.ToInt16(dr["estado"])
                                                  }
                                                  ).ToList();
                             }
@@ -157,6 +158,7 @@ namespace APIScaneo.Controllers
                                                      producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
                                                      inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
                                                      nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
+                                                     salaVelacion = dr["SalaVelacion"] == DBNull.Value ? null : dr["SalaVelacion"].ToString(),
                                                      estado = dr["estado"] == DBNull.Value ? null : Convert.ToInt16(dr["estado"])
                                                  }
                                                  ).ToList();
@@ -254,6 +256,7 @@ namespace APIScaneo.Controllers
                                                     producto = dr["producto"] == DBNull.Value ? null : dr["producto"].ToString(),
                                                     inhumado = dr["inhumado"] == DBNull.Value ? null : dr["inhumado"].ToString(),
                                                     nombreProveedor = dr["nombreProveedor"] == DBNull.Value ? null : dr["nombreProveedor"].ToString(),
+                                                    salaVelacion = dr["SalaVelacion"] == DBNull.Value ? null : dr["SalaVelacion"].ToString(),
                                                     estado = dr["estado"] == DBNull.Value ? null : Convert.ToInt16(dr["estado"]),
                                                     comentario = dr["comentario"] == DBNull.Value ? null : dr["comentario"].ToString(),
                                                     observacionRetiro = dr["observacionRetiro"] == DBNull.Value ? null : dr["observacionRetiro"].ToString(),

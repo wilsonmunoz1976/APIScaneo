@@ -4,5 +4,6 @@ namespace clsScaneo.Entidades
     {
         public string? anio { get; set; } = string.Empty;
         public string? mes { get; set; } = string.Empty;
+        public int? secuencia { get; set; } = 0;
     }
 }

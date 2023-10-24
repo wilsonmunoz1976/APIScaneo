@@ -130,6 +130,8 @@ namespace clsScaneo.Clases
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_articulo", SqlDbType = SqlDbType.VarChar, Size = 20, Value = oEmergencia.articulo });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = oEmergencia.usuario });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = oEmergencia.bodega });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_tipogestion", SqlDbType = SqlDbType.Bit, Value = oEmergencia.tipogestion });
+                    cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_tipoingreso", SqlDbType = SqlDbType.Bit, Value = oEmergencia.tipoingreso });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codplanilla", SqlDbType = SqlDbType.VarChar, Size = 15 });
                     cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_codsoliegre", SqlDbType = SqlDbType.Int });

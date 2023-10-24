@@ -61,22 +61,23 @@ namespace clsScaneo.Clases
             return dt;
         }
 
-        public DataTable GetActivosFijos(string Bodega, string Codigo, string Usuario, ref RespuestaEjecucion oResp)
+        public DataSet GetActivosFijos(string Codigo, string Usuario, ref RespuestaEjecucion oResp)
         {
-            DataTable dt = new("tb0");
+            DataSet ds = new("rs0");
             try
             {
                 SqlCommand cmd = oConnection.CreateCommand();
+                SqlDataAdapter da = new SqlDataAdapter();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "dbo.pr_ActivosFijos";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "CO" });
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = Bodega });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_codigo", SqlDbType = SqlDbType.VarChar, Size = 50, Value = Codigo });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_usuario", SqlDbType = SqlDbType.VarChar, Size = 15, Value = Usuario });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.ReturnValue, ParameterName = "@return_value", SqlDbType = SqlDbType.Int });
-                dt.Load(cmd.ExecuteReader());
+                da.SelectCommand = cmd;
+                da.Fill(ds);
 
                 oResp = new()
                 {
@@ -93,7 +94,7 @@ namespace clsScaneo.Clases
                 };
                 logger.Error($"Error en la clase [{ex.GetType().Name}], metodo [{ex.GetType().FullName}" + "\r\n" + ex.StackTrace);
             }
-            return dt;
+            return ds;
         }
 
         #endregion "Archivos Fijos"

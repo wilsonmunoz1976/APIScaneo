@@ -37,10 +37,11 @@ namespace APIScaneo.Controllers
             }
         }
 
-        [HttpPost("GetActivosFijos")]
-        public ActivoFijoResponse GetActivosFijos()
+        [HttpPost("GetActivosFijos/{codigo}/{usuario}")]
+        public ActivoFijoResponse GetActivosFijos(string codigo, string usuario)
         {
-            List<ActivoFijoResponseDetalle> oActivosFijos = new();
+            ActivoFijoResponseInfo oActivoInfo = new();
+            List<ActivoFijoResponseDetalle> oActivoDetalle = new();
             RespuestaEjecucion? oResp = IsTokenValido();
             if (oResp != null)
             {
@@ -48,22 +49,37 @@ namespace APIScaneo.Controllers
                 {
                     try
                     {
-
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.GetActivosFijos(ref oResp);
-                            if (oData != null)
+                            DataSet oData = Conectividad.GetActivosFijos(codigo, usuario, ref oResp);
+                            if (oData.Tables.Count > 0)
                             {
-                                oActivosFijos = (from DataRow dr in oData.Rows
-                                                 select new ActivoFijoResponseDetalle()
-                                                 {
-                                                     codigo = dr["codigo"]==DBNull.Value? null: dr["codigo"].ToString(),
-                                                     activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
-                                                     custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
-                                                     costo = dr["costo"] == DBNull.Value? null: Convert.ToDecimal(dr["costo"]),
-                                                     existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToInt32(dr["existencia"])
-                                                 }
-                                                 ).ToList();
+                                DataTable dtInfo = oData.Tables[0];
+                                DataTable dtDetalle = oData.Tables[1];
+                                if (dtInfo != null)
+                                {
+                                    if (dtInfo.Rows.Count > 0)
+                                    {
+                                        DataRow oRowInfo = dtInfo.Rows[0];
+                                        oActivoInfo.codigo      = oRowInfo["Codigo"]      == DBNull.Value ? null: oRowInfo["Codigo"].ToString();
+                                        oActivoInfo.descripcion = oRowInfo["Descripcion"] == DBNull.Value ? null: oRowInfo["Descripcion"].ToString();
+                                        oActivoInfo.custodio    = oRowInfo["Custodio"]    == DBNull.Value ? null: oRowInfo["Custodio"].ToString();
+                                        oActivoInfo.costo       = oRowInfo["Costo"]       == DBNull.Value ? null: Convert.ToDecimal(oRowInfo["Costo"]);
+                                        oActivoInfo.existencia  = oRowInfo["Existencia"]  == DBNull.Value ? null: Convert.ToInt32(oRowInfo["Existencia"]);
+                                    }
+                                }
+
+                                if (dtDetalle != null)
+                                {
+                                    oActivoDetalle = (from DataRow dr in dtDetalle.Rows
+                                                     select new ActivoFijoResponseDetalle()
+                                                     {
+                                                         codbodega  = dr["CodBodega"]  == DBNull.Value ? null : dr["CodBodega"].ToString(),
+                                                         desbodega  = dr["DesBodega"]  == DBNull.Value ? null : dr["DesBodega"].ToString(),
+                                                         existencia = dr["Existencia"] == DBNull.Value ? null : Convert.ToInt32(dr["Existencia"]),
+                                                     }
+                                                     ).ToList();
+                                }
                             }
                         }
                         else
@@ -81,53 +97,7 @@ namespace APIScaneo.Controllers
                     }
                 }
             }
-            return new ActivoFijoResponse() { respuesta = oResp, detalle=oActivosFijos };
-        }
-
-        [HttpPost("GetActivosFijos/{bodega}/{codigo}/{usuario}")]
-        public ActivoFijoResponse GetActivosFijos(string bodega, string codigo, string usuario)
-        {
-            List<ActivoFijoResponseDetalle> oActivosFijos = new();
-            RespuestaEjecucion? oResp = IsTokenValido();
-            if (oResp != null)
-            {
-                if (oResp.codigo == 0)
-                {
-                    try
-                    {
-                        if (Conectividad != null)
-                        {
-                            DataTable oData = Conectividad.GetActivosFijos(bodega, codigo, usuario, ref oResp);
-                            if (oData != null)
-                            {
-                                oActivosFijos = (from DataRow dr in oData.Rows
-                                                 select new ActivoFijoResponseDetalle()
-                                                 {
-                                                     codigo = dr["codigo"] == DBNull.Value ? null : dr["codigo"].ToString(),
-                                                     activo = dr["activo"] == DBNull.Value ? null : dr["activo"].ToString(),
-                                                     custodio = dr["custodio"] == DBNull.Value ? null : dr["custodio"].ToString(),
-                                                     costo = dr["costo"] == DBNull.Value ? null : Convert.ToDecimal(dr["costo"]),
-                                                     existencia = dr["existencia"] == DBNull.Value ? null : Convert.ToInt32(dr["existencia"])
-                                                 }
-                                                 ).ToList();
-                            }
-                        }
-                        else
-                        {
-                            oResp.codigo = -2;
-                            oResp.mensaje = "No esta instanciada la clase de Activos Fijos";
-                            logger.Error("No esta instanciada la clase de Activos Fijos");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        oResp.codigo = -2;
-                        oResp.mensaje = ex.Message;
-                        logger.Error(ex.Message + "\r\n" + ex.StackTrace);
-                    }
-                }
-            }
-            return new ActivoFijoResponse() { respuesta = oResp, detalle = oActivosFijos };
+            return new ActivoFijoResponse() { respuesta = oResp, info = oActivoInfo, detalle = oActivoDetalle };
         }
 
         private RespuestaEjecucion IsTokenValido()

@@ -10,6 +10,7 @@ namespace clsScaneo.Entidades
         public string? producto { get; set; }
         public string? inhumado { get; set; }
         public string? nombreProveedor { get; set; }
+        public string? salaVelacion { get; set; }
         public int? estado { get; set; }
         public string? comentario { get; set; }
         public string? observacionRetiro { get; set; }
