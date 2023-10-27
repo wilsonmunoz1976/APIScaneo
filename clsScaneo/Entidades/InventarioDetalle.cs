@@ -13,5 +13,8 @@ namespace clsScaneo.Entidades
         public double? diferencia { get; set; } = 0;
         public string? observacion { get; set; } = string.Empty;
         public string? modificar { get; set; } = string.Empty;
+        public int anchocolumna0 { get; set; } = 0;
+        public int anchocolumna9 { get; set; } = 0;
+
     }
 }
