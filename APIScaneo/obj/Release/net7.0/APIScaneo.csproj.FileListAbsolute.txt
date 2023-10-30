@@ -161,3 +161,5 @@ D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Release\net7.0\runtimes\unix\
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Release\net7.0\runtimes\win\lib\net7.0\Microsoft.Data.SqlClient.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Release\net7.0\AspNetCoreCompatibility.dll
 D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\bin\Release\net7.0\plantilla_mail_reingreso_retapizado.html
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\APIScaneo.Properties.Resources.resources
+D:\Fuentes\BackEnd\APIREST\APIScaneo\APIScaneo\obj\Release\net7.0\APIScaneo.csproj.GenerateResource.cache

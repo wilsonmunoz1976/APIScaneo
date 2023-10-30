@@ -26,6 +26,23 @@ BEGIN
     DECLARE @w_nombres  varchar(100)
 	DECLARE @w_email    varchar(200)
 
+    IF EXISTS(SELECT 1 FROM dbo.ssatParametrosGenerales WHERE ci_aplicacion='MOV' AND ci_parametro = 'DEBUG' AND tx_parametro = 'SI')
+	BEGIN
+	    IF NOT EXISTS(SELECT 1 FROM sys.all_objects WHERE object_id=OBJECT_ID('dbo.trace_movil'))
+		BEGIN
+		    CREATE TABLE trace_movil (fechahora datetime default getdate(), mensaje varchar(max))
+		END
+
+		INSERT INTO trace_movil (mensaje) 
+		SELECT 'DECLARE @w_ret int, @w_msgerror varchar(200), @w_codplanilla varchar(15), @w_codsoliegre int, @w_bodega varchar(3), @w_descarticulo varchar(60); '+ CHAR(13)
+			   +'EXEC @w_ret = dbo.pr_Seguridad ' + CHAR(13)
+			   + ' @i_accion       ='+ISNULL(CHAR(39) + @i_accion + CHAR(39),'null') + CHAR(13)
+			   +', @i_usuario      ='+ISNULL(CHAR(39) + @i_usuario + CHAR(39),'null')+ CHAR(13)
+			   +', @i_password     ='+ISNULL(CHAR(39) + @i_password + CHAR(39),'null')+ CHAR(13)
+			   +', @o_msgerror     = @w_msgerror     OUTPUT '+ CHAR(13)
+			   +'SELECT @w_ret, @w_msgerror'+ CHAR(13)
+	END
+
     IF @i_accion = 'EM'
     BEGIN
         SELECT ci_empresa, 

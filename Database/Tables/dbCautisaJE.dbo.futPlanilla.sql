@@ -98,10 +98,10 @@ CREATE TABLE [dbo].[futPlanilla](
 	[ci_usuariomodificaplanilla] [varchar](15) NULL,
 	[fx_modificaplanilla] [datetime] NULL,
 	[ci_compensacion] [int] NULL,
+	[tx_linkcondolencias] [varchar](500) NULL,
 	[ci_facturaalquiler] [varchar](20) NULL,
 	[ci_tiporeserva] [varchar](1) NULL,
 	[ci_prereserva] [varchar](15) NULL,
-	[tx_linkcondolencias] [varchar](500) NULL,
  CONSTRAINT [PK_fuPlanilla] PRIMARY KEY CLUSTERED 
 (
 	[ci_planilla] ASC

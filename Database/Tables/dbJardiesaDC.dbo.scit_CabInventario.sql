@@ -17,10 +17,13 @@ GO
 
 CREATE TABLE dbo.scit_CabInventario
 (
-	ci_anio     varchar(4)  NOT NULL,
-	ci_mes      varchar(2)  NOT NULL,
-	fx_creacion datetime    NOT NULL,
-	ci_usuario  varchar(20) NOT NULL,
+	ci_anio      varchar(4)  NOT NULL,
+	ci_mes       varchar(2)  NOT NULL,
+	ci_bodega    varchar(3)  NOT NULL,
+	ci_secuencia smallint    NOT NULL DEFAULT(1),
+	fx_creacion  datetime    NOT NULL,
+	ci_usuario   varchar(20) NOT NULL,
+	te_estado    char(1)     NOT NULL DEFAULT('A')
  CONSTRAINT PK_scit_CabInventario PRIMARY KEY NONCLUSTERED 
 (
 	ci_anio ASC,

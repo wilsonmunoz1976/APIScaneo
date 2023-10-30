@@ -27,6 +27,27 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    IF EXISTS(SELECT 1 FROM dbo.ssatParametrosGenerales WHERE ci_aplicacion='MOV' AND ci_parametro = 'DEBUG' AND tx_parametro = 'SI')
+	BEGIN
+	    IF NOT EXISTS(SELECT 1 FROM sys.all_objects WHERE object_id=OBJECT_ID('dbo.trace_movil'))
+		BEGIN
+		    CREATE TABLE trace_movil (fechahora datetime default getdate(), mensaje varchar(max))
+		END
+
+		INSERT INTO trace_movil (mensaje) 
+		SELECT 'DECLARE @w_ret int, @w_msgerror varchar(200), @w_transaccion varchar(11); '+ CHAR(13)
+			   +'EXEC @w_ret = dbo.pr_MovimientoBodega ' + CHAR(13)
+			   + ' @i_tipomov     ='+ISNULL(CHAR(39) + @i_tipomov + CHAR(39),'null') + CHAR(13)
+			   +', @i_articulo    ='+ISNULL(CHAR(39) + @i_articulo + CHAR(39),'null')+ CHAR(13)
+			   +', @i_planilla    ='+ISNULL(CHAR(39) + @i_planilla + CHAR(39),'null')+ CHAR(13)
+			   +', @i_usuario     ='+ISNULL(CONVERT(VARCHAR,@i_usuario),'null')+ CHAR(13)
+			   +', @i_bodega      ='+ISNULL(CHAR(39) + @i_bodega + CHAR(39),'null')+ CHAR(13)
+			   +', @i_solegre     ='+ISNULL(CONVERT(varchar,@i_solegre),'null') + CHAR(13)
+			   +', @o_transaccion = @w_transaccion OUTPUT'+ CHAR(13)
+			   +', @o_msgerror    = @w_msgerror    OUTPUT; '+ CHAR(13)
+			   +'  SELECT @w_ret, @w_msgerror, @w_transaccion'+ CHAR(13)
+	END
+
     DECLARE @w_anio          varchar(4),
             @w_mes           varchar(2),
             @w_secuencia     varchar(4),
@@ -54,53 +75,82 @@ BEGIN
     
 		    IF ('0001' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a  WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b  WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
 			BEGIN
-				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen
+				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen,
+				       @w_inhumado     = futSolicitudEgreso.tx_nombrefallecido
 				  FROM dbJardinesEsperanza.dbo.futSolicitudEgreso WITH (NOLOCK)
 				 WHERE ci_solicitudegreso = @i_solegre
 
-		        IF @w_tipotransacc = 'FAC'
-			        SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
-					       @w_fechacreacion = vetCabeceraFactura.fx_creacion
-			          FROM dbJardinesEsperanza.dbo.vetCabeceraFactura WITH (NOLOCK)
-			         WHERE vetCabeceraFactura.ci_factura = @i_planilla
-			           AND vetCabeceraFactura.tx_tipodocumento = 'FA'
+				IF @w_inhumado IS NULL
+				BEGIN
+					IF @w_tipotransacc = 'FAC'
+						SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
+							   @w_fechacreacion = vetCabeceraFactura.fx_creacion
+						  FROM dbJardinesEsperanza.dbo.vetCabeceraFactura WITH (NOLOCK)
+						 WHERE vetCabeceraFactura.ci_factura = @i_planilla
+						   AND vetCabeceraFactura.tx_tipodocumento = 'FA'
 
-				IF @w_tipotransacc = 'INH'
-                    SELECT @w_inhumado      = tx_nombrefallecido,
-                           @w_fechacreacion = fx_creacion 
-                      FROM dbJardinesEsperanza.dbo.futPlanilla  WITH (NOLOCK)
-                     WHERE ci_planilla      = @i_planilla
+					IF @w_tipotransacc = 'INH'
+						SELECT @w_inhumado      = tx_nombrefallecido,
+							   @w_fechacreacion = fx_creacion 
+						  FROM dbJardinesEsperanza.dbo.futPlanilla  WITH (NOLOCK)
+						 WHERE ci_planilla      = @i_planilla
+				END
 			END
 
 		    IF ('0002' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a WITH (NOLOCK) INNER JOIN dbo.scit_Bodegas b WITH (NOLOCK) ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
 			BEGIN
-				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen
+				SELECT @w_tipotransacc = futSolicitudEgreso.tx_documentoorigen,
+				       @w_inhumado     = futSolicitudEgreso.tx_nombrefallecido
 				  FROM dbCautisaJE.dbo.futSolicitudEgreso WITH (NOLOCK)
 				 WHERE ci_solicitudegreso = @i_solegre
 
-		        IF @w_tipotransacc = 'FAC'
-			        SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
-					       @w_fechacreacion = vetCabeceraFactura.fx_creacion
-			          FROM dbCautisaJE.dbo.vetCabeceraFactura WITH (NOLOCK)
-			         WHERE vetCabeceraFactura.ci_factura = @i_planilla
-			           AND vetCabeceraFactura.tx_tipodocumento = 'FA'
+				IF @w_inhumado IS NULL
+				BEGIN
+					IF @w_tipotransacc = 'FAC'
+						SELECT @w_inhumado      = vetCabeceraFactura.tx_fallecidofactura,
+							   @w_fechacreacion = vetCabeceraFactura.fx_creacion
+						  FROM dbCautisaJE.dbo.vetCabeceraFactura WITH (NOLOCK)
+						 WHERE vetCabeceraFactura.ci_factura = @i_planilla
+						   AND vetCabeceraFactura.tx_tipodocumento = 'FA'
 
-				IF @w_tipotransacc = 'INH'
-                    SELECT @w_inhumado      = tx_nombrefallecido,
-                           @w_fechacreacion = fx_creacion 
-                      FROM dbCautisaJE.dbo.futPlanilla WITH (NOLOCK)
-                     WHERE ci_planilla      = @i_planilla
+					IF @w_tipotransacc = 'INH'
+						SELECT @w_inhumado      = tx_nombrefallecido,
+							   @w_fechacreacion = fx_creacion 
+						  FROM dbCautisaJE.dbo.futPlanilla WITH (NOLOCK)
+						 WHERE ci_planilla      = @i_planilla
+				END
+			END
+
+			SELECT @w_va_costo = scit_Articulos.va_costo,
+			       @w_qn_existencia = scit_Articulos.qn_existencia
+			  FROM dbJardiesaDC.dbo.scit_Articulos WITH (NOLOCK)
+			 INNER JOIN dbJardiesaDC.dbo.scit_ArticulosBodegas WITH (NOLOCK)
+			    ON scit_ArticulosBodegas.ci_articulo = scit_Articulos.ci_articulo
+			   AND scit_ArticulosBodegas.ci_bodega   = @i_bodega
+			 WHERE scit_Articulos.ci_articulo   = @i_articulo
+
+			IF @w_qn_existencia <= 0
+			BEGIN
+                SELECT @o_msgerror = 'No hay existencia para el producto ' + @i_articulo + ' en la bodega ' + @i_bodega
+                RETURN -2
 			END
 
             SELECT @w_observacion = CASE WHEN @i_tipomov = 'IN' THEN 'Ingreso'
                                          WHEN @i_tipomov = 'OU' THEN 'Egreso'
                                          WHEN @i_tipomov = 'RB' THEN 'Reingreso'
 										 WHEN @i_tipomov = 'RE' THEN 'Egreso de Retapizado'
+										 WHEN @i_tipomov = 'RT' THEN 'Reingreso de Retapizado'
                                          ELSE 'Movimiento'
                                     END
-              + ' por planilla ' + @i_planilla + ', del Inhumado ' + @w_inhumado
+              + ' por ' +  
+			  CASE WHEN @w_tipotransacc = 'INH' THEN 'planilla '
+			       WHEN @w_tipotransacc = 'FAC' THEN 'factura '
+				   ELSE '' 
+			  END 
+			+ ISNULL(@i_planilla,'pendiente') + ', del Inhumado ' + @w_inhumado
     
 	        IF @i_tipomov = 'RE' SELECT @i_tipomov = 'OU'
+			IF @i_tipomov = 'RT' SELECT @i_tipomov = 'RB'
 
             SELECT @w_fechacontable = fx_fechacontable
               FROM dbJardiesaDC.dbo.ssatFechaContable WITH (NOLOCK)
@@ -206,30 +256,33 @@ BEGIN
                 RETURN -2
             END 
 
-			SELECT @w_va_costo = scit_Articulos.va_costo,
-			       @w_qn_existencia = scit_Articulos.qn_existencia
-			  FROM dbJardiesaDC.dbo.scit_Articulos WITH (NOLOCK)
-			  WHERE ci_articulo   = @i_articulo
+			IF @i_tipomov IN ('IN', 'RB')
+			BEGIN
+				SELECT @w_costopromedio = ((@w_va_costo * @w_qn_existencia) + @w_valorUnit) / (@w_qn_existencia +  CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
+																														WHEN @i_tipomov = 'OU' THEN 0
+																														ELSE 0
+																													END)   
+			END 
+			ELSE
+			BEGIN
+			    SELECT @w_costopromedio = @w_va_costo
+			END
 
-            SELECT @w_costopromedio = ((@w_va_costo * @w_qn_existencia) + @w_valorUnit) / (@w_qn_existencia +  CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
-                                                                                                                    WHEN @i_tipomov = 'OU' THEN -1
-                                                                                                                    ELSE 0
-                                                                                                                END)   
 			 
-            UPDATE dbJardiesaDC.dbo.scit_Articulos 
-               SET qn_existencia = qn_existencia + 
-                                 CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
-                                      WHEN @i_tipomov = 'OU' THEN -1
-                                      ELSE 0
-                                 END,
-				   va_costo = ROUND(IIF(@i_tipomov IN ('IN', 'RB'), @w_costopromedio, va_costo),4)
-             WHERE ci_articulo   = @i_articulo
+			UPDATE dbJardiesaDC.dbo.scit_Articulos 
+				SET qn_existencia = qn_existencia + 
+									CASE WHEN @i_tipomov IN ('IN', 'RB') THEN 1
+										WHEN @i_tipomov = 'OU' THEN -1
+										ELSE 0
+									END,
+					va_costo = ROUND(@w_costopromedio,4)
+				WHERE ci_articulo   = @i_articulo
 
-            IF @@ROWCOUNT = 0
-            BEGIN
-                SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo'
-                RETURN -2
-            END 
+			IF @@ROWCOUNT = 0
+			BEGIN
+				SELECT @o_msgerror = 'Error: No se pudo actualizar la existencia del Articulo'
+				RETURN -2
+			END 
 
             UPDATE dbJardiesaDC.dbo.scit_ArticulosBodegas 
                SET qn_existencia = qn_existencia + 

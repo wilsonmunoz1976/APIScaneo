@@ -28,6 +28,12 @@ CREATE TABLE [dbo].[futRetapizados](
 	[ci_usuarioreingreso]  [varchar](15) NULL,
 	[ci_transaccionegreso] varchar(11) NULL,
 	[ci_tipo_transaccionegreso] varchar(2) null,
+	[ci_factura] varchar(20) null,
+	[tx_observacion] varchar(200) null,
+	[tx_nombrelimpieza] varchar(50) null,
+	[tx_observacionbaja] varchar(300) null,
+	[fx_eliminacion] datetime null,
+	[ci_usuarioeliminacion] varchar(15) null
  CONSTRAINT [PK_futRetapizados] PRIMARY KEY CLUSTERED 
 (
 	[ci_secuencia] ASC

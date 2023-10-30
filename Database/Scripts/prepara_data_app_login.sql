@@ -59,6 +59,10 @@ INSERT INTO [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
 SELECT ci_aplicacion='MOV', ci_parametro='RGOHOR', tx_parametro='08:00|18:00', tx_descripcion='Rango Horario de Emergencia', ci_banco=null
 GO
 
+INSERT INTO [dbJardiesaDC].[dbo].[ssatParametrosGenerales]
+SELECT ci_aplicacion='MOV', ci_parametro='RGOFMS', tx_parametro='1', tx_descripcion='Rango de días antes de fin de mes', ci_banco=null
+GO
+
 IF NOT EXISTS(SELECT 1 FROM dbJardiesaDC.dbo.ssatUsuario WHERE ci_usuario='WMUNOZ')
 BEGIN
 	INSERT INTO dbJardiesaDC.dbo.ssatUsuario (ci_usuario, tx_usuario, tx_contrasena, ce_tipousuario, tx_observacion, ci_expira, qn_dias, fx_ultcambioclave, tx_terminal, ce_usuario, ci_usuariointegrado, ci_usuarioprodubanco)

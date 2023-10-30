@@ -19,6 +19,7 @@ CREATE TABLE dbo.scit_DetInventario(
 	ci_anio           varchar(4)  NOT NULL,
 	ci_mes            varchar(2)  NOT NULL,
 	ci_bodega         varchar(3)  NOT NULL,
+	ci_secuencia      smallint    NOT NULL DEFAULT(1),
 	ci_articulo       varchar(20) NOT NULL,
 	qn_existencia     bigint      NOT NULL,
 	qn_toma_fisica    bigint      NOT NULL,
@@ -26,12 +27,14 @@ CREATE TABLE dbo.scit_DetInventario(
 	qn_consignacion   bigint      NOT NULL,
 	qn_retapizandose  bigint      NOT NULL,
 	qn_panillaxcerrar bigint      NOT NULL,
-	tx_observacion varchar(200)    NULL,
+	tx_observacion    varchar(200)    NULL,
+	va_costo          money           NULL, 
  CONSTRAINT PK_scit_DetInventario PRIMARY KEY NONCLUSTERED 
 (
 	ci_anio ASC,
 	ci_mes ASC,
 	ci_bodega ASC,
+	ci_secuencia ASC,
 	ci_articulo ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 80)
 )
@@ -66,7 +69,7 @@ ALTER TABLE dbo.scit_DetInventario CHECK CONSTRAINT FK_scit_DetInventario_scit_B
 GO
 
 ALTER TABLE dbo.scit_DetInventario  WITH CHECK ADD  CONSTRAINT FK_scit_DetInventario_scit_DetInventario FOREIGN KEY(ci_anio, ci_mes)
-REFERENCES dbo.scit_CabInventario (ci_anio, ci_mes)
+REFERENCES dbo.scit_CabInventario (ci_anio, ci_mes, ci_secuencia)
 GO
 
 ALTER TABLE dbo.scit_DetInventario CHECK CONSTRAINT FK_scit_DetInventario_scit_DetInventario

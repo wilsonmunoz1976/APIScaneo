@@ -22,6 +22,24 @@ AS
 BEGIN
     DECLARE @w_return INT = 0, @w_estado int
 
+    IF EXISTS(SELECT 1 FROM dbo.ssatParametrosGenerales WHERE ci_aplicacion='MOV' AND ci_parametro = 'DEBUG' AND tx_parametro = 'SI')
+	BEGIN
+	    IF NOT EXISTS(SELECT 1 FROM sys.all_objects WHERE object_id=OBJECT_ID('dbo.trace_movil'))
+		BEGIN
+		    CREATE TABLE trace_movil (fechahora datetime default getdate(), mensaje varchar(max))
+		END
+
+		INSERT INTO trace_movil (mensaje) 
+		SELECT 'DECLARE @w_ret int, @w_msgerror varchar(200), @w_codplanilla varchar(15), @w_codsoliegre int, @w_bodega varchar(3), @w_descarticulo varchar(60); '+ CHAR(13)
+			   +'EXEC @w_ret = dbo.pr_Reasignacion ' + CHAR(13)
+			   + ' @i_accion       ='+ISNULL(CHAR(39) + @i_accion + CHAR(39),'null') + CHAR(13)
+			   +', @i_usuario      ='+ISNULL(CHAR(39) + @i_usuario + CHAR(39),'null')+ CHAR(13)
+			   +', @i_usuarionew   ='+ISNULL(CHAR(39) + @i_usuarionew + CHAR(39),'null')+ CHAR(13)
+			   +', @i_codsolegre   ='+ISNULL(CONVERT(VARCHAR,@i_codsolegre),'null') + CHAR(13)
+			   +', @o_msgerror     = @w_msgerror     OUTPUT '+ CHAR(13)
+			   +'SELECT @w_ret, @w_msgerror'+ CHAR(13)
+	END
+
 	IF @i_accion = 'US'  -- Listado de usuarios
 	BEGIN
 	    BEGIN TRY
@@ -56,7 +74,7 @@ BEGIN
 			IF ('0001' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a INNER JOIN dbo.scit_Bodegas b ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
 			BEGIN
 				UPDATE dbJardinesEsperanza.dbo.futSolicitudEgreso
-				   SET ci_usuario         = @i_usuarionew
+				   SET ci_usuario         = lower(@i_usuarionew)
 				 WHERE ci_usuario         = @i_usuario
 				   AND ci_solicitudegreso = @i_codsolegre 
 
@@ -75,7 +93,7 @@ BEGIN
 				 WHERE ci_solicitudegreso = @i_codsolegre 
 
 				INSERT INTO dbJardinesEsperanza.dbo.futLogReasignacion (ci_usuarioorigen, ci_usuariodestino, fx_fechareasignacion, ci_solicitudegreso, ce_estadosolicitud)
-				SELECT @i_usuario, @i_usuarionew, GETDATE(), @i_codsolegre , @w_estado
+				SELECT lower(@i_usuario), lower(@i_usuarionew), GETDATE(), @i_codsolegre , @w_estado
 			END
 
 			IF ('0002' IN (SELECT ci_grupocontable from dbo.scit_BodegaUsuario a INNER JOIN dbo.scit_Bodegas b ON a.ci_bodega = b.ci_bodega WHERE a.ci_usuario = @i_usuario))
