@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\APIScaneo.csproj": {}
+    "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\APIScaneo.csproj": {}
   },
   "projects": {
-    "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\APIScaneo.csproj": {
+    "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\APIScaneo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
+        "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
         "projectName": "APIScaneo",
-        "projectPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
+        "projectPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
         "packagesPath": "C:\\Users\\wmunoz\\.nuget\\packages\\",
-        "outputPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\obj\\",
+        "outputPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -34,8 +34,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj": {
-                "projectPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj"
+              "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj": {
+                "projectPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj"
               }
             }
           }
@@ -90,14 +90,14 @@
         }
       }
     },
-    "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj": {
+    "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
+        "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
         "projectName": "clsScaneo",
-        "projectPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
+        "projectPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
         "packagesPath": "C:\\Users\\wmunoz\\.nuget\\packages\\",
-        "outputPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\obj\\",
+        "outputPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

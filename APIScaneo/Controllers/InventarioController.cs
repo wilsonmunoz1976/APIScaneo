@@ -234,8 +234,8 @@ namespace APIScaneo.Controllers
             return oResp;
         }
 
-        [HttpPost("ConsultarPeriodoActivo/{bodega}")]
-        public PeriodoActivoResponse ConsultarPeriodoActivo(string bodega) 
+        [HttpPost("ConsultarPeriodoActivo/{bodega}/{tipoconsulta}")]
+        public PeriodoActivoResponse ConsultarPeriodoActivo(string bodega, string tipoconsulta) 
         {
             PeriodoActivoResponseDetalle? oDetalle = new();
             RespuestaEjecucion? oResp = IsTokenValido();
@@ -247,7 +247,7 @@ namespace APIScaneo.Controllers
                     {
                         if (Conectividad != null)
                         {
-                            DataTable oData = Conectividad.ConsultarPeriodoActivo(bodega, ref oResp);
+                            DataTable oData = Conectividad.ConsultarPeriodoActivo(bodega, tipoconsulta, ref oResp);
                             if (oData != null)
                             {
                                 if (oData.Rows.Count > 0)

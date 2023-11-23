@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FmWEilsX5w2FUmYQXCmWKlvvu9HadkrbmbR2+QpPAYteuE/AGmIQ3YPKnrpL7noQf8JP0bVprZVAkgvgaNNEOg==",
+  "dgSpecHash": "GZcCd2Lj8GESSnKubCG9rvTu4mCjVVbgtnBF+V65YmSX2fHwul1uNTbAJJjCVufSnukBOUqZQDtPNTPSmLDy1g==",
   "success": true,
-  "projectFilePath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
+  "projectFilePath": "D:\\Fuentes\\BackEnd\\APIScaneo\\APIScaneo\\APIScaneo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\wmunoz\\.nuget\\packages\\aspnetcorecompatibility\\1.1.0\\aspnetcorecompatibility.1.1.0.nupkg.sha512",
     "C:\\Users\\wmunoz\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",

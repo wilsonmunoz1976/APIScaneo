@@ -232,7 +232,7 @@ namespace clsScaneo.Clases
             return oResp;
         }
 
-        public DataTable ConsultarPeriodoActivo(string bodega, ref RespuestaEjecucion oResp)
+        public DataTable ConsultarPeriodoActivo(string bodega, string tipoconsulta, ref RespuestaEjecucion oResp)
         {
             DataTable dt = new("tb0");
             try
@@ -241,7 +241,7 @@ namespace clsScaneo.Clases
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "dbo.pr_Inventario";
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = "AC" });
+                cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_accion", SqlDbType = SqlDbType.VarChar, Size = 2, Value = tipoconsulta });
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.Input, ParameterName = "@i_bodega", SqlDbType = SqlDbType.VarChar, Size = 3, Value = bodega });
 
                 cmd.Parameters.Add(new SqlParameter() { Direction = ParameterDirection.InputOutput, ParameterName = "@o_msgerror", SqlDbType = SqlDbType.VarChar, Size = 200 });

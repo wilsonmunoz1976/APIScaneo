@@ -7057,11 +7057,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
+      "projectUniqueName": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
       "projectName": "clsScaneo",
-      "projectPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
+      "projectPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\clsScaneo.csproj",
       "packagesPath": "C:\\Users\\wmunoz\\.nuget\\packages\\",
-      "outputPath": "D:\\Fuentes\\BackEnd\\APIREST\\APIScaneo\\clsScaneo\\obj\\",
+      "outputPath": "D:\\Fuentes\\BackEnd\\APIScaneo\\clsScaneo\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
